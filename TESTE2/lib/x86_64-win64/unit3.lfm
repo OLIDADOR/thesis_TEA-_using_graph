@@ -166,5 +166,6 @@ object Form3: TForm3
     Height = 750
     Top = 34
     Width = 815
+    OnPaint = PaintBox1Paint
   end
 end

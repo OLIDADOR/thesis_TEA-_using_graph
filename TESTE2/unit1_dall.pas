@@ -57,7 +57,10 @@ type
     Label1: TLabel;
     Label2: TLabel;
     OpenPictureDialog1: TOpenPictureDialog;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     RadioGroup1: TRadioGroup;
+    RadioGroup2: TRadioGroup;
     ToggleBox1: TToggleBox;
     vel_nom11: TLabeledEdit;
     width1: TLabeledEdit;
@@ -117,6 +120,7 @@ begin
    posnX:=0;
    posnY:=0;
 end;
+
 
 function get_max_id_link(nodelist:a_node):integer;
 var
@@ -261,6 +265,122 @@ begin
   end;
 end;
 
+function get_node_xr(range:integer;nodelist:a_node;xn:longint;yn:longint):Integer;
+  var
+    aux0:integer;
+    l1:integer;
+    x_c:longint;
+    y_c:longint;
+    i_curr:integer;
+    x_curr:integer;
+    flag_c:integer;
+begin
+   l1:=length(nodelist);
+   i_curr:=0;
+   x_curr:=1000;
+   for aux0:=0 to l1-1 do
+   begin
+     x_c:=nodelist[aux0].posnX;
+     y_c:=nodelist[aux0].posnY;
+     if ((x_c>xn) and ((y_c<=yn+range) and (y_c>=yn-range)) and (x_c<>xn)) then
+     begin
+       if x_c<x_curr then
+       begin
+        i_curr:=aux0+1;
+        x_curr:=x_c
+       end;
+     end;
+   end;
+    get_node_xr:=i_curr;
+end;
+
+function get_node_xl(range:integer;nodelist:a_node;xn:longint;yn:longint):Integer;
+  var
+    aux0:integer;
+    l1:integer;
+    x_c:longint;
+    y_c:longint;
+    i_curr:integer;
+    x_curr:integer;
+    flag_c:integer;
+begin
+   l1:=length(nodelist);
+   i_curr:=0;
+   x_curr:=0;
+   for aux0:=0 to l1-1 do
+   begin
+     x_c:=nodelist[aux0].posnX;
+     y_c:=nodelist[aux0].posnY;
+     if ((x_c<xn) and ((y_c<=yn+range) and (y_c>=yn-range)) and (x_c<>xn)) then
+     begin
+     if x_c>x_curr then
+       begin
+        i_curr:=aux0+1;
+        x_curr:=x_c;
+       end;
+     end;
+   end;
+    get_node_xl:=i_curr;
+end;
+
+function get_node_yr(range:integer;nodelist:a_node;xn:longint;yn:longint):Integer;
+  var
+    aux0:integer;
+    l1:integer;
+    x_c:longint;
+    y_c:longint;
+    i_curr:integer;
+    y_curr:integer;
+    flag_c:integer;
+begin
+   l1:=length(nodelist);
+   i_curr:=0;
+   y_curr:=1000;
+   for aux0:=0 to l1-1 do
+   begin
+     x_c:=nodelist[aux0].posnX;
+     y_c:=nodelist[aux0].posnY;
+     if ((y_c>yn) and ((x_c<=xn+range) and (x_c>=xn-range)) and (y_c<>yn)) then
+     begin
+      if y_c<y_curr then
+       begin
+        i_curr:=aux0+1;
+        y_curr:=y_c;
+       end;
+     end;
+   end;
+    get_node_yr:=i_curr;
+end;
+
+function get_node_yl(range:integer;nodelist:a_node;xn:longint;yn:longint):Integer;
+  var
+    aux0:integer;
+    l1:integer;
+    x_c:longint;
+    y_c:longint;
+    i_curr:integer;
+    y_curr:integer;
+    flag_c:integer;
+begin
+   l1:=length(nodelist);
+   i_curr:=0;
+   y_curr:=0;
+   for aux0:=0 to l1-1 do
+   begin
+     x_c:=nodelist[aux0].posnX;
+     y_c:=nodelist[aux0].posnY;
+     if ((y_c<yn) and ((x_c<=xn+range) and (x_c>=xn-range)) and (y_c<>yn)) then
+     begin
+     if y_c>y_curr then
+       begin
+        i_curr:=aux0+1;
+        y_curr:=y_c;
+       end;
+     end;
+   end;
+    get_node_yl:=i_curr;
+end;
+
 function get_node_id(range:integer; x:longint; y:longint;nodelist:a_node;xn:longint;yn:longint):Integer;
   var
     aux0:integer;
@@ -316,11 +436,11 @@ begin
      count:=0;
      for aux1:=0 to diff1 do
      begin
-          for aux2:=x_a to (x_a+range) do
+          for aux2:=x_a to (x1+range) do
           begin
-             PixelColor:=map.Canvas.Pixels[x_a,y1+aux1];
+             PixelColor:=map.Canvas.Pixels[aux2,y1+aux1];
              cr:=ColorToString(PixelColor);
-             if cr<>'clWhite' then
+             if cr='clBlack' then
              begin
                count:=count+1;
                check_colour:=count;
@@ -342,11 +462,11 @@ begin
        count:=0;
        for aux1:=0 to diff1 do
        begin
-          for aux2:=x_a to (x_a+range) do
+          for aux2:=x_a to (x1+range) do
               begin
-              PixelColor:=map.Canvas.Pixels[x_a,y2+aux1];
+              PixelColor:=map.Canvas.Pixels[aux2,y2+aux1];
               cr:=ColorToString(PixelColor);
-             if cr<>'clWhite' then
+             if cr='clBlack' then
              begin
                count:=count+1;
              end;
@@ -367,11 +487,11 @@ begin
        count:=0;
        for aux1:=0 to diff1 do
        begin
-          for aux2:=y_a to (y_a+range) do
+          for aux2:=y_a to (Y1+range) do
               begin
-              PixelColor:=map.Canvas.Pixels[x1+aux1,y_a];
+              PixelColor:=map.Canvas.Pixels[x1+aux1,aux2];
               cr:=ColorToString(PixelColor);
-             if cr<>'clWhite' then
+             if cr='clBlack' then
              begin
                count:=count+1;
              end;
@@ -392,11 +512,11 @@ begin
        count:=0;
        for aux1:=0 to diff1 do
        begin
-          for aux2:=y_a to (y_a+range) do
+          for aux2:=y_a to (y1+range) do
               begin
-              PixelColor:=map.Canvas.Pixels[x2+aux1,y_a];
+              PixelColor:=map.Canvas.Pixels[x2+aux1,aux2];
               cr:=ColorToString(PixelColor);
-             if cr<>'clWhite' then
+             if cr='clBlack' then
              begin
                count:=count+1;
              end;
@@ -426,14 +546,15 @@ procedure Detect_links (p:double;range:integer ;nodelist:a_node;map:TImage);
     dist:integer;
     max_x:integer;
     max_y:integer;
-    id_n:integer;
+    id_nxr:integer;
+    id_nxl:integer;
+    id_nyr:integer;
+    id_nyl:integer;
     nx:longint;
     ny:longint;
     c_count:integer;
   begin
   l4:=length(nodelist);
-  max_x:=100;
-  max_y:=100;
   if l4>0 then
   begin
   for aux4:=0 to l4-1 do
@@ -442,83 +563,61 @@ procedure Detect_links (p:double;range:integer ;nodelist:a_node;map:TImage);
    n1:=nodelist[aux4].id;
    x1:=nodelist[aux4].posnX;
    y1:=nodelist[aux4].posnY;
-   for aux5:=0 to max_x-x1 do
-   begin
-     nx:=x1+aux5;
-     id_n:=get_node_id(range,nx,y1,nodelist,x1,y1);
-     if id_n>0 then
+   id_nxr:=get_node_xr(range,nodelist,x1,y1);
+   id_nxl:=get_node_xl(range,nodelist,x1,y1);
+   id_nyr:=get_node_yr(range,nodelist,x1,y1);
+   id_nyl:=get_node_yl(range,nodelist,x1,y1);
+   if id_nxr>0 then
      begin
-       n2:=nodelist[id_n-1].id;
-       x2:=nodelist[id_n-1].posnX;
-       y2:=nodelist[id_n-1].posnY;
+       n2:=nodelist[id_nxr-1].id;
+       x2:=nodelist[id_nxr-1].posnX;
+       y2:=nodelist[id_nxr-1].posnY;
        dist:=x2-x1;
        c_count:=check_colour(range,x1,y1,x2,y2,map);
        if c_count>(dist*p) then
        begin
        create_link_between(n1,n2,nodelist);
-       break;
        end;
      end;
-   end;
-   for aux5:=0 to x1 do
-   begin
-     nx:=x1-aux5;
-     id_n:=get_node_id(10,nx,y1,nodelist,x1,y1);
-     if id_n>0 then
+     if id_nxl>0 then
      begin
-       n2:=nodelist[id_n-1].id;
-       x2:=nodelist[id_n-1].posnX;
-       y2:=nodelist[id_n-1].posnY;
+       n2:=nodelist[id_nxl-1].id;
+       x2:=nodelist[id_nxl-1].posnX;
+       y2:=nodelist[id_nxl-1].posnY;
        dist:=x1-x2;
-       c_count:=check_colour(8,x1,y1,x2,y2,map);
+       c_count:=check_colour(range,x1,y1,x2,y2,map);
        if c_count>(dist*p) then
        begin
        create_link_between(n1,n2,nodelist);
-       break;
        end;
      end;
-   end;
-   for aux5:=0 to max_y-y1 do
-   begin
-     ny:=y1+aux5;
-     id_n:=get_node_id(10,x1,ny,nodelist,x1,y1);
-     if id_n>0 then
+     if id_nyr>0 then
      begin
-       n2:=nodelist[id_n-1].id;
-       x2:=nodelist[id_n-1].posnX;
-       y2:=nodelist[id_n-1].posnY;
+       n2:=nodelist[id_nyr-1].id;
+       x2:=nodelist[id_nyr-1].posnX;
+       y2:=nodelist[id_nyr-1].posnY;
        dist:=y2-y1;
-       c_count:=check_colour(8,x1,y1,x2,y2,map);
+       c_count:=check_colour(range,x1,y1,x2,y2,map);
        if c_count>(dist*p) then
        begin
        create_link_between(n1,n2,nodelist);
-       break;
+       end;
+     end;
+     if id_nyl>0 then
+     begin
+       n2:=nodelist[id_nyl-1].id;
+       x2:=nodelist[id_nyl-1].posnX;
+       y2:=nodelist[id_nyl-1].posnY;
+       dist:=y1-y2;
+       c_count:=check_colour(range,x1,y1,x2,y2,map);
+       if c_count>(dist*p) then
+       begin
+       create_link_between(n1,n2,nodelist);
        end;
      end;
    end;
-   for aux5:=0 to y1 do
-      begin
-        ny:=y1-aux5;
-        id_n:=get_node_id(10,x1,ny,nodelist,x1,y1);
-        if id_n>0 then
-        begin
-          n2:=nodelist[id_n-1].id;
-          x2:=nodelist[id_n-1].posnX;
-          y2:=nodelist[id_n-1].posnY;
-          dist:=y1-y2;
-          c_count:=check_colour(8,x1,y1,x2,y2,map);
-          if c_count>(dist*p) then
-          begin
-          create_link_between(n1,n2,nodelist);
-          break;
-          end;
-        end;
-      end;
-
-   end;
   end;
   end;
-
 
 procedure remove_from_nodelist (n1:integer;nodelist:a_node);
 
@@ -595,6 +694,8 @@ end;
 
 procedure TForm1.FormPaint(Sender: TObject);
 begin
+  Canvas.Pen.Width:=5;
+  Canvas.Pen.Color:=clRed;
   l4:=length(intersection_nodesXY);
     if l4>0 then
     begin
@@ -666,9 +767,9 @@ begin
     l:=length(intersection_nodesXY);
     SetLength(intersection_nodesXY, l+1);
     intersection_nodesXY[l]:=node_temp;
-    x_temp:=pointl.x+1;
-    y_temp:=pointl.y+1;
-    Canvas.Rectangle (pointl.x-1,pointl.y-1,x_temp,y_temp);
+    x_temp:=pointl.x-279;
+    y_temp:=pointl.y-28;
+    Canvas.Rectangle (pointl.x-281,pointl.y-30,x_temp,y_temp);
     Label3.Caption:=FloatToStr(intersection_nodesXY[l].posrealX);
     Label4.Caption:=FloatToStr(intersection_nodesXY[l].posrealY);
     aux:= aux+1;
@@ -692,21 +793,23 @@ begin
     setlength(intersection_nodesXY,l4-1);
     end;
     Invalidate;
+
   end;
 end;
 end;
 
 procedure TForm1.mapPaint(Sender: TObject);
 begin
-    Canvas.Pen.Width:=5;
+  Canvas:=map.Canvas;
+  Canvas.Pen.Width:=5;
   Canvas.Pen.Color:=clRed;
   l4:=length(intersection_nodesXY);
     if l4>0 then
     begin
     for aux4:=0 to l4-1 do
     begin
-     pointX:=intersection_nodesXY[aux4].posnX+280;
-     pointY:=intersection_nodesXY[aux4].posnY+29;
+     pointX:=intersection_nodesXY[aux4].posnX;
+     pointY:=intersection_nodesXY[aux4].posnY;
      x_temp:=pointX+1;
      y_temp:=pointY+1;
      Canvas.Rectangle (pointX-1,pointY-1,x_temp,y_temp);
@@ -738,14 +841,16 @@ begin
    o_w:=StrtoFloat(form1.width1.text);
    o_h:=StrtoFloat(form1.heigth.text);
    vel_nom:=StrtoFloat(vel_nom11.text);
-   p:=0.5;
-   Detect_links(p,10,intersection_nodesXY,form1.map);
-  //create_link_between(1,2,intersection_nodesXY);
+   if (RadioButton1.Checked= true) then
+   begin
+   p:=1;
+   Detect_links(p,5,intersection_nodesXY,form1.map);
+    //create_link_between(1,2,intersection_nodesXY);
    //dist:=intersection_nodesXY[1].posnX-intersection_nodesXY[0].posnX;
-   //c_count:=check_colour(10,intersection_nodesXY[0].posnX,intersection_nodesXY[0].posnY,intersection_nodesXY[1].posnX,intersection_nodesXY[1].posnY,map);
-   //Label7.Caption:=floatToStr(dist*p);
+   // c_count:=check_colour(5,intersection_nodesXY[0].posnX,intersection_nodesXY[0].posnY,intersection_nodesXY[1].posnX,intersection_nodesXY[1].posnY,map);
+   //Label7.Caption:=floatToStr(dist*p*5);
    //Label8.Caption:=intToStr(c_count);
-
+    end;
    Form2.Show;
    Form1.hide;
 end;
