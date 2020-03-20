@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map>
+  <Nodes>
+    <Node Id="1">
+      <x>0,0525739320920044</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="2">
+      <x>0,157721796276013</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="3">
+      <x>0,28368017524644</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="4">
+      <x>0,396495071193866</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="5">
+      <x>0,0460021905805038</x>
+      <y>0,46677471636953</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="6">
+      <x>0,28368017524644</x>
+      <y>0,46677471636953</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="7">
+      <x>0,0876232201533406</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="8">
+      <x>0,129609346476816</x>
+      <y>0,320907617504052</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="9">
+      <x>0,199707922599489</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="10">
+      <x>0,321285140562249</x>
+      <y>0,247974068071313</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="11">
+      <x>0,204454180357795</x>
+      <y>0,320907617504052</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="12">
+      <x>0,28368017524644</x>
+      <y>0,320907617504052</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="13">
+      <x>0,125228185469149</x>
+      <y>0,46677471636953</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+  </Nodes>
+  <Links>
+    <Link Id="1">
+      <Node1_Id>1</Node1_Id>
+      <Node2_Id>7</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="0">
+      <Node1_Id>1</Node1_Id>
+      <Node2_Id>0</Node2_Id>
+      <Distance>0</Distance>
+    </Link>
+    <Link Id="3">
+      <Node1_Id>1</Node1_Id>
+      <Node2_Id>8</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="2">
+      <Node1_Id>2</Node1_Id>
+      <Node2_Id>7</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="5">
+      <Node1_Id>2</Node1_Id>
+      <Node2_Id>9</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="6">
+      <Node1_Id>3</Node1_Id>
+      <Node2_Id>9</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="11">
+      <Node1_Id>3</Node1_Id>
+      <Node2_Id>12</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="8">
+      <Node1_Id>4</Node1_Id>
+      <Node2_Id>10</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="10">
+      <Node1_Id>5</Node1_Id>
+      <Node2_Id>11</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="13">
+      <Node1_Id>5</Node1_Id>
+      <Node2_Id>13</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="4">
+      <Node1_Id>6</Node1_Id>
+      <Node2_Id>8</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="12">
+      <Node1_Id>6</Node1_Id>
+      <Node2_Id>12</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="14">
+      <Node1_Id>6</Node1_Id>
+      <Node2_Id>13</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="7">
+      <Node1_Id>10</Node1_Id>
+      <Node2_Id>3</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+    <Link Id="9">
+      <Node1_Id>11</Node1_Id>
+      <Node2_Id>3</Node2_Id>
+      <Distance>1</Distance>
+    </Link>
+  </Links>
+</Map>
