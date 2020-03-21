@@ -66,6 +66,9 @@ var
   aux5:integer;
   aux6:integer;
   id:string;
+  id_i:integer;
+  newlabel: TLabel;
+  flag_nld:integer;
   n_links:string;
   possX:string;
   possY:string;
@@ -412,6 +415,7 @@ procedure TForm2.FormCreate(Sender: TObject);
 begin
   R2:=1;
   flag_grid:=0;
+  flag_nld:=0;
 end;
 
 procedure TForm2.FormPaint(Sender: TObject);
@@ -523,10 +527,22 @@ begin
   begin
     for aux4:=0 to l4-1 do
     begin
+     id_i:=form1.intersection_nodesXY[aux4].id;
      X_print:=form1.intersection_nodesXY[aux4].posnX;
      Y_print:=form1.intersection_nodesXY[aux4].posnY;
+     if flag_nld=0 then
+     begin
+     newlabel := TLabel.Create(Form2);
+     newlabel.name := 'nlad'+inttostr(id_i);
+     newlabel.caption := inttostr(id_i);
+     newlabel.left := X_print+953-15;
+     newlabel.Top := y_print+48-18;
+     newlabel.visible := true;
+     newlabel.parent := Form2;
+     end;
      Canvas.Rectangle (X_print-1,Y_print-1,X_print+1,Y_print+1);
     end;
+    flag_nld:=1;
     Canvas.Pen.Width:=2;
     Canvas.Pen.Color:=clLime;
     for aux4:=0 to l4-1 do
