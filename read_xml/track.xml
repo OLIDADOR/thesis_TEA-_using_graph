@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<track>
+  <defines>
+    <conts name="field_length" value="30"/>
+    <conts name="field_width" value="20"/>
+    <conts name="ground" value="0.001"/>
+  </defines>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="4.73257698541329" z="ground" angle="-105.521228986662"/>
+    <size width="0.25" length="1.13452188006483"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="4.73257698541329" z="ground" angle="-105.521228986662"/>
+    <size width="0.25" length="1.20481927710843"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="4.73257698541329" z="ground" angle="-136.163555594513"/>
+    <size width="0.25" length="1.20481927710843"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="4.73257698541329" z="ground" angle="-136.163555594513"/>
+    <size width="0.25" length="1.19386637458927"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="4.73257698541329" z="ground" angle="-136.163555594513"/>
+    <size width="0.25" length="1.18854673149649"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="4.73257698541329" z="ground" angle="-150.921869541033"/>
+    <size width="0.25" length="1.19386637458927"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="4.73257698541329" z="ground" angle="-150.921869541033"/>
+    <size width="0.25" length="1.14262560777958"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="9.3030794165316" z="ground" angle="-132.452101973612"/>
+    <size width="0.25" length="1.14262560777958"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="9.3030794165316" z="ground" angle="-132.452101973612"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="9.27066450567261" z="ground" angle="-98.0693300387067"/>
+    <size width="0.25" length="1.13452188006483"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="9.27066450567261" z="ground" angle="-98.0693300387067"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="8.29821717990275" z="ground" angle="-120.708602657475"/>
+    <size width="0.25" length="1.18854673149649"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="5.86709886547812" z="ground" angle="-102.626935613108"/>
+    <size width="0.25" length="1.13452188006483"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="7.00162074554295" z="ground" angle="-100.631863826376"/>
+    <size width="0.25" length="1.13452188006483"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="1.31434830230011" y="8.13614262560778" z="ground" angle="-99.1765350974621"/>
+    <size width="0.25" length="1.13452188006483"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="2.51916757940854" y="4.73257698541329" z="ground" angle="-118.026531762635"/>
+    <size width="0.25" length="1.20481927710843"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="3.72398685651698" y="4.73257698541329" z="ground" angle="-128.198624250367"/>
+    <size width="0.25" length="1.20481927710843"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="6.12267250821468" y="4.73257698541329" z="ground" angle="-142.297434625418"/>
+    <size width="0.25" length="1.19386637458927"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="7.31653888280394" y="4.73257698541329" z="ground" angle="-147.103888238567"/>
+    <size width="0.25" length="1.19386637458927"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="5.92112371690978" z="ground" angle="-129.774355644621"/>
+    <size width="0.25" length="1.18854673149649"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.92880613362541" y="7.10967044840627" z="ground" angle="-124.731782328321"/>
+    <size width="0.25" length="1.18854673149649"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="5.87520259319287" z="ground" angle="-145.38053910139"/>
+    <size width="0.25" length="1.14262560777958"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="7.01782820097245" z="ground" angle="-140.490414979713"/>
+    <size width="0.25" length="1.14262560777958"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="8.51040525739321" y="8.16045380875203" z="ground" angle="-136.202565301591"/>
+    <size width="0.25" length="1.14262560777958"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="7.48239712095134" y="9.29844871498032" z="ground" angle="-128.823392069118"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="6.45438898450947" y="9.29381801342903" z="ground" angle="-124.779281630768"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="5.42638084806759" y="9.28918731187775" z="ground" angle="-120.291806026002"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="4.39837271162572" y="9.28455661032647" z="ground" angle="-115.34831719386"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="3.37036457518385" y="9.27992590877518" z="ground" angle="-109.960451459642"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+  <line>
+    <color rgb24="8F8F8F"/>
+    <position x="2.34235643874198" y="9.2752952072239" z="ground" angle="-104.172977474154"/>
+    <size width="0.25" length="1.02801856597415"/>
+  </line>
+</track>

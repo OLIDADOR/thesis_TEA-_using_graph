@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids, Dom,
-  XmlRead;
+  XmlRead,XMLWrite,Math;
 
 type
     link_full = object
@@ -272,6 +272,156 @@ begin
     read_xml:=nodelist;
 end;
 
+function check_array(l:array of integer; i:integer):integer;
+var
+l1:integer;
+count:integer;
+i_curr:integer;
+aux:integer;
+begin
+ l1:=length(l);
+ count:=0;
+ for aux:=0 to l1-1 do
+ begin
+   i_curr:=l[aux];
+   if i_curr=i then
+   begin
+   count:=count+1;
+   end;
+end;
+ check_array:=count;
+end;
+procedure write_xml_Simtwo (scale:integer; nodelist:a_node; width_line:double);
+
+var
+ id_n:integer;
+ l1:integer;
+ l2:integer;
+ l3:integer;
+ n_curr:integer;
+ ntl:integer;
+ x1:Double;
+ y1:Double;
+ x2:Double;
+ y2:Double;
+ c:integer;
+ aux4:integer;
+ aux5:integer;
+ aux6:integer;
+ dist:real;
+ declive:real;
+ angle:real;
+ l_id:integer;
+ f_done:integer;
+ count:integer;
+ l_done:array of integer;
+ Doc: TXMLDocument;                                  // variable to document
+ RootNode, parentNode, nofilho: TDOMNode;                    // variable to nodes
+begin
+ // Create a document
+ Doc := TXMLDocument.Create;
+
+ // Create a root node
+ RootNode := Doc.CreateElement('track');
+ Doc.Appendchild(RootNode);      // save root node
+
+
+  // Create a defines node
+  RootNode:= Doc.DocumentElement;
+  parentNode := Doc.CreateElement('defines');
+  RootNode.Appendchild(parentNode);                          // save parent node
+
+  //create the conts atributes and node
+  parentNode := Doc.CreateElement('conts');                // create a child node
+  TDOMElement(parentNode).SetAttribute('name','field_length');     // create atributes
+  TDOMElement(parentNode).SetAttribute('value',StringReplace(FloatToStr(3*scale),',','.',[rfReplaceAll, rfIgnoreCase]));
+  RootNode.ChildNodes.Item[0].AppendChild(parentNode);       // insert child node in respective parent node
+
+  //create the conts atributes and node
+  parentNode := Doc.CreateElement('conts');                // create a child node
+  TDOMElement(parentNode).SetAttribute('name','field_width');     // create atributes
+  TDOMElement(parentNode).SetAttribute('value',StringReplace(FloatToStr(2*scale),',','.',[rfReplaceAll, rfIgnoreCase]));
+  RootNode.ChildNodes.Item[0].AppendChild(parentNode);       // insert child node in respective parent node
+
+  //create the conts atributes and node
+  parentNode := Doc.CreateElement('conts');                // create a child node
+  TDOMElement(parentNode).SetAttribute('name','ground');     // create atributes
+  TDOMElement(parentNode).SetAttribute('value',StringReplace(FloatToStr(0.001),',','.',[rfReplaceAll, rfIgnoreCase]));
+  RootNode.ChildNodes.Item[0].AppendChild(parentNode);       // insert child node in respective parent node
+
+ count:=1;
+ l1:=length(nodelist);
+ for aux4:=0 to l1-1 do
+  begin
+   x1:=nodelist[aux4].pos_X*scale;
+   y1:=nodelist[aux4].pos_y*scale;
+   l2:=length(nodelist[aux4].links);
+   for aux5:=0 to l2-1 do
+    begin
+     ntl:=nodelist[aux4].links[aux5].node_to_link;
+     dist:=nodelist[aux4].links[aux5].distance *scale;
+     l_id:=nodelist[aux4].links[aux5].id_l;
+     f_done:=check_array(l_done,l_id);
+     if f_done=0 then
+     begin
+      for aux6:=0 to l1-1 do
+       begin
+       n_curr:=nodelist[aux4].id;
+       if n_curr=ntl then
+          begin
+            x2:=nodelist[aux6].pos_X*scale;
+            y2:=nodelist[aux6].pos_y*scale;
+
+            end;
+
+            end;
+
+            // Create a link line
+            RootNode:= Doc.DocumentElement;
+            parentNode := Doc.CreateElement('line');
+            RootNode.Appendchild(parentNode);                          // save parent node
+
+            //calculate angle of line
+            //declive:=(y2-y1)/(x2-x1);
+            angle:=arctan2((y2-y1),(x2-x1));
+
+
+            //create the colour atributes and node
+            parentNode := Doc.CreateElement('color');                // create a child node
+            TDOMElement(parentNode).SetAttribute('rgb24','8F8F8F');     // create atributes
+            RootNode.ChildNodes.Item[count].AppendChild(parentNode);       // insert child node in respective parent node
+
+            //create the position atributes and node
+            parentNode := Doc.CreateElement('position');                // create a child node
+            TDOMElement(parentNode).SetAttribute('x',StringReplace(FloatToStr(x1),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
+            TDOMElement(parentNode).SetAttribute('y',StringReplace(FloatToStr(y1),',','.',[rfReplaceAll, rfIgnoreCase]));
+            TDOMElement(parentNode).SetAttribute('z','ground');
+            TDOMElement(parentNode).SetAttribute('angle',StringReplace(FloatToStr(RadToDeg(angle)),',','.',[rfReplaceAll, rfIgnoreCase]));
+            RootNode.ChildNodes.Item[count].AppendChild(parentNode);       // insert child node in respective parent node
+
+
+             //create the position atributes and node
+            parentNode := Doc.CreateElement('size');                // create a child node
+            TDOMElement(parentNode).SetAttribute('width',StringReplace(FloatToStr(width_line),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
+            TDOMElement(parentNode).SetAttribute('length',StringReplace(FloatToStr(dist),',','.',[rfReplaceAll, rfIgnoreCase]));
+            RootNode.ChildNodes.Item[count].AppendChild(parentNode);       // insert child node in respective parent node
+
+            count:=count+1;
+
+            l3:=length(l_done);
+            setlength(l_done,l3+1);
+            l_done[l3]:=l_id;
+                 end;
+     end;
+    end;
+
+
+  writeXMLFile(Doc, 'track.xml');                     // write to XML
+end;
+
+
+
+
 { TForm1 }
 
 procedure TForm1.FormShow(Sender: TObject);
@@ -302,6 +452,7 @@ begin
       Node:= Nodes[0];
       id:=Node.Attributes.Item[0];
       LABEL1.Caption:=id.NodeValue;
+      write_xml_Simtwo(10,full_nodelist,0.25);
 end;
 
 
