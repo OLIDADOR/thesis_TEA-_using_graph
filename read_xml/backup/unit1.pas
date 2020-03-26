@@ -5,8 +5,9 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids, Dom,
-  XmlRead,XMLWrite,Math;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids,
+  GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects, GLLCLViewer, Dom,
+  XmlRead, XMLWrite, Math, Types, GLBaseClasses;
 
 type
     link_full = object
@@ -40,10 +41,26 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    GLCadencer1: TGLCadencer;
+    GLCamera1: TGLCamera;
+    GLCube1: TGLCube;
+    GLCube2: TGLCube;
+    GLDummyCube3: TGLDummyCube;
+    GLLightSource1: TGLLightSource;
+    GLScene2: TGLScene;
+    GLSceneViewer1: TGLSceneViewer;
     Label1: TLabel;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     procedure FormShow(Sender: TObject);
+    procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
+      newTime: Double);
+    procedure GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure GLSceneViewer1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
 
   public
@@ -67,10 +84,31 @@ var
   l2:integer;
   ntl:integer;
   dist:double;
-
+  newline1: TGLLines;
+    mx, my, mx2, my2: integer;
 implementation
 
 {$R *.lfm}
+function get_line_Dir (x1:Double;y1:Double;x2:double;y2:Double):integer;
+
+begin
+   if (x1=x2) and (y1<>y2) then
+      begin
+       get_line_Dir:=1;
+      end
+    else if (x1<>x2) and (y1=y2) then
+      begin
+       get_line_Dir:=2;
+      end
+    else
+    begin
+    get_line_Dir:=0;
+    end;
+end;
+
+
+
+
 
 function get_index_node(nodelist:a_node; id:integer):integer;
 var
@@ -227,6 +265,7 @@ var
   n1_i:integer;
   n2_i:integer;
   dist_d:Double;
+
 begin
 
   ReadXMLFile(Doc, 'C:\Users\diogo\Desktop\pascal\read_xml\test.xml');
@@ -366,7 +405,7 @@ begin
      begin
       for aux6:=0 to l1-1 do
        begin
-       n_curr:=nodelist[aux4].id;
+       n_curr:=nodelist[aux6].id;
        if n_curr=ntl then
           begin
             x2:=nodelist[aux6].pos_X*scale;
@@ -382,8 +421,8 @@ begin
             RootNode.Appendchild(parentNode);                          // save parent node
 
             //calculate angle of line
-            declive:=(y2-y1)/(x2-x1);
-            angle:=arctan2(declive);
+            //declive:=(y2-y1)/(x2-x1);
+            angle:=arctan2((y2-y1),(x2-x1));
 
 
             //create the colour atributes and node
@@ -419,8 +458,92 @@ begin
   writeXMLFile(Doc, 'track.xml');                     // write to XML
 end;
 
+procedure Print_map_in_GLS(nodelist:a_node; width_line:integer; GLScene: TGLScene; base:TGLDummyCube ; scale:integer);
+var
+ newline: TGLLines;
+ id_n:integer;
+ l1:integer;
+ l2:integer;
+ l3:integer;
+ n_curr:integer;
+ ntl:integer;
+ x1:Double;
+ y1:Double;
+ x2:Double;
+ y2:Double;
+ c:integer;
+ aux4:integer;
+ aux5:integer;
+ aux6:integer;
+ dist:real;
+ declive:real;
+ angle:real;
+ l_id:integer;
+ f_done:integer;
+ count:integer;
+ res:integer;
+ l_done:array of integer;
+ begin
+   l1:=length(nodelist);
+ for aux4:=0 to l1-1 do
+  begin
+   x1:=nodelist[aux4].pos_X*scale;
+   y1:=nodelist[aux4].pos_y*scale;
+   l2:=length(nodelist[aux4].links);
+   for aux5:=0 to l2-1 do
+    begin
+     ntl:=nodelist[aux4].links[aux5].node_to_link;
+     dist:=nodelist[aux4].links[aux5].distance *scale;
+     l_id:=nodelist[aux4].links[aux5].id_l;
+     f_done:=check_array(l_done,l_id);
+     if f_done=0 then
+     begin
+      for aux6:=0 to l1-1 do
+       begin
+       n_curr:=nodelist[aux6].id;
+       if n_curr=ntl then
+          begin
+            x2:=nodelist[aux6].pos_X*scale;
+            y2:=nodelist[aux6].pos_y*scale;
 
-
+            end;
+            end;
+            res:=get_line_Dir(x1,y1,x2,y2);
+            newline:=TGLLines.CreateAsChild(GLScene.Objects);
+            newline.LineWidth:=width_line;
+            if ((res=1) and (y2>y1)) then
+            begin
+            newline.AddNode(x1-1.5*scale,y1-1.1*scale-(width_line/4),0);
+            newline.AddNode(x2-1.5*scale,y2-1.1*scale+(width_line/4),0);
+            end
+            else if ((res=1) and (y2<y1)) then
+            begin
+            newline.AddNode(x1-1.5*scale,y1-1.1*scale+(width_line/4),0);
+            newline.AddNode(x2-1.5*scale,y2-1.1*scale-(width_line/4),0);
+            end
+            else if ((res=2) and (x2>x1)) then
+            begin
+            newline.AddNode(x1-1.5*scale-width_line/4,y1-1.1*scale,0);
+            newline.AddNode(x2-1.5*scale+width_line/4,y2-1.1*scale,0);
+            end
+            else if ((res=2) and (x2<x1)) then
+            begin
+            newline.AddNode(x1-1.5*scale+width_line/4,y1-1.1*scale,0);
+            newline.AddNode(x2-1.5*scale-width_line/4,y2-1.1*scale,0);
+            end
+            else
+            begin
+            newline.AddNode(x1-1.5*scale,y1-1.1*scale,0);
+            newline.AddNode(x2-1.5*scale,y2-1.1*scale,0);
+            end;
+            //GLScene.Objects.addchild(newline);
+            l3:=length(l_done);
+            setlength(l_done,l3+1);
+            l_done[l3]:=l_id;
+            end;
+     end;
+    end;
+ end;
 
 { TForm1 }
 
@@ -453,6 +576,48 @@ begin
       id:=Node.Attributes.Item[0];
       LABEL1.Caption:=id.NodeValue;
       write_xml_Simtwo(10,full_nodelist,0.25);
+      //newline1:=TGLLines.CreateAsChild(GLScene2.Objects);
+      //newline1.LineWidth:=25;
+      //newline1.AddNode(1,25,0);
+      //newline1.AddNode(300,25,0);
+      //GLScene2.Objects.addchild(newline1);
+      Print_map_in_GLS(full_nodelist,10,GLScene2,GLDummyCube3,200);
+end;
+
+procedure TForm1.GLCadencer1Progress(Sender: TObject; const deltaTime,
+  newTime: Double);
+begin
+   if ((mx <> mx2) or (my <> my2)) then
+  begin
+    GLCamera1.MoveAroundTarget(my - my2, mx - mx2);
+    mx := mx2;
+    my := my2;
+  end;
+end;
+
+procedure TForm1.GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  mx := X;
+  my := Y;
+  mx2 := X;
+  my2 := Y;
+end;
+
+procedure TForm1.GLSceneViewer1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+   if ssLeft in Shift then
+  begin
+    mx2 := X;
+    my2 := Y;
+  end;
+end;
+
+procedure TForm1.GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+   GLCamera1.AdjustDistanceToTarget(Power(1.025, WheelDelta / 300));
 end;
 
 
