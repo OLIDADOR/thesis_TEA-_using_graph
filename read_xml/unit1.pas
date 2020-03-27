@@ -34,6 +34,20 @@ type
      links:array of link_full;
    end;
 
+   Robot_Pos_info = object
+   private
+     {private declarations}
+   public
+     {public declarations}
+     var
+     id_robot:integer;
+     current_nodes:array of integer;
+     pos_X:Double;
+     pos_Y:Double;
+   end;
+
+       r_node=array of Robot_Pos_info;
+
       a_node=array of node_full;
 
 
@@ -106,9 +120,112 @@ begin
     end;
 end;
 
+function get_closest_node_id (nodelist:a_node; x:Double; y:Double; scale:integer):integer;
 
+var
+    l4:integer;
+    aux4:integer;
+    n_curr:integer;
+    x_p:Double;
+    y_p:Double;
+    id_min:integer;
+    diff1:Double;
+    diff2:Double;
+    Difft:Double;
+    diff_min:Double;
+begin
+  l4:=length(nodelist);
+  diff_min:=10*scale;
+  id_min:=0;
+  if l4>0 then
+  begin
+  for aux4:=0 to l4-1 do
+  begin
+     n_curr:=nodelist[aux4].id;
+     x_p:=nodelist[aux4].pos_X*scale;
+     y_p:=nodelist[aux4].pos_Y*scale;
+     diff1:=abs(x_p-x);
+     diff2:=abs(y_p-y);
+     Difft:=diff1+diff2;
+  if diff_min>Difft then
+     begin
+      diff_min:=Difft;
+      id_min:=n_curr;
+    end;
+ end;
+  get_closest_node_id:=id_min;
+end;
+end;
 
+function get_max_robotid(robotlist:r_node):integer;
+var
+l4:integer;
+aux4:integer;
+i_max:integer;
+i_curr:integer;
+begin
+ l4:=length(robotlist);
+ i_max:=0;
+ for aux4:=0 to l4-1 do
+ begin
+    i_curr:=robotlist[aux4].id_robot;
+    if i_curr>i_max then
+       begin
+       i_max:=i_curr;
+       end;
+ end;
+  get_max_robotid:=i_max;
+end;
 
+procedure Create_robots( n_robots:integer;robotlist:r_node);
+var
+l4:integer;
+aux4:integer;
+count:integer;
+max_id:integer;
+begin
+count:=1;
+l4:=length(robotlist);
+setlength(robotlist,l4+n_robots);
+for aux4:=0 to n_robots do
+begin
+max_id:=get_max_robotid(robotlist);
+robotlist[l4+aux4].id_robot:=max_id+count;
+end;
+end;
+procedure update_robot_inicial_position(r_id:integer; id:integer; robotlist:r_node; nodelist:a_node);
+var
+l4:integer;
+l5:integer;
+aux5:integer;
+aux4:integer;
+rid_curr:integer;
+id_curr:integer;
+begin
+  l4:=length(robotlist);
+  if l4>0 then
+  begin
+  for aux4:=0 to l4-1 do
+  begin
+    rid_curr:=robotlist[aux4].id_robot;
+    if rid_curr=r_id then
+    begin
+     setlength(robotlist[aux4].current_nodes,1);
+     robotlist[aux4].current_nodes[0]:=id;
+     l5:=length(nodelist);
+     for aux5:=0 to l5-1 do
+     begin
+       id_curr:=nodelist[aux5].id;
+       if id_curr=id then
+       begin
+         robotlist[aux4].pos_X:=nodelist[aux5].pos_X;
+         robotlist[aux4].pos_Y:=nodelist[aux5].pos_Y;
+       end;
+     end;
+    end;
+  end;
+end;
+end;
 
 function get_index_node(nodelist:a_node; id:integer):integer;
 var
