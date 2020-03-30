@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids,
-  GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects, GLLCLViewer, Dom,
-  XmlRead, XMLWrite, Math, Types, GLBaseClasses;
+  ExtCtrls, GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects,
+  GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses;
 
 type
     link_full = object
@@ -55,6 +55,7 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    Button1: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera1: TGLCamera;
     GLCube1: TGLCube;
@@ -63,9 +64,11 @@ type
     GLLightSource1: TGLLightSource;
     GLScene2: TGLScene;
     GLSceneViewer1: TGLSceneViewer;
-    Label1: TLabel;
+    LabeledEdit2: TLabeledEdit;
+    LabeledEdit3: TLabeledEdit;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
+    procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
       newTime: Double);
@@ -85,6 +88,7 @@ var
   Form1: TForm1;
   full_nodelist:array of node_full;
   l1:integer;
+  l4:integer;
   aux1:integer;
   i_curr:integer;
   x:double;
@@ -98,8 +102,13 @@ var
   l2:integer;
   ntl:integer;
   dist:double;
+  x_r:double;
+  y_r:double;
   newline1: TGLLines;
     mx, my, mx2, my2: integer;
+    robots:array of Robot_Pos_info;
+    max_id:integer;
+    id_r:integer;
 implementation
 
 {$R *.lfm}
@@ -144,8 +153,8 @@ begin
      n_curr:=nodelist[aux4].id;
      x_p:=nodelist[aux4].pos_X*scale;
      y_p:=nodelist[aux4].pos_Y*scale;
-     diff1:=abs(x_p-x);
-     diff2:=abs(y_p-y);
+     diff1:=abs(x_p-x*scale);
+     diff2:=abs(y_p-y*scale);
      Difft:=diff1+diff2;
   if diff_min>Difft then
      begin
@@ -177,22 +186,6 @@ begin
   get_max_robotid:=i_max;
 end;
 
-procedure Create_robots( n_robots:integer;robotlist:r_node);
-var
-l4:integer;
-aux4:integer;
-count:integer;
-max_id:integer;
-begin
-count:=1;
-l4:=length(robotlist);
-setlength(robotlist,l4+n_robots);
-for aux4:=0 to n_robots do
-begin
-max_id:=get_max_robotid(robotlist);
-robotlist[l4+aux4].id_robot:=max_id+count;
-end;
-end;
 procedure update_robot_inicial_position(r_id:integer; id:integer; robotlist:r_node; nodelist:a_node);
 var
 l4:integer;
@@ -225,6 +218,37 @@ begin
     end;
   end;
 end;
+end;
+
+procedure print_robot_position_GLS(robotlist:r_node; scale:integer; GLScene: TGLScene; base:TGLDummyCube; r_w:double; r_h:double);
+var
+l1:integer;
+l2:integer;
+aux1:integer;
+aux2:integer;
+x:double;
+y:double;
+newcube: TGLCube;
+ begin
+    l1:=length(robotlist);
+    if l1>0 then
+    begin
+    for aux1:=0 to l1-1 do
+      begin
+         x:=robotlist[aux1].pos_X*scale;
+         y:=robotlist[aux1].pos_Y*scale;
+         newcube:=TGLCube.CreateAsChild(GLScene.Objects);
+         newcube.CubeHeight:=r_h;
+         newcube.CubeWidth:=r_w;
+         newcube.CubeDepth:=1;
+         newcube.Position.X:=x-1.5*scale;
+         newcube.Position.y:=y-1.1*scale;
+         newcube.Position.z:=1;
+         //colour.
+        newcube.Material.FrontProperties.Ambient:='clrBrown';
+      end;
+ end;
+ end;
 
 function get_index_node(nodelist:a_node; id:integer):integer;
 var
@@ -346,10 +370,6 @@ begin
   end;
 end;
 
-
-
-
-
 function read_xml():a_node;
 var
   nodelist:array of node_full;
@@ -446,6 +466,7 @@ begin
 end;
  check_array:=count;
 end;
+
 procedure write_xml_Simtwo (scale:integer; nodelist:a_node; width_line:double);
 
 var
@@ -661,6 +682,24 @@ var
     end;
  end;
 
+procedure Create_robots( robotlist:r_node; nodelist:a_node; x:Double; y:Double; scale:integer);
+var
+l4:integer;
+aux4:integer;
+count:integer;
+max_id:integer;
+id:integer;
+
+begin
+count:=1;
+l4:=length(robotlist);
+setlength(robotlist,l4+1);
+max_id:=get_max_robotid(robotlist);
+robotlist[l4].id_robot:=max_id+count;
+id:=get_closest_node_id(nodelist, x, y, scale);
+update_robot_inicial_position(max_id+count, id, robotlist, nodelist);
+end;
+
 { TForm1 }
 
 procedure TForm1.FormShow(Sender: TObject);
@@ -683,14 +722,13 @@ begin
          id_l:=full_nodelist[aux1].links[aux2].id_l;
          ntl:=full_nodelist[aux1].links[aux2].node_to_link;
          dist:=full_nodelist[aux1].links[aux2].distance;
-         StringGrid2.InsertRowWithValues(1,[inttostr(id_l), inttostr(i_curr), inttostr(ntl), floattostr(dist)]);
+
         end;
       end;
       ReadXMLFile(Doc, 'C:\Users\diogo\Desktop\pascal\read_xml\test.xml');
       Nodes:= Doc.GetElementsByTagName('Node');
       Node:= Nodes[0];
       id:=Node.Attributes.Item[0];
-      LABEL1.Caption:=id.NodeValue;
       write_xml_Simtwo(10,full_nodelist,0.25);
       //newline1:=TGLLines.CreateAsChild(GLScene2.Objects);
       //newline1.LineWidth:=25;
@@ -698,6 +736,42 @@ begin
       //newline1.AddNode(300,25,0);
       //GLScene2.Objects.addchild(newline1);
       Print_map_in_GLS(full_nodelist,10,GLScene2,GLDummyCube3,200);
+      l2:=length(robots);
+      if l2>0 then
+      begin
+      for aux1:=0 to l1-1 do
+      begin
+         id_l:=robots[aux1].id_robot;
+         x_r:=robots[aux1].pos_X;
+         y_r:=robots[aux1].pos_y;
+         StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
+        end;
+      end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  x_r:=strtofloat(Labelededit2.Text);
+  y_r:=strtofloat(Labelededit3.Text);
+  //Create_robots(robots,full_nodelist,x_r,y_r,10);
+l4:=length(robots);
+setlength(robots,l4+1);
+max_id:=get_max_robotid(robots);
+robots[l4].id_robot:=max_id+1;
+id_r:=get_closest_node_id(full_nodelist, x_r, y_r, 200);
+update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
+  l2:=length(robots);
+      if l2>0 then
+      begin
+      for aux1:=0 to l2-1 do
+      begin
+         id_l:=robots[aux1].id_robot;
+         x_r:=robots[aux1].pos_X;
+         y_r:=robots[aux1].pos_y;
+         StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
+        end;
+      end;
+  print_robot_position_GLS(robots,200,GLScene2,GLDummyCube3,25,25);
 end;
 
 procedure TForm1.GLCadencer1Progress(Sender: TObject; const deltaTime,

@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 129
-  Height = 767
-  Top = 60
+  Left = 344
+  Height = 803
+  Top = 115
   Width = 1369
   Caption = 'Form1'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 803
+  ClientWidth = 1369
   DesignTimePPI = 120
   OnShow = FormShow
   LCLVersion = '2.0.4.0'
@@ -37,47 +37,6 @@ object Form1: TForm1
       196
     )
   end
-  object StringGrid2: TStringGrid
-    Left = 48
-    Height = 226
-    Top = 312
-    Width = 591
-    AutoFillColumns = True
-    ColCount = 4
-    Columns = <    
-      item
-        Title.Caption = 'Link_id'
-        Width = 146
-      end    
-      item
-        Title.Caption = 'Node_1'
-        Width = 146
-      end    
-      item
-        Title.Caption = 'Node_2'
-        Width = 146
-      end    
-      item
-        Title.Caption = 'Distance'
-        Width = 149
-      end>
-    FixedCols = 0
-    TabOrder = 1
-    ColWidths = (
-      146
-      146
-      146
-      149
-    )
-  end
-  object Label1: TLabel
-    Left = 48
-    Height = 20
-    Top = 656
-    Width = 44
-    Caption = 'Label1'
-    ParentColor = False
-  end
   object GLSceneViewer1: TGLSceneViewer
     Left = 672
     Height = 622
@@ -96,11 +55,70 @@ object Form1: TForm1
     OnMouseDown = GLSceneViewer1MouseDown
     OnMouseMove = GLSceneViewer1MouseMove
     OnMouseWheel = GLSceneViewer1MouseWheel
+    TabOrder = 1
+  end
+  object StringGrid2: TStringGrid
+    Left = 49
+    Height = 226
+    Top = 322
+    Width = 589
+    AutoFillColumns = True
+    ColCount = 3
+    Columns = <    
+      item
+        Title.Caption = 'robot_id'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 195
+      end>
+    FixedCols = 0
     TabOrder = 2
+    ColWidths = (
+      195
+      195
+      195
+    )
+  end
+  object LabeledEdit2: TLabeledEdit
+    Left = 47
+    Height = 28
+    Top = 608
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Robot inicial X'
+    EditLabel.ParentColor = False
+    TabOrder = 3
+  end
+  object LabeledEdit3: TLabeledEdit
+    Left = 208
+    Height = 28
+    Top = 608
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Robot inicial Y'
+    EditLabel.ParentColor = False
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 47
+    Height = 43
+    Top = 656
+    Width = 140
+    Caption = 'Add Robot'
+    OnClick = Button1Click
+    TabOrder = 5
   end
   object GLScene2: TGLScene
-    left = 160
-    top = 576
+    left = 704
+    top = 712
     object GLCamera1: TGLCamera
       TagFloat = 0
       DepthOfView = 300000
@@ -274,7 +292,7 @@ object Form1: TForm1
     MinDeltaTime = 0
     FixedDeltaTime = 0
     OnProgress = GLCadencer1Progress
-    left = 56
-    top = 568
+    left = 848
+    top = 712
   end
 end
