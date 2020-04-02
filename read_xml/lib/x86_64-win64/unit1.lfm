@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 344
+  Left = 674
   Height = 803
-  Top = 115
+  Top = 386
   Width = 1369
   Caption = 'Form1'
   ClientHeight = 803
@@ -108,13 +108,33 @@ object Form1: TForm1
     TabOrder = 4
   end
   object Button1: TButton
-    Left = 47
+    Left = 192
     Height = 43
-    Top = 656
+    Top = 664
     Width = 140
     Caption = 'Add Robot'
     OnClick = Button1Click
     TabOrder = 5
+  end
+  object Button2: TButton
+    Left = 960
+    Height = 56
+    Top = 712
+    Width = 249
+    Caption = 'Next'
+    OnClick = Button2Click
+    TabOrder = 6
+  end
+  object LabeledEdit1: TLabeledEdit
+    Left = 47
+    Height = 28
+    Top = 672
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Direction(graus)'
+    EditLabel.ParentColor = False
+    TabOrder = 7
   end
   object GLScene2: TGLScene
     left = 704

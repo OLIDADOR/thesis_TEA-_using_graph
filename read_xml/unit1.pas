@@ -9,6 +9,22 @@ uses
   ExtCtrls, GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects,
   GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses;
 
+
+const
+
+  // Cell States
+  VIRGIN = 0;
+  OBSTACLE = 1;
+  CLOSED = 2;
+  OPENED = 3;
+
+  NUM_LAYERS = 160;
+  MAX_EXCHANGES = 10;
+  MAX_ITERATIONS = 10000;
+  MAX_SUBMISSIONS = 4;
+
+
+
 type
     link_full = object
    private
@@ -35,16 +51,59 @@ type
    end;
 
    Robot_Pos_info = object
+  private
+    {private declarations}
+  public
+    {public declarations}
+    var
+    id_robot:integer;
+    current_nodes:array of integer;
+    inicial_node:integer;
+    target_node:integer;
+    pos_X:Double;
+    pos_Y:Double;
+    Direction:Double;
+    SubMissions: array[0..MAX_SUBMISSIONS] of TGridCoord;
+    NumberSubMissions: integer;
+    CounterSubMissions: integer;
+    ActualSubMission: integer;
+    InitialIdPriority: integer;
+  end;
+
+   TEA_Graph_node = object
    private
      {private declarations}
    public
      {public declarations}
      var
-     id_robot:integer;
-     current_nodes:array of integer;
+     id:integer;
      pos_X:Double;
      pos_Y:Double;
+     status:integer;
+     links:array of link_full;
    end;
+ 
+ TAStarHeapArray = record
+      data: array of integer;
+      count: integer;
+    end;
+
+  TAStarProfiler = record
+    RemovePointFromAStarList_count: integer;
+    RemoveFromOpenList_count: integer;
+    AddToOpenList_count: integer;
+    HeapArrayTotal: integer;
+    comparesTotal: integer;
+    iter: integer;
+  end;  
+   
+  TAStarMap = record
+    TEA_GRAPH: array of array of TEA_Graph_node;
+    GraphState: array of array of byte;
+    HeapArray: TAStarHeapArray;
+    Profiler: TAStarProfiler;
+  end; 
+
 
        r_node=array of Robot_Pos_info;
 
@@ -56,6 +115,7 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
+    Button2: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera1: TGLCamera;
     GLCube1: TGLCube;
@@ -64,11 +124,13 @@ type
     GLLightSource1: TGLLightSource;
     GLScene2: TGLScene;
     GLSceneViewer1: TGLSceneViewer;
+    LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
       newTime: Double);
@@ -81,12 +143,14 @@ type
   private
 
   public
-
+    map:TAStarMap;
+    full_nodelist:array of node_full;
+    robots:array of Robot_Pos_info;
+    graphsize:integer;
   end;
 
 var
   Form1: TForm1;
-  full_nodelist:array of node_full;
   l1:integer;
   l4:integer;
   aux1:integer;
@@ -106,11 +170,12 @@ var
   y_r:double;
   newline1: TGLLines;
     mx, my, mx2, my2: integer;
-    robots:array of Robot_Pos_info;
     max_id:integer;
     id_r:integer;
+    dirr:double;
 implementation
-
+     uses
+   unit2;
 {$R *.lfm}
 function get_line_Dir (x1:Double;y1:Double;x2:double;y2:Double):integer;
 
@@ -229,6 +294,7 @@ aux2:integer;
 x:double;
 y:double;
 newcube: TGLCube;
+angle:double;
  begin
     l1:=length(robotlist);
     if l1>0 then
@@ -244,6 +310,10 @@ newcube: TGLCube;
          newcube.Position.X:=x-1.5*scale;
          newcube.Position.y:=y-1.1*scale;
          newcube.Position.z:=1;
+         angle:=gradtorad(robotlist[aux1].Direction);
+         newcube.Direction.X:=cos(angle);
+         newcube.Direction.Y:=sin(angle);
+         newcube.Direction.Z:=1;
          //colour.
         newcube.Material.FrontProperties.Ambient.RandomColor;
       end;
@@ -751,14 +821,21 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  x_r:=strtofloat(Labelededit2.Text);
-  y_r:=strtofloat(Labelededit3.Text);
+x_r:=strtofloat(Labelededit2.Text);
+y_r:=strtofloat(Labelededit3.Text);
+dirr:=strtofloat(Labelededit1.Text);
   //Create_robots(robots,full_nodelist,x_r,y_r,10);
 l4:=length(robots);
 setlength(robots,l4+1);
 max_id:=get_max_robotid(robots);
 robots[l4].id_robot:=max_id+1;
 id_r:=get_closest_node_id(full_nodelist, x_r, y_r, 200);
+l1:=length(robots[l4].current_nodes);
+setlength(robots[l4].current_nodes,l1+1);
+robots[l4].current_nodes[l1]:=id_r;
+robots[l4].inicial_node:=id_r;
+robots[l4].InitialIdPriority:=max_id+1;
+robots[l4].Direction:=dirr;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
   l2:=length(robots);
       if l2>0 then
@@ -772,6 +849,26 @@ update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
         end;
       end;
   print_robot_position_GLS(robots,200,GLScene2,GLDummyCube3,25,25);
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+   l1:=length(full_nodelist);
+   setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
+   for aux1:=0 to NUM_LAYERS-1 do
+   begin
+      for aux2:=0 to l1-1 do
+      begin
+         map.TEA_GRAPH[aux2][aux1].id:=full_nodelist[aux2].id;
+         map.TEA_GRAPH[aux2][aux1].pos_X:=full_nodelist[aux2].pos_X;
+         map.TEA_GRAPH[aux2][aux1].pos_Y:=full_nodelist[aux2].pos_Y;
+         map.TEA_GRAPH[aux2][aux1].links:=full_nodelist[aux2].links;
+         map.TEA_GRAPH[aux2][aux1].status:=VIRGIN;
+      end;
+   end;
+   graphsize:=l1;
+   form1.hide;
+   form2.show;
 end;
 
 procedure TForm1.GLCadencer1Progress(Sender: TObject; const deltaTime,
