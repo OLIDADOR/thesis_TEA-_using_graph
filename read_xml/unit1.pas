@@ -108,7 +108,7 @@ type
        r_node=array of Robot_Pos_info;
 
       a_node=array of node_full;
-
+      a_i=array of integer;
 
 
   { TForm1 }
@@ -119,7 +119,6 @@ type
     GLCadencer1: TGLCadencer;
     GLCamera1: TGLCamera;
     GLCube1: TGLCube;
-    GLCube2: TGLCube;
     GLDummyCube3: TGLDummyCube;
     GLLightSource1: TGLLightSource;
     GLScene2: TGLScene;
@@ -147,6 +146,7 @@ type
     full_nodelist:array of node_full;
     robots:array of Robot_Pos_info;
     graphsize:integer;
+    ws:array of integer;
   end;
 
 var
@@ -310,10 +310,8 @@ angle:double;
          newcube.Position.X:=x-1.5*scale;
          newcube.Position.y:=y-1.1*scale;
          newcube.Position.z:=1;
-         angle:=gradtorad(robotlist[aux1].Direction);
-         newcube.Direction.X:=cos(angle);
-         newcube.Direction.Y:=sin(angle);
-         newcube.Direction.Z:=1;
+         angle:=robotlist[aux1].Direction;
+         newcube.RollAngle:=angle;
          //colour.
         newcube.Material.FrontProperties.Ambient.RandomColor;
       end;
@@ -665,7 +663,11 @@ begin
   writeXMLFile(Doc, 'track.xml');                     // write to XML
 end;
 
-procedure Print_map_in_GLS(nodelist:a_node; width_line:integer; GLScene: TGLScene; base:TGLDummyCube ; scale:integer);
+procedure Print_WS_in_GLS(a_i:a_i; width_line:integer; GLScene: TGLScene; base:TGLDummyCube ; scale:integer;x1:Double;y1:Double;x2:Double;y2:Double);
+ begin
+ end;
+
+procedure Print_map_in_GLS(ws:a_i;nodelist:a_node; width_line:integer; GLScene: TGLScene; base:TGLDummyCube ; scale:integer);
 var
  newline: TGLLines;
  id_n:integer;
@@ -694,6 +696,7 @@ var
    l1:=length(nodelist);
  for aux4:=0 to l1-1 do
   begin
+   id_n:=nodelist[aux4].id;
    x1:=nodelist[aux4].pos_X*scale;
    y1:=nodelist[aux4].pos_y*scale;
    l2:=length(nodelist[aux4].links);
@@ -749,6 +752,10 @@ var
             l_done[l3]:=l_id;
             end;
      end;
+     if check_array(ws,id_n)=1 then
+     begin
+       Print_WS_in_GLS(ws, width_line, GLScene, base, scale,x1,y1,x2,y2);
+     end;
     end;
  end;
 
@@ -770,18 +777,50 @@ id:=get_closest_node_id(nodelist, x, y, scale);
 update_robot_inicial_position(max_id+count, id, robotlist, nodelist);
 end;
 
+function get_Workstations (nodelist:a_node):a_i;
+var
+aux1:integer;
+l1:integer;
+l2:integer;
+l3:integer;
+def:integer;
+nid:integer;
+arr:array of integer;
+begin
+l1:=length(nodelist);
+for aux1:=0 to l1-1 do
+ begin
+   def:=nodelist[aux1].defined;
+   l2:=length(nodelist[aux1].links);
+   nid:=nodelist[aux1].id;
+   if ((l2=1) and (def=1)) then
+   begin
+     l3:=length(arr);
+     setlength(arr,l3+1);
+     arr[l3]:=nid;
+   end;
+ end;
+   get_Workstations:=arr;
+end;
+
+
+
 { TForm1 }
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
     full_nodelist:=read_xml();
+    ws:=get_Workstations(full_nodelist);
     l1:=length(full_nodelist);
       for aux1:=0 to l1-1 do
       begin
        i_curr:=full_nodelist[aux1].id;
        x:=full_nodelist[aux1].pos_X;
        y:=full_nodelist[aux1].pos_y;
+       if check_array(ws,i_curr)=1 then
+       begin
        StringGrid1.InsertRowWithValues(1,[inttostr(i_curr), floattostr(x), floattostr(Y)]);
+       end;
       end;
       for aux1:=0 to l1-1 do
       begin
@@ -805,7 +844,7 @@ begin
       //newline1.AddNode(1,25,0);
       //newline1.AddNode(300,25,0);
       //GLScene2.Objects.addchild(newline1);
-      Print_map_in_GLS(full_nodelist,10,GLScene2,GLDummyCube3,200);
+      Print_map_in_GLS(ws,full_nodelist,10,GLScene2,GLDummyCube3,200);
       l2:=length(robots);
       if l2>0 then
       begin

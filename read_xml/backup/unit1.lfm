@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 674
+  Left = 169
   Height = 803
-  Top = 386
+  Top = 136
   Width = 1369
   Caption = 'Form1'
   ClientHeight = 803
@@ -248,61 +248,6 @@ object Form1: TForm1
       TurnAngle = 0
       CubeSize = {
         00007A4400007A440000803F
-      }
-    end
-    object GLCube2: TGLCube
-      TagFloat = 0
-      Material.BackProperties.Ambient.Red = 0.200000002980232
-      Material.BackProperties.Ambient.Green = 0.200000002980232
-      Material.BackProperties.Ambient.Blue = 0.200000002980232
-      Material.BackProperties.Ambient.Alpha = 1
-      Material.BackProperties.Diffuse.Red = 0.800000011920929
-      Material.BackProperties.Diffuse.Green = 0.800000011920929
-      Material.BackProperties.Diffuse.Blue = 0.800000011920929
-      Material.BackProperties.Diffuse.Alpha = 1
-      Material.BackProperties.Emission.Red = 0
-      Material.BackProperties.Emission.Green = 0
-      Material.BackProperties.Emission.Blue = 0
-      Material.BackProperties.Emission.Alpha = 1
-      Material.BackProperties.Specular.Red = 0
-      Material.BackProperties.Specular.Green = 0
-      Material.BackProperties.Specular.Blue = 0
-      Material.BackProperties.Specular.Alpha = 1
-      Material.FrontProperties.Ambient.Red = 0.64705902338028
-      Material.FrontProperties.Ambient.Green = 0.164706006646156
-      Material.FrontProperties.Ambient.Blue = 0.164706006646156
-      Material.FrontProperties.Ambient.Alpha = 1
-      Material.FrontProperties.Ambient.Color = {
-        A9A5253FB1A8283EB1A8283E0000803F
-      }
-      Material.FrontProperties.Diffuse.Red = 0.800000011920929
-      Material.FrontProperties.Diffuse.Green = 0.800000011920929
-      Material.FrontProperties.Diffuse.Blue = 0.800000011920929
-      Material.FrontProperties.Diffuse.Alpha = 1
-      Material.FrontProperties.Emission.Red = 0
-      Material.FrontProperties.Emission.Green = 0
-      Material.FrontProperties.Emission.Blue = 0
-      Material.FrontProperties.Emission.Alpha = 1
-      Material.FrontProperties.Specular.Red = 0
-      Material.FrontProperties.Specular.Green = 0
-      Material.FrontProperties.Specular.Blue = 0
-      Material.FrontProperties.Specular.Alpha = 1
-      Material.Texture.EnvColor.Red = 0
-      Material.Texture.EnvColor.Green = 0
-      Material.Texture.EnvColor.Blue = 0
-      Material.Texture.EnvColor.Alpha = 0
-      Material.Texture.BorderColor.Red = 0
-      Material.Texture.BorderColor.Green = 0
-      Material.Texture.BorderColor.Blue = 0
-      Material.Texture.BorderColor.Alpha = 0
-      PitchAngle = 0
-      Position.Coordinates = {
-        00000000000000000000803F0000803F
-      }
-      RollAngle = 0
-      TurnAngle = 0
-      CubeSize = {
-        0000C8410000C8410000803F
       }
     end
   end

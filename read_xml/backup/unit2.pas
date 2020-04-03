@@ -14,20 +14,24 @@ type
   { TForm2 }
 
   TForm2 = class(TForm)
+    Button1: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera3: TGLCamera;
-    GLCube1: TGLCube;
-    GLCube2: TGLCube;
     GLCube3: TGLCube;
     GLDummyCube3: TGLDummyCube;
-    GLLightSource1: TGLLightSource;
-    GLLightSource2: TGLLightSource;
     GLLightSource3: TGLLightSource;
-    GLScene1: TGLScene;
-    GLScene2: TGLScene;
+    GLPlane1: TGLPlane;
     GLScene3: TGLScene;
     GLSceneViewer1: TGLSceneViewer;
     GLSceneViewer2: TGLSceneViewer;
+    Label1: TLabel;
+    Label2: TLabel;
+    LabeledEdit1: TLabeledEdit;
+    LabeledEdit2: TLabeledEdit;
+    StringGrid1: TStringGrid;
+    StringGrid2: TStringGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
       newTime: Double);
@@ -46,7 +50,18 @@ type
 var
   Form2: TForm2;
   mx, my, mx2, my2: integer;
-
+  l1,l2:integer;
+  aux1, aux2:integer;
+  X:double;
+  Y:double;
+  i_curr:integer;
+  count:integer;
+  r_ID:integer;
+  r_id_curr:integer;
+  ws_ID:integer;
+  rc1,rc2:integer;
+  i_t:integer;
+  i_node:integer;
 implementation
       uses
    unit1;
@@ -211,9 +226,9 @@ angle:double;
          newcube.Position.y:=y-1.1*scale;
          newcube.Position.z:=1;
          angle:=gradtorad(robotlist[aux1].Direction);
-         newcube.Direction.X:=cos(angle);
-         newcube.Direction.Y:=sin(angle);
-         newcube.Direction.Z:=1;
+         //newcube.Direction.X:=cos(angle);
+         //newcube.Direction.Y:=sin(angle);
+         //newcube.Direction.Z:=1;
          //colour.
         newcube.Material.FrontProperties.Ambient.RandomColor;
       end;
@@ -237,6 +252,74 @@ procedure TForm2.FormShow(Sender: TObject);
 begin
  Print_map_in_GLS(form1.full_nodelist,10,GLScene3,GLDummyCube3,200);
  Print_robot_position_GLS(form1.robots,200,GLScene3,GLDummyCube3,25,25);
+ l1:=length(form1.robots);
+ label2.Caption:=inttostr(l1);
+end;
+
+procedure TForm2.Button1Click(Sender: TObject);
+begin
+  r_ID:=strtoint(labelededit1.Text);
+  ws_ID:=strtoint(labelededit2.Text);
+  l1:=length(form1.robots);
+  for aux1:=0 to l1-1 do
+  begin
+    r_id_curr:=form1.robots[aux1].id_robot;
+    if r_id_curr=r_ID then
+    begin
+       form1.robots[aux1].target_node:=form1.ws[ws_ID-1];
+    end;
+  end;
+end;
+
+procedure TForm2.FormPaint(Sender: TObject);
+begin
+  rc1:=StringGrid1.RowCount;
+  for aux1:=1 to rc1-1 do
+     begin
+     StringGrid1.DeleteRow(1);
+     end;
+  rc2:=StringGrid2.RowCount;
+  for aux1:=1 to rc2-1 do
+     begin
+     StringGrid2.DeleteRow(1);
+     end;
+  l1:=length(form1.full_nodelist);
+  count:=1;
+  for aux1:=0 to l1-1 do
+  begin
+  i_curr:=form1.full_nodelist[aux1].id;
+  x:=form1.full_nodelist[aux1].pos_X;
+  y:=form1.full_nodelist[aux1].pos_y;
+  if check_array(form1.ws,i_curr)=1 then
+  begin
+       StringGrid1.InsertRowWithValues(1,[inttostr(count),inttostr(i_curr) , floattostr(x), floattostr(Y)]);
+       count:=count+1;
+  end;
+  end;
+  l1:=length(form1.robots);
+  for aux1:=0 to l1-1 do
+  begin
+     i_curr:=form1.robots[aux1].id_robot;
+     i_t:=form1.robots[aux1].target_node;
+     i_node:= form1.robots[aux1].inicial_node;
+     l2:=length(form1.full_nodelist);
+     for aux2:=0 to l2-1 do
+     begin
+     if form1.full_nodelist[aux2].id=i_node  then
+     begin
+     X:=form1.full_nodelist[aux2].pos_X;
+     Y:=form1.full_nodelist[aux2].pos_Y;
+     end;
+     end;
+     if check_array(form1.ws,i_t)=1 then
+     begin
+     StringGrid2.InsertRowWithValues(1,[inttostr(i_curr), floattostr(X),floattostr(Y), inttostr(i_t)]);
+     end;
+     else
+     begin
+       StringGrid2.InsertRowWithValues(1,[inttostr(i_curr), floattostr(X),floattostr(Y)]);
+     end;
+  end;
 end;
 
 procedure TForm2.GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;

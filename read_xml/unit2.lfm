@@ -1,12 +1,13 @@
 object Form2: TForm2
-  Left = 5
+  Left = 22
   Height = 853
-  Top = 127
+  Top = 152
   Width = 1893
   Caption = 'Form2'
   ClientHeight = 853
   ClientWidth = 1893
   DesignTimePPI = 120
+  OnPaint = FormPaint
   OnShow = FormShow
   LCLVersion = '2.0.4.0'
   object GLSceneViewer1: TGLSceneViewer
@@ -37,145 +38,120 @@ object Form2: TForm2
     FieldOfView = 0
     TabOrder = 1
   end
-  object GLScene1: TGLScene
-    left = 88
-    top = 568
-    object GLLightSource1: TGLLightSource
-      TagFloat = 0
-      Ambient.Red = 0
-      Ambient.Green = 0
-      Ambient.Blue = 0
-      Ambient.Alpha = 1
-      ConstAttenuation = 1
-      Diffuse.Red = 1
-      Diffuse.Green = 1
-      Diffuse.Blue = 1
-      Diffuse.Alpha = 1
-      LinearAttenuation = 0
-      QuadraticAttenuation = 0
-      Specular.Red = 0
-      Specular.Green = 0
-      Specular.Blue = 0
-      Specular.Alpha = 1
-      SpotCutOff = 180
-      SpotExponent = 0
-    end
-    object GLCube1: TGLCube
-      TagFloat = 0
-      Material.BackProperties.Ambient.Red = 0.200000002980232
-      Material.BackProperties.Ambient.Green = 0.200000002980232
-      Material.BackProperties.Ambient.Blue = 0.200000002980232
-      Material.BackProperties.Ambient.Alpha = 1
-      Material.BackProperties.Diffuse.Red = 0.800000011920929
-      Material.BackProperties.Diffuse.Green = 0.800000011920929
-      Material.BackProperties.Diffuse.Blue = 0.800000011920929
-      Material.BackProperties.Diffuse.Alpha = 1
-      Material.BackProperties.Emission.Red = 0
-      Material.BackProperties.Emission.Green = 0
-      Material.BackProperties.Emission.Blue = 0
-      Material.BackProperties.Emission.Alpha = 1
-      Material.BackProperties.Specular.Red = 0
-      Material.BackProperties.Specular.Green = 0
-      Material.BackProperties.Specular.Blue = 0
-      Material.BackProperties.Specular.Alpha = 1
-      Material.FrontProperties.Ambient.Red = 0.200000002980232
-      Material.FrontProperties.Ambient.Green = 0.200000002980232
-      Material.FrontProperties.Ambient.Blue = 0.200000002980232
-      Material.FrontProperties.Ambient.Alpha = 1
-      Material.FrontProperties.Diffuse.Red = 0.800000011920929
-      Material.FrontProperties.Diffuse.Green = 0.800000011920929
-      Material.FrontProperties.Diffuse.Blue = 0.800000011920929
-      Material.FrontProperties.Diffuse.Alpha = 1
-      Material.FrontProperties.Emission.Red = 0
-      Material.FrontProperties.Emission.Green = 0
-      Material.FrontProperties.Emission.Blue = 0
-      Material.FrontProperties.Emission.Alpha = 1
-      Material.FrontProperties.Specular.Red = 0
-      Material.FrontProperties.Specular.Green = 0
-      Material.FrontProperties.Specular.Blue = 0
-      Material.FrontProperties.Specular.Alpha = 1
-      Material.Texture.EnvColor.Red = 0
-      Material.Texture.EnvColor.Green = 0
-      Material.Texture.EnvColor.Blue = 0
-      Material.Texture.EnvColor.Alpha = 0
-      Material.Texture.BorderColor.Red = 0
-      Material.Texture.BorderColor.Green = 0
-      Material.Texture.BorderColor.Blue = 0
-      Material.Texture.BorderColor.Alpha = 0
-      PitchAngle = 0
-      RollAngle = 0
-      TurnAngle = 0
-    end
+  object LabeledEdit1: TLabeledEdit
+    Left = 70
+    Height = 28
+    Top = 671
+    Width = 118
+    EditLabel.Height = 20
+    EditLabel.Width = 118
+    EditLabel.Caption = 'Robot ID'
+    EditLabel.ParentColor = False
+    TabOrder = 2
   end
-  object GLScene2: TGLScene
-    left = 1048
-    top = 568
-    object GLLightSource2: TGLLightSource
-      TagFloat = 0
-      Ambient.Red = 0
-      Ambient.Green = 0
-      Ambient.Blue = 0
-      Ambient.Alpha = 1
-      ConstAttenuation = 1
-      Diffuse.Red = 1
-      Diffuse.Green = 1
-      Diffuse.Blue = 1
-      Diffuse.Alpha = 1
-      LinearAttenuation = 0
-      QuadraticAttenuation = 0
-      Specular.Red = 0
-      Specular.Green = 0
-      Specular.Blue = 0
-      Specular.Alpha = 1
-      SpotCutOff = 180
-      SpotExponent = 0
-    end
-    object GLCube2: TGLCube
-      TagFloat = 0
-      Material.BackProperties.Ambient.Red = 0.200000002980232
-      Material.BackProperties.Ambient.Green = 0.200000002980232
-      Material.BackProperties.Ambient.Blue = 0.200000002980232
-      Material.BackProperties.Ambient.Alpha = 1
-      Material.BackProperties.Diffuse.Red = 0.800000011920929
-      Material.BackProperties.Diffuse.Green = 0.800000011920929
-      Material.BackProperties.Diffuse.Blue = 0.800000011920929
-      Material.BackProperties.Diffuse.Alpha = 1
-      Material.BackProperties.Emission.Red = 0
-      Material.BackProperties.Emission.Green = 0
-      Material.BackProperties.Emission.Blue = 0
-      Material.BackProperties.Emission.Alpha = 1
-      Material.BackProperties.Specular.Red = 0
-      Material.BackProperties.Specular.Green = 0
-      Material.BackProperties.Specular.Blue = 0
-      Material.BackProperties.Specular.Alpha = 1
-      Material.FrontProperties.Ambient.Red = 0.200000002980232
-      Material.FrontProperties.Ambient.Green = 0.200000002980232
-      Material.FrontProperties.Ambient.Blue = 0.200000002980232
-      Material.FrontProperties.Ambient.Alpha = 1
-      Material.FrontProperties.Diffuse.Red = 0.800000011920929
-      Material.FrontProperties.Diffuse.Green = 0.800000011920929
-      Material.FrontProperties.Diffuse.Blue = 0.800000011920929
-      Material.FrontProperties.Diffuse.Alpha = 1
-      Material.FrontProperties.Emission.Red = 0
-      Material.FrontProperties.Emission.Green = 0
-      Material.FrontProperties.Emission.Blue = 0
-      Material.FrontProperties.Emission.Alpha = 1
-      Material.FrontProperties.Specular.Red = 0
-      Material.FrontProperties.Specular.Green = 0
-      Material.FrontProperties.Specular.Blue = 0
-      Material.FrontProperties.Specular.Alpha = 1
-      Material.Texture.EnvColor.Red = 0
-      Material.Texture.EnvColor.Green = 0
-      Material.Texture.EnvColor.Blue = 0
-      Material.Texture.EnvColor.Alpha = 0
-      Material.Texture.BorderColor.Red = 0
-      Material.Texture.BorderColor.Green = 0
-      Material.Texture.BorderColor.Blue = 0
-      Material.Texture.BorderColor.Alpha = 0
-      PitchAngle = 0
-      RollAngle = 0
-      TurnAngle = 0
-    end
+  object LabeledEdit2: TLabeledEdit
+    Left = 232
+    Height = 28
+    Top = 672
+    Width = 118
+    EditLabel.Height = 20
+    EditLabel.Width = 118
+    EditLabel.Caption = 'Workstation ID'
+    EditLabel.ParentColor = False
+    TabOrder = 3
+  end
+  object StringGrid1: TStringGrid
+    Left = 416
+    Height = 248
+    Top = 568
+    Width = 472
+    AutoFillColumns = True
+    ColCount = 4
+    Columns = <    
+      item
+        Title.Caption = 'Workstation ID'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'Node ID'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 117
+      end>
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 4
+    ColWidths = (
+      117
+      117
+      117
+      117
+    )
+  end
+  object Button1: TButton
+    Left = 70
+    Height = 55
+    Top = 728
+    Width = 111
+    Caption = 'Add Mission'
+    OnClick = Button1Click
+    TabOrder = 5
+  end
+  object StringGrid2: TStringGrid
+    Left = 944
+    Height = 244
+    Top = 568
+    Width = 456
+    AutoFillColumns = True
+    ColCount = 4
+    Columns = <    
+      item
+        Title.Caption = 'Robot ID'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'Target Node'
+        Width = 113
+      end>
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 6
+    ColWidths = (
+      113
+      113
+      113
+      113
+    )
+  end
+  object Label1: TLabel
+    Left = 209
+    Height = 20
+    Top = 733
+    Width = 122
+    Caption = 'Number of robots:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 344
+    Height = 20
+    Top = 733
+    Width = 44
+    Caption = 'Label2'
+    ParentColor = False
   end
   object GLScene3: TGLScene
     left = 80
