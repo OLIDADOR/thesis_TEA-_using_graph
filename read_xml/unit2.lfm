@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 22
+  Left = -1
   Height = 853
-  Top = 152
+  Top = 131
   Width = 1893
   Caption = 'Form2'
   ClientHeight = 853
@@ -152,6 +152,15 @@ object Form2: TForm2
     Width = 44
     Caption = 'Label2'
     ParentColor = False
+  end
+  object Button2: TButton
+    Left = 1435
+    Height = 60
+    Top = 584
+    Width = 402
+    Caption = 'Link to Simtwo'
+    OnClick = Button2Click
+    TabOrder = 7
   end
   object GLScene3: TGLScene
     left = 80

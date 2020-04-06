@@ -123,7 +123,6 @@ type
     GLLightSource1: TGLLightSource;
     GLScene2: TGLScene;
     GLSceneViewer1: TGLSceneViewer;
-    LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
     StringGrid1: TStringGrid;
@@ -803,6 +802,63 @@ for aux1:=0 to l1-1 do
    get_Workstations:=arr;
 end;
 
+procedure write_scene_xml(robotlist:r_node;scale:integer);
+var
+l1:integer;
+Doc: TXMLDocument;                                  // variable to document
+RootNode, parentNode, nofilho: TDOMNode;                    // variable to nodes
+x:double;
+y:double;
+aux1:integer;
+ begin
+  // Create a document
+ Doc := TXMLDocument.Create;
+
+  // Create a root node
+ RootNode := Doc.CreateElement('scene');
+ Doc.Appendchild(RootNode);      // save root node
+ l1:=length(robotlist);
+ for aux1:=0 to l1-1 do
+  begin
+    x:=robotlist[aux1].pos_X*scale;
+    y:=robotlist[aux1].pos_Y*scale;
+
+     // Create a robot
+     RootNode:= Doc.DocumentElement;
+     parentNode := Doc.CreateElement('robot');
+     RootNode.Appendchild(parentNode);                          // save parent node
+
+      //create the id
+     parentNode := Doc.CreateElement('ID');                // create a child node
+     TDOMElement(parentNode).SetAttribute('name','LegoNXT'+IntToStr(aux1+1));     // create atributes
+     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+
+    //create the pos
+     parentNode := Doc.CreateElement('pos');                // create a child node
+     TDOMElement(parentNode).SetAttribute('x',StringReplace(floattostr(x),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
+     TDOMElement(parentNode).SetAttribute('y',StringReplace(floattostr(y),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
+     TDOMElement(parentNode).SetAttribute('z','0');     // create atributes
+     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+
+     //create the rot_deg
+     parentNode := Doc.CreateElement('rot_deg');                // create a child node
+     TDOMElement(parentNode).SetAttribute('x','0');     // create atributes
+     TDOMElement(parentNode).SetAttribute('y','0');     // create atributes
+     TDOMElement(parentNode).SetAttribute('z','0');     // create atributes
+     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+
+     
+     //create the rot_deg
+     parentNode := Doc.CreateElement('body');                // create a child node
+     TDOMElement(parentNode).SetAttribute('file','nxt.xml');     // create atributes
+     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+   end;
+
+     parentNode := Doc.CreateElement('track');
+     TDOMElement(parentNode).SetAttribute('file','track.xml');     // create atributes
+     RootNode.Appendchild(parentNode);                          // save parent node
+     writeXMLFile(Doc, 'scene.xml');                     // write to XML
+ end;
 
 
 { TForm1 }
@@ -838,7 +894,7 @@ begin
       Nodes:= Doc.GetElementsByTagName('Node');
       Node:= Nodes[0];
       id:=Node.Attributes.Item[0];
-      write_xml_Simtwo(10,full_nodelist,0.25);
+      write_xml_Simtwo(1,full_nodelist,0.01);
       //newline1:=TGLLines.CreateAsChild(GLScene2.Objects);
       //newline1.LineWidth:=25;
       //newline1.AddNode(1,25,0);
@@ -862,7 +918,6 @@ procedure TForm1.Button1Click(Sender: TObject);
 begin
 x_r:=strtofloat(Labelededit2.Text);
 y_r:=strtofloat(Labelededit3.Text);
-dirr:=strtofloat(Labelededit1.Text);
   //Create_robots(robots,full_nodelist,x_r,y_r,10);
 l4:=length(robots);
 setlength(robots,l4+1);
@@ -874,7 +929,7 @@ setlength(robots[l4].current_nodes,l1+1);
 robots[l4].current_nodes[l1]:=id_r;
 robots[l4].inicial_node:=id_r;
 robots[l4].InitialIdPriority:=max_id+1;
-robots[l4].Direction:=dirr;
+robots[l4].Direction:=0;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
   l2:=length(robots);
       if l2>0 then
@@ -906,6 +961,7 @@ begin
       end;
    end;
    graphsize:=l1;
+   write_scene_xml(robots,10);
    form1.hide;
    form2.show;
 end;

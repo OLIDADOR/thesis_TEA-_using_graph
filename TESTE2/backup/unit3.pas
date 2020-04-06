@@ -56,6 +56,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure GroupBox1Click(Sender: TObject);
     procedure LabeledEdit1Change(Sender: TObject);
+    procedure PaintBox1Paint(Sender: TObject);
   private
 
   public
@@ -251,9 +252,9 @@ var
                              l_or_x:=node_t_x-node_x;
                              l_or_y:=node_t_y-node_y;
                              n_div:=dist/form1.vel_nom;
-                             div_dist:=dist/trunc(n_div);
                              if n_div>1 then
                              begin
+                             div_dist:=dist/trunc(n_div);
                              if (abs(l_or_x)>4) and  (abs(l_or_y)<4) then
                                 begin
                                    coord_dist_x:=l_or_x/trunc(n_div);
@@ -537,6 +538,7 @@ var
                              end
                              else
                              begin
+                                  div_dist:=dist;
                                   R8:=length(full_graph[node_t_id-1].links);
                                   R5:=length(full_graph[aux8].links);
                                   {Backwards link declaration}
@@ -773,6 +775,44 @@ end;
 procedure TForm3.LabeledEdit1Change(Sender: TObject);
 begin
 
+end;
+
+procedure TForm3.PaintBox1Paint(Sender: TObject);
+begin
+    Canvas:= form3.PaintBox1.Canvas;
+  Canvas.Pen.Width:=8;
+  Canvas.Pen.Color:=clGreen;
+  l4:=length(full_graph);
+  if l4>0 then
+  begin
+    for aux4:=0 to l4-1 do
+    begin
+    X_print:=round(full_graph[aux4].pos_X*815/form1.o_w);
+    Y_print:=round(full_graph[aux4].pos_Y*750/form1.o_h);
+     Canvas.Rectangle (X_print-1,Y_print-1,X_print+1,Y_print+1);
+    end;
+    Canvas.Pen.Width:=2;
+    Canvas.Pen.Color:=clLime;
+    for aux4:=0 to l4-1 do
+    begin
+     l5:=length(full_graph[aux4].links);
+     X_print:=round(full_graph[aux4].pos_X*815/form1.o_w);
+     Y_print:=round(full_graph[aux4].pos_Y*750/form1.o_h);
+     for aux5:=0 to l5-1 do
+     begin
+       n_tlink:=full_graph[aux4].links[aux5].node_to_link;
+       for aux6:=0 to l4-1 do
+       begin
+         if n_tlink=full_graph[aux6].id then
+         begin
+            X_print1:=round(full_graph[aux6].pos_X*815/form1.o_w);
+            Y_print1:=round(full_graph[aux6].pos_Y*750/form1.o_h);
+           Canvas.Line(X_print, Y_print, X_print1, Y_print1);
+         end;
+       end;
+     end;
+    end;
+  end;
 end;
 
 end.

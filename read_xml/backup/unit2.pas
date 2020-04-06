@@ -15,6 +15,7 @@ type
 
   TForm2 = class(TForm)
     Button1: TButton;
+    Button2: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera3: TGLCamera;
     GLCube3: TGLCube;
@@ -31,6 +32,7 @@ type
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
@@ -41,6 +43,7 @@ type
       Y: Integer);
     procedure GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure ToggleBox1Change(Sender: TObject);
   private
 
   public
@@ -64,7 +67,7 @@ var
   i_node:integer;
 implementation
       uses
-   unit1;
+   unit1,main;
 
 {$R *.lfm}
 
@@ -271,6 +274,12 @@ begin
   end;
 end;
 
+procedure TForm2.Button2Click(Sender: TObject);
+begin
+  Application.CreateForm(TFMain, FMain);
+  TFMain.Show;
+end;
+
 procedure TForm2.FormPaint(Sender: TObject);
 begin
   rc1:=StringGrid1.RowCount;
@@ -314,7 +323,7 @@ begin
      if check_array(form1.ws,i_t)=1 then
      begin
      StringGrid2.InsertRowWithValues(1,[inttostr(i_curr), floattostr(X),floattostr(Y), inttostr(i_t)]);
-     end;
+     end
      else
      begin
        StringGrid2.InsertRowWithValues(1,[inttostr(i_curr), floattostr(X),floattostr(Y)]);
@@ -346,5 +355,13 @@ procedure TForm2.GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
 begin
    GLCamera3.AdjustDistanceToTarget(Power(1.025, WheelDelta / 300));
 end;
+
+procedure TForm2.ToggleBox1Change(Sender: TObject);
+begin
+
+end;
+
+
+
 end.
 

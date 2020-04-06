@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+  </columns>
+  <cells>
+    <cell r="1" c="1" text="[ok]" />
+  </cells>
+</sheet>

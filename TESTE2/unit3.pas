@@ -252,13 +252,13 @@ var
                              l_or_x:=node_t_x-node_x;
                              l_or_y:=node_t_y-node_y;
                              n_div:=dist/form1.vel_nom;
-                             div_dist:=dist/trunc(n_div);
                              if n_div>1 then
                              begin
+                             div_dist:=dist/trunc(n_div);
                              if (abs(l_or_x)>4) and  (abs(l_or_y)<4) then
                                 begin
                                    coord_dist_x:=l_or_x/trunc(n_div);
-                                   for aux12:=0 to trunc(n_div-1) do
+                                   for aux12:=0 to trunc(n_div-2) do
                                    begin
                                         if aux12=0 then
                                            begin
@@ -284,7 +284,7 @@ var
                                         R3:=R3+1;
                                         l_id_count:=l_id_count+1;
                                            end
-                                        else if aux12<trunc(n_div-1) then
+                                        else if aux12<trunc(n_div-2) then
                                         begin
                                         {Create link node}
                                         R4:=0;
@@ -352,7 +352,7 @@ var
                              else if (abs(l_or_x)<4) and  (abs(l_or_y)>4) then
                                 begin
                                   coord_dist_y:=l_or_y/trunc(n_div);
-                                    for aux12:=0 to trunc(n_div-1) do
+                                    for aux12:=0 to trunc(n_div-2) do
                                    begin
                                         if aux12=0 then
                                            begin
@@ -376,7 +376,7 @@ var
                                         R3:=R3+1;
                                         l_id_count:=l_id_count+1;
                                            end
-                                        else if aux12<trunc(n_div-1) then
+                                        else if aux12<trunc(n_div-2) then
                                         begin
                                         R4:=0;
                                         R5:=length(full_graph[R3-1].links);
@@ -447,7 +447,7 @@ var
                                 begin
                                     coord_dist_x:=l_or_x/trunc(n_div);
                                     coord_dist_y:=l_or_y/trunc(n_div);
-                                     for aux12:=0 to trunc(n_div-1) do
+                                     for aux12:=0 to trunc(n_div-2) do
                                      begin
                                           if aux12=0 then
                                              begin
@@ -471,7 +471,7 @@ var
                                             R3:=R3+1;
                                             l_id_count:=l_id_count+1;
                                              end
-                                          else if aux12<trunc(n_div-1) then
+                                          else if aux12<trunc(n_div-2) then
                                           begin
                                             R4:=0;
                                             R5:=length(full_graph[R3-1].links);
@@ -538,6 +538,7 @@ var
                              end
                              else
                              begin
+                                  div_dist:=dist;
                                   R8:=length(full_graph[node_t_id-1].links);
                                   R5:=length(full_graph[aux8].links);
                                   {Backwards link declaration}

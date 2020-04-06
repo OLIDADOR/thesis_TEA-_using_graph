@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='Plotter'/>
+
+  <solids>
+    <cuboid>
+      <ID value='Base'/>
+      <mass value='1'/>
+      <size x='1' y='1' z='0.1'/>
+      <pos x='0' y='0' z='0.05'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+      <canvas width='256' heigth='256'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='xGuide'/>
+      <mass value='0.2'/>
+      <size x='0.04' y='1' z='0.04'/>
+      <pos x='0' y='0' z='0.3'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+    </cuboid>
+    
+    <cuboid>
+      <ID value='yGuide'/>
+      <mass value='0.1'/>
+      <size x='0.02' y='0.02' z='0.04'/>
+      <pos x='0.03' y='0' z='0.3'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+    </cuboid>
+
+    <cylinder>
+      <ID value='Pen'/>
+      <mass value='0.1'/>
+      <size radius='0.01' z='0.05'/>
+      <pos x='0.05' y='0' z='0.3'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+    </cylinder>
+
+  </solids>
+
+  <articulations>
+    <default>
+      <draw radius='0.005' height='0.1' rgb24='8F0000'/>
+      <motor ri='1' ki='1.8e-2' vmax='12' imax='2' active='1'/>
+      <gear ratio='256'/>
+      <friction bv='1e-1' fc='3e-2'/>
+      <encoder ppr='1000' mean='0' stdev='0'/>
+      <controller mode='pidposition' kp='100' ki='0' kd='0.02' kf='0.05' active='1' period='10'/>
+      <spring k='0' zeropos='0'/>
+
+    </default>
+    <joint>
+      <ID value='SlideX'/>
+      <pos x='0' y='0' z='0.3'/>
+      <axis x='-1' y='0' z='0'/>
+      <connect B1='Base' B2='xGuide'/>
+      <limits Min='-1' Max='1'/>
+      <type value='Slider'/>
+    </joint>
+    <joint>
+      <ID value='SlideY'/>
+      <axis x='0' y='-1' z='0'/>
+      <connect B1='xGuide' B2='yGuide'/>
+      <limits Min='-1' Max='1'/>
+      <type value='Slider'/>
+    </joint>
+    <joint>
+      <ID value='SlideZ'/>
+      <axis x='0' y='0' z='-1'/>
+      <connect B1='yGuide' B2='Pen'/>
+      <limits Min='-1' Max='1'/>
+      <type value='Slider'/>
+    </joint>
+  </articulations>
+
+  <noshells>
+    <cuboid>
+      <size x='0.9' y='0.9' z='0.001'/>
+      <pos x='0.0' y='0' z='0.11'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>   
+    </cuboid>
+  </noshells>
+
+  <sensors>
+    <pentip>
+      <solid id='Pen'/>
+      <beam length='0.02' initial_width='0.007' final_width='0.007'/>
+      <pos x='0' y='0' z='-0.02'/>
+      <rot_deg x='0' y='90' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+      <period value='0.002'/>
+    </pentip>
+  </sensors>
+
+</robot>
+

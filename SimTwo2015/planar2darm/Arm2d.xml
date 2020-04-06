@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='Arm2D'/>
+  
+  <defines>
+    <const name='arm_length' value='0.3' />
+    <const name='forearm_length' value='0.4' />
+    <const name='shoulder_height' value='1.2' />
+  </defines>
+  
+  <solids>
+
+    <cuboid>
+      <ID value='Body'/>
+      <mass value='50'/>
+      <size x='0.4' y='0.4' z='1.4'/>
+      <pos x='0' y='0.3' z='0.7'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='Arm'/>
+      <mass value='0.4'/>
+      <size x='arm_length' y='0.05' z='0.04'/>
+      <pos x='arm_length/2' y='0' z='shoulder_height'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='Forearm'/>
+      <mass value='0.4'/>
+      <size x='forearm_length' y='0.05' z='0.04'/>
+      <pos x='arm_length + forearm_length/2' y='0' z='shoulder_height'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+
+  </solids>
+
+  <articulations>
+
+    <default>
+      <draw radius='0.005' height='0.1' rgb24='8F0000'/>
+      <motor ri='1' ki='1.8e-2' vmax='12' imax='2' active='1'/>
+      <gear ratio='256'/>
+      <friction bv='1e-1' fc='3e-2'/>
+      <encoder ppr='1000' mean='0' stdev='0'/>
+      <controller mode='pidposition' kp='100' ki='0' kd='0.02' kf='0.05' active='1' period='10'/>
+      <spring k='0' zeropos='0'/>
+    </default>
+
+    <joint>
+      <ID value='Shoulder'/>
+      <pos x='0' y='0' z='shoulder_height'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='Body' B2='Arm'/>
+      <!--<limits Min='-90' Max='90'/>-->
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+      <desc Eng='Rot'/>
+    </joint>
+
+    <joint>
+      <ID value='Elbow'/>
+      <pos x='arm_length' y='0' z='shoulder_height'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='Arm' B2='Forearm'/>
+      <limits Min='-90' Max='90'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+      <desc Eng='Pivot'/>
+    </joint>
+
+  </articulations>
+
+</robot>
+

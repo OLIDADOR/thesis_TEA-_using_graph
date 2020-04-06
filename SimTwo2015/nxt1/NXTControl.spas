@@ -1,0 +1,349 @@
+const NumWheels = 4;
+const b = 0.1;
+
+// Global Variables
+var irobot, isensor: integer;
+    t, w: double;
+    lines: TStrings;
+    UDP: TStream;
+    ControlMode: string;
+    
+    udpdata: string;
+    flagFirstMessage:integer;
+    totalRobots: integer;
+    
+    MessageCurrentPositions: string;
+    MessageVelocities: string;
+
+    vLinear,vAngular:array[1..10] of double;
+
+procedure KeyControl(v: double);
+var v1, v2: double;
+begin
+  v := 10;
+
+  v1 := 0;
+  v2 := 0;
+  if keyPressed(VK_RIGHT) then begin
+    v1 := +1;
+    v2 := -1;
+  end;
+
+  if keyPressed(VK_LEFT) then begin
+    v1 := v1 - 1;
+    v2 := v2 + 1;
+  end;
+
+  if keyPressed(VK_UP) then begin
+    v1 := v1 + 1;
+    v2 := v2 + 1;
+  end;
+
+  if keyPressed(VK_DOWN) then begin
+    v1 := v1 - 1;
+    v2 := v2 - 1;
+  end;
+
+  v1 := v1*v;
+  v2 := v2*v;
+  SetAxisSpeedRef(irobot, 0, v1);
+  SetAxisSpeedRef(irobot, 1, v2);
+end;
+
+procedure TrackControl(v, k: double);
+var v1, v2, err, ys: double;
+    P: TPoint3D;
+begin
+  P := GetSolidPos(irobot, isensor);
+  if P.y > 0 then begin
+    err := -P.x;
+  end else if P.y > -0.25 then begin
+    err := -P.x + 0.1;
+  end else begin
+    err := -P.x;
+  end;
+  
+  v1 := v - k * err;
+  v2 := v + k * err;
+
+  SetAxisSpeedRef(irobot, 0, v1);
+  SetAxisSpeedRef(irobot, 1, v2);
+end;
+
+
+
+procedure ReadInitialConfiguration();
+var
+    tRobots:string;
+    i,j:integer;
+    xString,yString,dString: string;
+    x,y,d:double;
+begin
+     i:=2;
+     j:=1;
+     tRobots:='';
+     xString:='';
+     yString:='';
+     dString:='';
+     while(udpdata[i]<>'R') do begin
+         tRobots := tRobots + udpdata[i];
+         i:=i+1;
+     end;
+     totalRobots := StrToInt(tRobots);
+     j:=i+2;
+     i:=1;
+     while(i<=totalRobots) do begin
+         xString:='';
+         yString:='';
+         dString:='';
+         while(udpdata[j]<>'Y') do begin
+            xString:=xString + udpdata[j];
+            j:=j+1;
+         end;
+         j:=j+1;
+         while(udpdata[j]<>'D') do begin
+            yString:=yString + udpdata[j];
+            j:=j+1;
+         end;
+         j:=j+1;
+         dString:=udpdata[j];
+         j:=j+3;
+         SetRCValue(2, 3+i ,format('%s',[xString]));
+         SetRCValue(3, 3+i ,format('%s',[yString]));
+         SetRCValue(4, 3+i ,format('%s',[dString]));
+         x:=StrToFloat(xString)*0.18-0.18;
+         y:=StrToFloat(yString)*0.18-0.18;
+         case StrToFloat(dString) of
+         0:begin
+            d := pi;
+         end;
+         1:begin
+            d := pi*0.75;
+         end;
+         2:begin
+            d := pi/2;
+         end;
+         3:begin
+            d := pi/4;
+         end;
+         4:begin
+            d := 0;
+         end;
+         5:begin
+            d := pi*1.75;
+         end;
+         6:begin
+            d := pi*1.5;
+         end;
+         7:begin
+            d := pi*1.25;
+         end;
+         end;
+         SetRCValue(9, 3+i ,format('%f',[d]));
+         SetRobotPos(i-1, x, y, 0, d);
+         i:=i+1;
+     end;
+end;
+
+
+procedure ReadVelocities();
+var i,j:integer;
+    vLinearStr,vAngularStr,robotIndexStr: string;
+    robotIndex: integer;
+begin
+      i:=1;
+      j:=2;
+      vLinearStr:='';
+      vAngularStr:='';
+      robotIndexStr:='';
+      while (i<=totalRobots) do begin
+           //WriteLn(format('%d',[j]));
+           SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
+           SetRCValue(6, 5 ,format('%d',[length(MessageVelocities)]));
+           while (MessageVelocities[j]<>'V') do begin
+               robotIndexStr := robotIndexStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           while (MessageVelocities[j]<>'W') do begin
+               vLinearStr := vLinearStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           //WriteLn(format('%d',[j]));
+           j:=j+1;
+           while ((MessageVelocities[j]<>'P') and (MessageVelocities[j]<>'F')) do begin
+               vAngularStr := vAngularStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           robotIndex := StrToInt(robotIndexStr);
+           vLinear[robotIndex+1] := StrToFloat(vLinearStr);
+           vAngular[robotIndex+1] := StrToFloat(vAngularStr);
+
+           //SetAxisSpeedRef(i-1, 0, vLinear+vAngular*b/2);
+           //SetAxisSpeedRef(i-1, 1, vLinear-vAngular*b/2);
+           //SetRCValue(7, 3+i ,format('%.3f',[vLinear]));
+           //SetRCValue(8, 3+i ,format('%.3f',[vAngular]));
+
+           vLinearStr:='';
+           vAngularStr:='';
+           robotIndexStr:='';
+           i:=i+1;
+      end;
+      SetRCValue(6, 4 ,format('%s',[MessageVelocities]));
+end;
+
+
+procedure SendXYTheta();
+var
+  i:integer;
+begin
+  i:=1;
+  while i<=totalRobots do begin
+      MessageCurrentPositions := MessageCurrentPositions + 'R' + 'X' +
+                                  Format('%.3f',[GetRobotX(i-1)]) + 'Y' +
+                                  Format('%.3f',[GetRobotY(i-1)]) + 'T' +
+                                  Format('%.3f',[GetRobotTheta(i-1)]);
+      i:=i+1;
+  end;
+  MessageCurrentPositions := MessageCurrentPositions + 'F';
+  WriteUDPData('127.0.0.1',4040,MessageCurrentPositions);
+  MessageCurrentPositions:='';
+end;
+
+
+procedure Control;
+var ref: double;
+    s: string;
+    odo1,odo2: integer;
+    sens1,sens2:double;
+    tRobots:string;
+    i,j:integer;
+
+begin
+
+  if keyPressed(ord('R')) then begin
+    SetRobotPos(irobot, 0, 0.4, 0, 0);
+  end;
+
+  if keyPressed(ord('S')) then begin
+    ControlMode := 'keys';
+  end else if keyPressed(ord('T')) then begin
+    ControlMode := 'track';
+  end else begin
+    //ControlMode := 'keys';
+  end;
+
+  if ControlMode = 'keys' then begin
+    KeyControl(10);
+  end;
+  
+  t := t + 0.04;
+  if w*t >= 2*pi then begin
+    t := t - 2*pi/w;
+  end;
+  
+  if controlMode = 'track' then begin
+    TrackControl(10, 150);
+  end;
+  
+  //sens1:=GetSensorVal(0,0);
+  //sens2:=GetSensorVal(0,1);
+
+  if(RCButtonPressed(1,6)) then begin
+    SetRobotPos(0, 3.06, 0.36, 0, -pi/2);
+  end;
+
+  //GetAxisOdo(RobotIndex, AxisIndex);
+  odo1:=GetAxisOdo(0,0);
+  odo2:=GetAxisOdo(0,1);
+  
+  SetRCValue(1, 1 ,format('%.3g',[sens1]));
+  SetRCValue(2, 1 ,format('%.3g',[sens2]));
+  
+
+  
+  //Comunicações UDP
+  udpdata := ReadUDPData();
+  
+  if (flagFirstMessage = 0) then begin
+     WriteUDPData('127.0.0.1',4040,'READY');
+     flagFirstMessage:=1;
+  end;
+  
+  //Recebe mensagem UDP com as posições e direções iniciais dos robôs
+  if (udpdata <> '') then begin
+      if (udpdata[1] = 'T') then begin
+          ReadInitialConfiguration();
+          i:=1;
+          while i<=totalRobots do begin
+              vLinear[i]:=0;
+              vAngular[i]:=0;
+              i:=i+1;
+          end;
+          //para indicar ao Lazarus que já não precisa de enviar mais a mensagem
+          WriteUDPData('127.0.0.1',4040,'MIP1');
+      end;
+  end;
+
+  //Recebe mensagem UDP com a velocidade linear e angular dos robôs
+  if (udpdata <> '') then begin
+      if (udpdata[1] = 'P') then begin
+          MessageVelocities := udpdata;
+          ReadVelocities();
+
+      end;
+  end;
+  
+  //Envia para os motores V1 e V2
+  i:=1;
+  while i <= totalRobots do begin
+      SetAxisSpeedRef(i-1, 0, vLinear[i]+vAngular[i]*b/2);
+      SetAxisSpeedRef(i-1, 1, vLinear[i]-vAngular[i]*b/2);
+      i:=i+1;
+  end;
+  
+  //Envia mensagem UDP para o Lazarus
+  SendXYTheta();
+  
+  WriteLn('---START---');
+  WriteLn(format('%.3f',[GetRobotX(0)]));
+  WriteLn(format('%.3f',[GetRobotY(0)]));
+  WriteLn(format('%.3f',[GetRobotTheta(0)]));
+  {WriteLn(format('%.3f',[GetRobotX(1)]));
+  WriteLn(format('%.3f',[GetRobotY(1)]));
+  WriteLn(format('%.3f',[GetRobotTheta(1)]));
+  WriteLn(format('%.3f',[GetRobotX(2)]));
+  WriteLn(format('%.3f',[GetRobotY(2)]));
+  WriteLn(format('%.3f',[GetRobotTheta(2)]));}
+
+  {
+  if RCButtonPressed(1, 10) then begin
+    MessageVelocities := 'V0W0V0W0F';
+    ReadVelocities();
+  end;
+  }
+
+end;
+
+
+procedure Initialize;
+begin
+  irobot := 0;
+  //isensor := GetSolidIndex(irobot, 'NXTLightSensor');
+  
+  t := 0;
+  w := 1;
+  
+  ControlMode := 'keys';
+  
+  udpdata := '';
+  flagFirstMessage:=0;
+  totalRobots:=0;
+
+  
+  //SetRobotPos(0, 0.18, 0.18, 0, pi/2);
+  //SetRobotPos(1, 1.08, 0.18, 0, pi/2);
+  
+  //SetRCValue(6, 1 ,format('%d',[flag]));
+end;
