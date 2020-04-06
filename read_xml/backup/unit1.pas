@@ -818,6 +818,15 @@ aux1:integer;
  RootNode := Doc.CreateElement('scene');
  Doc.Appendchild(RootNode);      // save root node
  l1:=length(robotlist);
+
+ RootNode:= Doc.DocumentElement;
+ parentNode := Doc.CreateElement('defines');
+ RootNode.Appendchild(parentNode);
+
+ parentNode := Doc.CreateElement('const');                // create a child node
+ TDOMElement(parentNode).SetAttribute('name','ground');     // create atributes
+ RootNode.ChildNodes.Item[0].AppendChild(parentNode);       // insert child node in respective parent node
+
  for aux1:=0 to l1-1 do
   begin
     x:=robotlist[aux1].pos_X*scale;
@@ -831,27 +840,27 @@ aux1:integer;
       //create the id
      parentNode := Doc.CreateElement('ID');                // create a child node
      TDOMElement(parentNode).SetAttribute('name','LegoNXT'+IntToStr(aux1+1));     // create atributes
-     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+     RootNode.ChildNodes.Item[aux1+1].AppendChild(parentNode);       // insert child node in respective parent node
 
     //create the pos
      parentNode := Doc.CreateElement('pos');                // create a child node
-     TDOMElement(parentNode).SetAttribute('x',StringReplace(floattostr(x),',','.',[rfReplaceAll, rfIgnoreCase]);     // create atributes
-     TDOMElement(parentNode).SetAttribute('y',StringReplace(floattostr(y),',','.',[rfReplaceAll, rfIgnoreCase]);     // create atributes
+     TDOMElement(parentNode).SetAttribute('x',StringReplace(floattostr(x),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
+     TDOMElement(parentNode).SetAttribute('y',StringReplace(floattostr(y),',','.',[rfReplaceAll, rfIgnoreCase]));     // create atributes
      TDOMElement(parentNode).SetAttribute('z','0');     // create atributes
-     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+     RootNode.ChildNodes.Item[aux1+1].AppendChild(parentNode);       // insert child node in respective parent node
 
      //create the rot_deg
      parentNode := Doc.CreateElement('rot_deg');                // create a child node
      TDOMElement(parentNode).SetAttribute('x','0');     // create atributes
      TDOMElement(parentNode).SetAttribute('y','0');     // create atributes
      TDOMElement(parentNode).SetAttribute('z','0');     // create atributes
-     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+     RootNode.ChildNodes.Item[aux1+1].AppendChild(parentNode);       // insert child node in respective parent node
 
      
      //create the rot_deg
      parentNode := Doc.CreateElement('body');                // create a child node
      TDOMElement(parentNode).SetAttribute('file','nxt.xml');     // create atributes
-     RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);       // insert child node in respective parent node
+     RootNode.ChildNodes.Item[aux1+1].AppendChild(parentNode);       // insert child node in respective parent node
    end;
 
      parentNode := Doc.CreateElement('track');
@@ -961,7 +970,7 @@ begin
       end;
    end;
    graphsize:=l1;
-   write_scene_xml(robots,10);
+   write_scene_xml(robots,1);
    form1.hide;
    form2.show;
 end;
