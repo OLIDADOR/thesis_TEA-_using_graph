@@ -116,153 +116,156 @@ implementation
 
 
 procedure ControlLoop(Form:TFMain;var agvs:RobotsTeam;var CaminhosAgvs:Caminhos;xCam:float;yCam:float;thetaCam:float);
-var M0Speed, M1Speed: integer;
-    M0Acc, M1Acc: integer;
-    msg, addr: string;
-    flagFollowLineOK, flagFollowCircleOK: boolean;
-    threshold: float;
-    theta_ref: integer;
-    v,w,v_nominal: float;
-    x_ref,y_ref: float;
-    Kd,Ktheta,dist,angle: float;
-    wf: float;
-    raioCurvatura: float;
-begin
-
-    ////Inicializar flags e constantes
-    //flagFollowLineOK := false;
-    //flagFollowCircleOK := false;
-    //threshold := 0.05;
-    //raioCurvatura := 0.2291; //sqrt(0.162^2+0.162^2) -> 0.162 largura entre paredes
-    //wf := v_nominal/raioCurvatura;
-    //
-    ////Inicializar posições de todos os robôs
-    ////(Tem de ser fora do Loop)
-    //agvs[0].InitialPoint.x:=2;
-    //agvs[0].InitialPoint.y:=4;
-    //agvs[0].InitialPoint.direction:=2;
-    //
-    ////TEA* é executado a uma cadência fixa com base nas últimas posições lidas
-    ////pela câmara.
-    ////Assume como posição inicial do planeamento a célula aproximada consoante
-    ////as medidas da câmara.
-    //
-    ////Verifica se posição lida pela câmara já corresponde com o target point
-    ////(se sim nada é feito, apenas permanece imóvel)
-    //if ((xCam = agvs[0].TargetPoint.x) and (yCam = agvs[0].TargetPoint.y)) then begin
-    //  v := 0;
-    //  w := 0;
-    //end;
-    //
-    ////Verifica se posição (x,y) lida pela câmara corresponde já com o ponto
-    ////central da célula definida como inicial a menos de um threshold, ou
-    ////se já se encontra entre a célula 0 e 1
-    //
-    //case CaminhosAgvs[0].coords[1].direction of
-    //     0: begin
-    //          if ((CaminhosAgvs[0].coords[0].y - yCam <= threshold) or
-    //              ((yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowLineOK:=true;
-    //                 theta_ref:=90;
-    //                 x_ref:=(CaminhosAgvs[0].coords[0].x-1)*0.09;
-    //                 dist:=xCam-x_ref;
-    //          end;
-    //        end;
-    //     1: begin
-    //          if (((CaminhosAgvs[0].coords[0].x - xCam <= threshold) and (CaminhosAgvs[0].coords[0].y - yCam <= threshold)) or
-    //              ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x) and
-    //               (yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowCircleOK:=true;
-    //                 theta_ref:=45;
-    //                 //followCircle
-    //          end;
-    //        end;
-    //     2: begin
-    //          if ((CaminhosAgvs[0].coords[0].x - xCam <= threshold) or
-    //              ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x)))
-    //          then begin
-    //                 flagFollowLineOK:=true;
-    //                 theta_ref:=0;
-    //                 y_ref:=(CaminhosAgvs[0].coords[0].y-1)*0.09;
-    //                 dist:=yCam-y_ref;
-    //          end;
-    //        end;
-    //     3: begin
-    //          if (((CaminhosAgvs[0].coords[0].x - xCam <= threshold) and (yCam - CaminhosAgvs[0].coords[0].y <= threshold)) or
-    //              ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x) and
-    //               (yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowCircleOK:=true;
-    //                 theta_ref:=315;
-    //                 //followCircle
-    //          end;
-    //        end;
-    //     4: begin
-    //          if ((yCam - CaminhosAgvs[0].coords[0].y <= threshold) or
-    //              ((yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowLineOK:=true;
-    //                 theta_ref:=270;
-    //                 x_ref:=(CaminhosAgvs[0].coords[0].x-1)*0.09;
-    //                 dist:=xCam-x_ref;
-    //          end;
-    //        end;
-    //     5: begin
-    //          if (((xCam - CaminhosAgvs[0].coords[0].x <= threshold) and (yCam - CaminhosAgvs[0].coords[0].y <= threshold)) or
-    //              ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x) and
-    //               (yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowCircleOK:=true;
-    //                 theta_ref:=225;
-    //                 //followCircle
-    //          end;
-    //        end;
-    //     6: begin
-    //          if ((xCam - CaminhosAgvs[0].coords[0].x <= threshold) or
-    //              ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x)))
-    //          then begin
-    //                 flagFollowLineOK:=true;
-    //                 theta_ref:=180;
-    //                 y_ref:=(CaminhosAgvs[0].coords[0].y-1)*0.09;
-    //                 dist:=yCam-y_ref;
-    //          end;
-    //        end;
-    //     7: begin
-    //          if (((xCam - CaminhosAgvs[0].coords[0].x <= threshold) and (CaminhosAgvs[0].coords[0].y - yCam <= threshold)) or
-    //              ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x) and
-    //               (yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
-    //          then begin
-    //                 flagFollowCircleOK:=true;
-    //                 theta_ref:=135;
-    //                 //followCircle
-    //          end;
-    //        end;
-    //end;
-    //
-    //// Define nova reta entre o ponto inicial e o ponto seguinte
-    ////(em coordenadas (x,y))
-    //if flagFollowLineOK = true then begin
-    //    angle:=thetaCam-theta_ref;
-    //    v:=v_nominal;
-    //    w:=Kd*dist+Ktheta*angle;
-    //end
-    //else if flagFollowCircleOK = true then begin
-    //    angle:=thetaCam-theta_ref;
-    //    v:=v_nominal;
-    //    w:=Kd*dist+Ktheta*angle+wf;
-    //end;
-    ////else begin
-    //    // Define reta entre o ponto atual e o ponto seguinte
-    //    //(em coordenadas (x,y))
-    ////end;
-    //
-    ////Enquanto não houver leitura da câmara mantém-se as velocidades dadas e
-    ////segue-se a linha já anteriormente definida
-    //
-    //
-end;
+//var M0Speed, M1Speed: integer;
+//    M0Acc, M1Acc: integer;
+//    msg, addr: string;
+//    flagFollowLineOK, flagFollowCircleOK: boolean;
+//    threshold: float;
+//    theta_ref: integer;
+//    v,w,v_nominal: float;
+//    x_ref,y_ref: float;
+//    Kd,Ktheta,dist,angle: float;
+//    wf: float;
+//    raioCurvatura: float;
+//begin
+//
+//   //Inicializar flags e constantes
+//   flagFollowLineOK := false;
+//   flagFollowCircleOK := false;
+//   threshold := 0.05;
+//   raioCurvatura := 0.2291; //sqrt(0.162^2+0.162^2) -> 0.162 largura entre paredes
+//   wf := v_nominal/raioCurvatura;
+//
+//   //Inicializar posições de todos os robôs
+//   //(Tem de ser fora do Loop)
+//    //agvs[0].InitialPoint.x:=2;
+//    //agvs[0].InitialPoint.y:=4;
+//    //agvs[0].InitialPoint.direction:=2;
+//
+//    //TEA* é executado a uma cadência fixa com base nas últimas posições lidas
+//    //pela câmara.
+//    //Assume como posição inicial do planeamento a célula aproximada consoante
+//    //as medidas da câmara.
+//
+//    //Verifica se posição lida pela câmara já corresponde com o target point
+//    //(se sim nada é feito, apenas permanece imóvel)
+//
+//
+//
+//    if ((xCam = agvs[0].TargetPoint.x) and (yCam = agvs[0].TargetPoint.y)) then begin
+//      v := 0;
+//      w := 0;
+//    end;
+//
+//    //Verifica se posição (x,y) lida pela câmara corresponde já com o ponto
+//    //central da célula definida como inicial a menos de um threshold, ou
+//    //se já se encontra entre a célula 0 e 1
+//
+//    case CaminhosAgvs[0].coords[1].direction of
+//         0: begin
+//              if ((CaminhosAgvs[0].coords[0].y - yCam <= threshold) or
+//                  ((yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowLineOK:=true;
+//                     theta_ref:=90;
+//                     x_ref:=(CaminhosAgvs[0].coords[0].x-1)*0.09;
+//                     dist:=xCam-x_ref;
+//              end;
+//            end;
+//         1: begin
+//              if (((CaminhosAgvs[0].coords[0].x - xCam <= threshold) and (CaminhosAgvs[0].coords[0].y - yCam <= threshold)) or
+//                  ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x) and
+//                   (yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowCircleOK:=true;
+//                     theta_ref:=45;
+//                     //followCircle
+//              end;
+//            end;
+//         2: begin
+//              if ((CaminhosAgvs[0].coords[0].x - xCam <= threshold) or
+//                  ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x)))
+//              then begin
+//                     flagFollowLineOK:=true;
+//                     theta_ref:=0;
+//                     y_ref:=(CaminhosAgvs[0].coords[0].y-1)*0.09;
+//                     dist:=yCam-y_ref;
+//              end;
+//            end;
+//         3: begin
+//              if (((CaminhosAgvs[0].coords[0].x - xCam <= threshold) and (yCam - CaminhosAgvs[0].coords[0].y <= threshold)) or
+//                  ((xCam <= CaminhosAgvs[0].coords[1].x) and (xCam >= CaminhosAgvs[0].coords[0].x) and
+//                   (yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowCircleOK:=true;
+//                     theta_ref:=315;
+//                     //followCircle
+//              end;
+//            end;
+//         4: begin
+//              if ((yCam - CaminhosAgvs[0].coords[0].y <= threshold) or
+//                  ((yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowLineOK:=true;
+//                     theta_ref:=270;
+//                     x_ref:=(CaminhosAgvs[0].coords[0].x-1)*0.09;
+//                     dist:=xCam-x_ref;
+//              end;
+//            end;
+//         5: begin
+//              if (((xCam - CaminhosAgvs[0].coords[0].x <= threshold) and (yCam - CaminhosAgvs[0].coords[0].y <= threshold)) or
+//                  ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x) and
+//                   (yCam >= CaminhosAgvs[0].coords[1].y) and (yCam <= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowCircleOK:=true;
+//                     theta_ref:=225;
+//                     //followCircle
+//              end;
+//            end;
+//         6: begin
+//              if ((xCam - CaminhosAgvs[0].coords[0].x <= threshold) or
+//                  ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x)))
+//              then begin
+//                     flagFollowLineOK:=true;
+//                     theta_ref:=180;
+//                     y_ref:=(CaminhosAgvs[0].coords[0].y-1)*0.09;
+//                     dist:=yCam-y_ref;
+//              end;
+//            end;
+//         7: begin
+//              if (((xCam - CaminhosAgvs[0].coords[0].x <= threshold) and (CaminhosAgvs[0].coords[0].y - yCam <= threshold)) or
+//                  ((xCam >= CaminhosAgvs[0].coords[1].x) and (xCam <= CaminhosAgvs[0].coords[0].x) and
+//                   (yCam <= CaminhosAgvs[0].coords[1].y) and (yCam >= CaminhosAgvs[0].coords[0].y)))
+//              then begin
+//                     flagFollowCircleOK:=true;
+//                     theta_ref:=135;
+//                     //followCircle
+//              end;
+//            end;
+//    end;
+//
+//    // Define nova reta entre o ponto inicial e o ponto seguinte
+//    //(em coordenadas (x,y))
+//    if flagFollowLineOK = true then begin
+//        angle:=thetaCam-theta_ref;
+//        v:=v_nominal;
+//        w:=Kd*dist+Ktheta*angle;
+//    end
+//    else if flagFollowCircleOK = true then begin
+//        angle:=thetaCam-theta_ref;
+//        v:=v_nominal;
+//        w:=Kd*dist+Ktheta*angle+wf;
+//    end;
+//    //else begin
+//        // Define reta entre o ponto atual e o ponto seguinte
+//        //(em coordenadas (x,y))
+//    //end;
+//
+//    //Enquanto não houver leitura da câmara mantém-se as velocidades dadas e
+//    //segue-se a linha já anteriormente definida
+//
+//
+//end;
 
 
 procedure TFMain.ShowUDPState;

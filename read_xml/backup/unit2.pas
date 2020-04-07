@@ -67,7 +67,7 @@ var
   i_node:integer;
 implementation
       uses
-   unit1,main;
+   unit1,main,controlo;
 
 {$R *.lfm}
 
@@ -277,7 +277,9 @@ end;
 procedure TForm2.Button2Click(Sender: TObject);
 begin
   Application.CreateForm(TFMain, FMain);
-  TFMain.Show;
+  Application.CreateForm(TFControlo, FControlo);
+  FMain.Show;
+  FControlo.
 end;
 
 procedure TForm2.FormPaint(Sender: TObject);

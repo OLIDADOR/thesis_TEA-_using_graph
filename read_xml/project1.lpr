@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, GLScene_RunTime,sdposeriallaz, lnetvisual, Unit1, Unit2, main
+  Forms, GLScene_RunTime,sdposeriallaz, lnetvisual, Unit1, Unit2, main,controlo
   { you can add units after this };
 
 {$R *.res}
@@ -18,7 +18,8 @@ begin
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);
   Application.CreateForm(TForm2, Form2);
- // Application.CreateForm(TFMain, FMain);
+  //Application.CreateForm(TForm3, Form3);
+  //Application.CreateForm(TFMain, FMain);
   Application.Run;
 end.
 

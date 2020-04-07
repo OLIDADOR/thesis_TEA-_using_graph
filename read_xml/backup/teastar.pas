@@ -47,14 +47,27 @@ const
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
   //Max_nodes:=form1.graphsize;
-  AStarHeapArraySize = form1.graphsize*NUM_LAYERS;
+  //AStarHeapArraySize = form1.graphsize*NUM_LAYERS;
 
   COST1 = 0.5;
   COST2 = 0.5;
   COST3 = 0.707;
 
 type
-    node_full = object
+  link_full = object
+   private
+     {private declarations}
+   public
+     {public declarations}
+     var
+     id_l:integer;
+     node_to_link:integer;
+     distance:real;
+   end;
+
+
+
+  node_full = object
    private
      {private declarations}
    public
@@ -70,16 +83,7 @@ type
 
 
 
-   link_full = object
-   private
-     {private declarations}
-   public
-     {public declarations}
-     var
-     id_l:integer;
-     node_to_link:integer;
-     distance:real;
-   end;
+
 
    //link_telement = object
    //private
@@ -116,7 +120,7 @@ type
      pos_X:Double;
      pos_Y:Double;
      Direction:Double;
-     SubMissions: array[0..MAX_SUBMISSIONS] of TGridCoord;
+     SubMissions: array[0..MAX_SUBMISSIONS] of integer;
      NumberSubMissions: integer;
      CounterSubMissions: integer;
      ActualSubMission: integer;
@@ -133,9 +137,12 @@ type
      pos_X:Double;
      pos_Y:Double;
      H:double;
+     G:double;
+     Parent_node:integer;
+     Parent_step:integer;
      //status:integer;
      HeapIdx:integer;
-     direction:integer;
+     direction:double;
      links:array of link_full;
    end;
 
@@ -217,12 +224,12 @@ type
   //
   //RobotsTeam = array[0..NUMBER_ROBOTS-1] of Robot;
   //
-  //Caminho = record
-  //    coords: array[0 .. NUM_LAYERS] of TGridCoord;
-  //    steps: integer;
-  //end;
+  Caminho = record
+      coords: array[0 .. NUM_LAYERS] of integer;
+      steps: integer;
+  end;
   //
-  //Caminhos = array[0..NUMBER_ROBOTS-1] of Caminho;
+  Caminhos = array[0..NUMBER_ROBOTS-1] of Caminho;
 
 var
     noPath: boolean;
@@ -232,11 +239,11 @@ var
     errorMessage: integer;
     vehicleError: integer;
 
-procedure A_starTimeInit(var Map: TAStarMap; agv: Robot);
-procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot);
-function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs: Caminhos; var agvs: RobotsTeam; maxIter: integer):integer;
-function TEAstep(var Map:TAStarMap; var agv:Robot; var steps:integer; var curPnt:TGridCoord):double;
-procedure StorePath (var Map:TAStarMap; var agvs:RobotsTeam; var CaminhosAgvs:Caminhos; vehicle:integer; steps:integer);
+procedure A_starTimeInit(var Map: TAStarMap; agv: Robot_Pos_info);
+procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
+function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs: Caminhos; var agvs: r_node; maxIter: integer):integer;
+function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:Robot_Pos_info):double;
+procedure StorePath (var Map:TAStarMap; var agvs:r_node; var CaminhosAgvs:Caminhos; vehicle:integer; steps:integer);
 procedure CloserNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; j:integer; tstep:integer);
 procedure LargeNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; j:integer; tstep:integer);
 procedure UpdatePathDirections (var CaminhosAgvs:Caminhos; vehicle:integer);
@@ -244,13 +251,13 @@ procedure FreeCellsToVirgin (var Map:TAStarMap);
 procedure CellsToVirgin(var Map:TAStarMap;startLayer:integer);
 procedure PathsToVirgin (var Map:TAStarMap);
 procedure CleanHeapArray (var Map:TAStarMap);
-procedure InitialPositionAsObstacles (var vehicle: integer; Map: TAStarMap; agvs: RobotsTeam);
-function CalcH(var Map: TAStarMap; Pi, Pf: TGridCoord): double; inline;
+procedure InitialPositionAsObstacles (var vehicle: integer; Map: TAStarMap; agvs: r_node);
+function CalcH(var Map: TAStarMap; Pi, Pf: integer): double; inline;
 function CalcF(var Map: TAStarMap; idx: integer): double; inline;
-procedure InsertInOpenList( var Map: TAStarMap; Pnt: TGridCoord);
+procedure InsertInOpenList( var Map: TAStarMap; Pnt: integer);
 procedure UpdateHeapPositionByPromotion(var Map: TAStarMap; idx: integer); inline;
 procedure SwapHeapElements(var Map: TAStarMap; idx1, idx2: integer); inline;
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: TGridCoord); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer); inline;
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
 implementation
@@ -265,7 +272,7 @@ begin
   //is inserted on heapArray
   Map.TEA_GRAPH[agv.inicial_node][0].direction:=agv.Direction;
 
-  InsertInOpenList(Map, agv.InitialPoint);
+  InsertInOpenList(Map, agv.inicial_node);
   Map.TEA_GRAPH[agv.inicial_node][0].H := CalcH( Map, agv.inicial_node, agv.target_node);
 end;
 
@@ -273,7 +280,7 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
-procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot);
+procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
 begin
   //update the initial direction in order to be considered when the initial point
   //is inserted on heapArray
@@ -308,7 +315,7 @@ begin
 
       A_starTimeInit(Map,agvs[count]);
 
-      agvs[count].target_node := agvs[count].SubMissions[agvs[count].ActualSubMission-1].node;
+      agvs[count].target_node := agvs[count].SubMissions[agvs[count].ActualSubMission-1];
 
       //The initial position of each agv can´t be considered by the others as possible path in k={0,1}
       //independently of its priorities
@@ -387,12 +394,16 @@ end;
 
 function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer):double;
 var
-    newPnt: TGridCoord;
+    newPnt: integer;
+    newPnt_step:integer;
+    newPnt_dirr:real;
     newG,auxCost: double;
     edge: integer;
-    i,j: integer;
+    i,j,l1: integer;
     contador: integer;
-
+    n1,n2:integer;
+    curr_dirr,node_dirr,rot:real;
+    rot_abs:double;
 begin
 
    contador:=0;
@@ -426,87 +437,122 @@ begin
 
       Map.GraphState[curPnt][curPnt_t_step] := CLOSED;
 
+//
+//      if((curPnt.x mod 2) = 0) and ((curPnt.y mod 2) = 0) then begin
+//        //it's a center point of a cell
+//        edge:=0;
+//      end
+//      else begin  //it's an edge
+//       if((curPnt.x mod 2) = 0) then begin        //verify if it is an horizontal edge
+//          edge:=1;
+//       end
+//       else begin                               //verify if it is a vertical edge
+//          edge:=2;
+//       end;
+//      end;
 
-      if((curPnt.x mod 2) = 0) and ((curPnt.y mod 2) = 0) then begin
-        //it's a center point of a cell
-        edge:=0;
+
+   l1:=length(map.TEA_GRAPH[curPnt][curPnt_t_step].links);
+   for i:=0 to l1 do
+   begin
+      //Gerar a vizinhança
+      //Verificar a rotação
+      if i=0 then
+      begin
+        //Possibilidade de permanecer no mesmo ponto
+        newPnt:=map.TEA_GRAPH[curPnt][curPnt_t_step].id;
+        newPnt_step:= curPnt_t_step+1;
       end
-      else begin  //it's an edge
-       if((curPnt.x mod 2) = 0) then begin        //verify if it is an horizontal edge
-          edge:=1;
-       end
-       else begin                               //verify if it is a vertical edge
-          edge:=2;
-       end;
+      else
+      begin
+      n1:=map.TEA_GRAPH[curPnt][curPnt_t_step].id;
+      n2:=map.TEA_GRAPH[curPnt][curPnt_t_step].links[i-1].node_to_link;
+      curr_dirr:=Robot_Pos_info.Direction;
+      node_dirr:=get_node_dir(Map,n1,n2);
+      rot:=node_dirr-curr_dirr;
+      rot_abs:=abs(rot);
+      //move parallel or diagonaly = 1 step
+      //rotate 90º and move = 2 steps
+      //rotate 45º and move parallel = 1 step
+      //rotate 45º and move diagonally = 2 steps
+      newPnt:=n2;
+      if ((rot_abs>=0) and (rot_abs<=45)) then
+      begin
+        newPnt_step:= curPnt_t_step+1;
+      end
+      else
+      begin
+          newPnt_step:= curPnt_t_step+2;
+      end;
+       newPnt_dirr:=node_dirr;
       end;
 
+      //for i:=-1 to 1 do
+      //begin
+      //
+      //    for j:=-1 to 1 do
+      //    begin
+      //
+      //        //verify if the current point is inside the limits of the map
+      //        //(>=2 because 1 corresponds to the wall)
+      //        //edge = 1 and edge = 2 has neighbourhood 6 (i<>0 / j<>0 avoid two vertices)
+      //        //edge = 0 has neighbourhood 4 (i=0 or j=0 avoid the four vertices)
+      //
+      //        if((curPnt.x + i >= 2) and (curPnt.y + j >= 2) and
+      //           (curPnt.x + i < AStarGridXSize) and (curPnt.y + j < AStarGridYSize) and
+      //           (((edge = 1) and (j<>0)) or ((edge = 2) and (i<>0)) or
+      //           ((edge = 0) and ((j = 0) or (i = 0)))))
+      //        then begin
+      //
+      //              //generates the neighborhood
+      //              //move parallel or diagonaly = 1 step
+      //              //rotate 90º and move = 2 steps
+      //              //rotate 45º and move parallel = 1 step
+      //              //rotate 45º and move diagonally = 2 steps
+      //              newPnt.x := curPnt.x + i;
+      //              newPnt.y := curPnt.y + j;
+      //              case curPnt.direction of
+      //                 0,4: begin
+      //                          if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
+      //                      end;
+      //                 2,6: begin
+      //                          if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
+      //                      end;
+      //                 1,5: begin
+      //                          if (i=j) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
+      //                      end;
+      //                 3,7: begin
+      //                          if (i=j) then begin newPnt.t_step := curPnt.t_step + 2; end
+      //                          else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
+      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
+      //                      end;
+      //              end;
+      //
+      //              //"rosa dos ventos": North (j direction) is equal to direction 0
+      //              //counting clockwise
+      //              if ((i=0) and (j=1)) then begin newPnt.direction:=0; end
+      //              else if ((i=1) and (j=1)) then begin newPnt.direction:=1; end
+      //              else if ((i=1) and (j=0)) then begin newPnt.direction:=2; end
+      //              else if ((i=1) and (j=-1)) then begin newPnt.direction:=3; end
+      //              else if ((i=0) and (j=-1)) then begin newPnt.direction:=4; end
+      //              else if ((i=-1) and (j=-1)) then begin newPnt.direction:=5; end
+      //              else if ((i=-1) and (j=0)) then begin newPnt.direction:=6; end
+      //              else if ((i=-1) and (j=1)) then begin newPnt.direction:=7; end;
 
-      for i:=-1 to 1 do
-      begin
 
-          for j:=-1 to 1 do
-          begin
-
-              //verify if the current point is inside the limits of the map
-              //(>=2 because 1 corresponds to the wall)
-              //edge = 1 and edge = 2 has neighbourhood 6 (i<>0 / j<>0 avoid two vertices)
-              //edge = 0 has neighbourhood 4 (i=0 or j=0 avoid the four vertices)
-
-              if((curPnt.x + i >= 2) and (curPnt.y + j >= 2) and
-                 (curPnt.x + i < AStarGridXSize) and (curPnt.y + j < AStarGridYSize) and
-                 (((edge = 1) and (j<>0)) or ((edge = 2) and (i<>0)) or
-                 ((edge = 0) and ((j = 0) or (i = 0)))))
-              then begin
-
-                    //generates the neighborhood
-                    //move parallel or diagonaly = 1 step
-                    //rotate 90º and move = 2 steps
-                    //rotate 45º and move parallel = 1 step
-                    //rotate 45º and move diagonally = 2 steps
-                    newPnt.x := curPnt.x + i;
-                    newPnt.y := curPnt.y + j;
-                    case curPnt.direction of
-                       0,4: begin
-                                if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-                            end;
-                       2,6: begin
-                                if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-                            end;
-                       1,5: begin
-                                if (i=j) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-                            end;
-                       3,7: begin
-                                if (i=j) then begin newPnt.t_step := curPnt.t_step + 2; end
-                                else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-                                else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-                            end;
-                    end;
-
-                    //"rosa dos ventos": North (j direction) is equal to direction 0
-                    //counting clockwise
-                    if ((i=0) and (j=1)) then begin newPnt.direction:=0; end
-                    else if ((i=1) and (j=1)) then begin newPnt.direction:=1; end
-                    else if ((i=1) and (j=0)) then begin newPnt.direction:=2; end
-                    else if ((i=1) and (j=-1)) then begin newPnt.direction:=3; end
-                    else if ((i=0) and (j=-1)) then begin newPnt.direction:=4; end
-                    else if ((i=-1) and (j=-1)) then begin newPnt.direction:=5; end
-                    else if ((i=-1) and (j=0)) then begin newPnt.direction:=6; end
-                    else if ((i=-1) and (j=1)) then begin newPnt.direction:=7; end;
-
-
-                    case Map.GridState[newPnt.x, newPnt.y, newPnt.t_step] of
+                    case Map.GraphState[newPnt][newPnt_step] of
 
                         OBSTACLEWALL: continue;
 
@@ -518,33 +564,28 @@ begin
                             //The node is not in the Open List neither in the Close List
                             //So it is added to the Open List with properties updated
 
-                            with Map.Grid[newPnt.x, newPnt.y,  newPnt.t_step] do begin
-                              ParentPoint.x := curPnt.x;
-                              ParentPoint.y := curPnt.y;
-                              ParentPoint.t_step := curPnt.t_step;
-                              ParentPoint.direction := curPnt.direction;
-                              H := CalcH(Map, newPnt, agv.TargetPoint);
-                              mycoord.x := newPnt.x;
-                              mycoord.y := newPnt.y;
-                              mycoord.t_step := newPnt.t_step;
-                              mycoord.direction := newPnt.direction;
+                            with Map.TEA_GRAPH[newPnt][newPnt_step] do begin
+                              Parent_node := curPnt;
+                              //ParentPoint.y := curPnt.y;
+                              Parent_step := curPnt_t_step;
+                              //ParentPoint.direction := curPnt.direction;
+                              H := CalcH(Map, newPnt, agv.target_node);
+                              //mycoord.x := newPnt.x;
+                              //mycoord.y := newPnt.y;
+                              //mycoord.t_step := newPnt.t_step;
+                              //mycoord.direction := newPnt.direction;
 
                               //The robot stays in the same point in both time stamps
-                              if ((i=0) and (j=0)) then begin
-                                    G := Map.Grid[curPnt.x, curPnt.y, curPnt.t_step].G + COST1;
+                              if (i=0) then begin
+                                    G := Map.TEA_GRAPH[curPnt][curPnt.t_step].G + COST1;
                               end
-                              //The robot moves in vertical or horizontal
-                              else if ((i=0) or (j=0)) then begin
-                                    G := Map.Grid[curPnt.x, curPnt.y, curPnt.t_step].G + COST2;
-                              end
-                              //The robot moves in diagonal
                               else begin
-                                    G := Map.Grid[curPnt.x, curPnt.y, curPnt.t_step].G + COST3;
+                                    G := Map.TEA_GRAPH[curPnt][curPnt.t_step].G + COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i-1].distance);
                               end;
 
                               //to reflect the rotation cost
                               //(cost of one more step stopped)
-                              if (newPnt.t_step = curPnt.t_step + 2) then begin
+                              if (newPnt_step = curPnt_t_step + 2) then begin
                                     G := G + COST1;
                               end;
 
@@ -557,14 +598,11 @@ begin
 
                         OPENED: begin
 
-                            if ((i=0) and (j=0)) then begin
+                            if (i=0)  then begin
                                   auxCost := COST1;
                             end
-                            else if ((i=0) or (j=0)) then begin
-                                  auxCost := COST2;
-                            end
                             else begin
-                                  auxCost := COST3;
+                                  auxCost := COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i-1].distance);
                             end;
 
                             if (newPnt.t_step = curPnt.t_step + 2) then begin
@@ -573,29 +611,24 @@ begin
 
                             //newG is the cumulative G cost from the current point to the successor
                             //so, sometimes it can be bigger than the real cost to the initial point
-                            newG := Map.Grid[curPnt.x, curPnt.y, curPnt.t_step].G + auxCost;
+                            newG := Map.TEA_GRAPH[curPnt][curPnt_t_step].G + auxCost;
 
                             //if G(newPoint)<=newG nothing happens
                             //else updates G cost of the newPoint and updates its parent
                             //its parent become the node that was expanded
-                            if newG < Map.Grid[newPnt.x, newPnt.y, newPnt.t_step].G then begin
-                              Map.Grid[newPnt.x, newPnt.y, newPnt.t_step].G := newG;
-                              Map.Grid[newPnt.x, newPnt.y, newPnt.t_step].ParentPoint := curPnt;
-                              UpdateHeapPositionByPromotion(Map, Map.Grid[newPnt.x, newPnt.y, newPnt.t_step].HeapIdx);
+                            if newG < Map.TEA_GRAPH[curPnt][curPnt_t_step].G then begin
+                              Map.TEA_GRAPH[newPnt][newPnt_step].G := newG;
+                              Map.TEA_GRAPH[newPnt][newPnt_step].Parent_node := curPnt;
+                              UpdateHeapPositionByPromotion(Map, Map.TEA_GRAPH[newPnt][newPnt_t_step].HeapIdx);
                             end;
 
                         end;
                     end;
-              end
-              else begin
-                  //Point is out of the map;
-              end;
           end;
       end;
 
-   end;
 
-   steps:=curPnt.t_step;
+   steps:=curPnt_t_step;
 
    contador:=contador+1;
 
@@ -1024,57 +1057,27 @@ var
 begin
 
   tstep:=0;
-  i:=2;
-  j:=2;
+  i:=0;
 
   //change the state of the non obstacles cells to VIRGIN in every layer
-  //scan the vertical edges and the cell's centers
-  while i <= 18 do begin
-      while j <= 18 do begin
+  //scan the nodes
+  while i <= form1.graphsize do begin
           while tstep <= NUM_LAYERS do begin
-              if (Map.GridState[i,j,tstep] = OBSTACLEROBOT) then begin
-                 Map.GridState[i,j,tstep] := VIRGIN;
-                 Map.Grid[i,j,tstep].G := 0;
-                 Map.Grid[i,j,tstep].H := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.x := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.y := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.t_step := 0;
+              if (Map.GraphState[i][tstep] = OBSTACLEROBOT) then begin
+                 Map.GraphState[i][tstep] := VIRGIN;
+                 Map.TEA_GRAPH[i][tstep].G := 0;
+                 Map.TEA_GRAPH[i][tstep].H := 0;
+                 Map.TEA_GRAPH[i][tstep].Parent_node := 0;
+                 Map.TEA_GRAPH[i][tstep].Parent_step := 0;
               end;
               tstep := tstep+1;
           end;
           tstep:=0;
-          j:=j+2;
-      end;
-      j:=2;
       i:=i+1;
   end;
 
   tstep:=0;
-  i:=2;
-  j:=3;
-
-  //change the state of the non obstacles cells to VIRGIN in every layer
-  //scan the horizontal edges
-  while j <= 18 do begin
-      while i <= 18 do begin
-          while tstep <= NUM_LAYERS do begin
-              if (Map.GridState[i,j,tstep] = OBSTACLEROBOT) then begin
-                 Map.GridState[i,j,tstep] := VIRGIN;
-                 Map.Grid[i,j,tstep].G := 0;
-                 Map.Grid[i,j,tstep].H := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.x := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.y := 0;
-                 Map.Grid[i,j,tstep].ParentPoint.t_step := 0;
-              end;
-              tstep := tstep+1;
-          end;
-          tstep:=0;
-          i:=i+2;
-      end;
-      i:=2;
-      j:=j+2;
-  end;
-
+  i:=0;
 end;
 
 //------------------------------------------------------------------------------------------
