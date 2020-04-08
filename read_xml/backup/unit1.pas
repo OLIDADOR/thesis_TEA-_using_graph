@@ -825,6 +825,7 @@ aux1:integer;
 
  parentNode := Doc.CreateElement('const');                // create a child node
  TDOMElement(parentNode).SetAttribute('name','ground');     // create atributes
+ TDOMElement(parentNode).SetAttribute('value','0.001');     // create atributes
  RootNode.ChildNodes.Item[0].AppendChild(parentNode);       // insert child node in respective parent node
 
  for aux1:=0 to l1-1 do

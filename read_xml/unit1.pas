@@ -883,10 +883,10 @@ begin
        i_curr:=full_nodelist[aux1].id;
        x:=full_nodelist[aux1].pos_X;
        y:=full_nodelist[aux1].pos_y;
-       if check_array(ws,i_curr)=1 then
-       begin
+       //if check_array(ws,i_curr)=1 then
+       //begin
        StringGrid1.InsertRowWithValues(1,[inttostr(i_curr), floattostr(x), floattostr(Y)]);
-       end;
+       //end;
       end;
       for aux1:=0 to l1-1 do
       begin
