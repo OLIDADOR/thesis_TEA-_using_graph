@@ -1,8 +1,8 @@
 FViewer
 FSceneEdit
+FEditor
 FParams
 FSheets
-FEditor
 FChart
 FRemoteControl
 FWayPointsEdit

@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, lNetComponents, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, ExtCtrls, lNet, TEAstar, laz2_DOM, laz2_XMLRead, math, Utils;
+  Dialogs, StdCtrls, ExtCtrls, lNet, TEAstar, laz2_DOM, laz2_XMLRead, math, Utils3DS,Utils;
 
 const
   THRESHOLD_DIST = 0.03;//0.025;
   THRESHOLD_ANGLE = 0.34;   //0.33
   //THRESHOLD_ANGLE_BACK = 0.3;
-  CELLSCALE = 0.18;
+  CELLSCALE = 1;
   VNOM = 5.5 ;
   WNOM = 40;  //20
   GANHO_DIST = 240;    //320
@@ -58,35 +58,33 @@ type
     { public declarations }
   end;
 
-procedure InitialPointsForAllRobots(var agvs:RobotsTeam);
-procedure ChangeRobotPriorities(var Map:TAStarMap;var agvs:RobotsTeam);
-procedure InverseValidationOfPriorities(var Map:TAStarMap;var agvs:RobotsTeam;var CaminhosAgvs:Caminhos);
-procedure TEArun(var Map:TAStarMap;var agvs:RobotsTeam;var CaminhosAgvs:Caminhos);
-function DistToReference(robot:integer;xCam:double;yCam:double):double;
+   r_node=TEAstar.r_node;
+
+procedure InitialPointsForAllRobots(var agvs:r_node);
+procedure ChangeRobotPriorities(var Map:TAStarMap;var agvs:r_node);
+procedure InverseValidationOfPriorities(var Map:TAStarMap;var agvs:r_node;var CaminhosAgvs:Caminhos);
+procedure TEArun(var Map:TAStarMap;var agvs:r_node;var CaminhosAgvs:Caminhos);
+function DistToReference(robot:integer;xCam:DOUBLE;yCam:double):double;
 function AngleToReference(robot:integer;xCam:double;yCam:double;thetaCam:double):double;
 function Signal(value:integer):integer;
 procedure UpdateThetaDest(robot:integer;thetaCam:double);
 procedure UpdateThetaDestPi(robot:integer;thetaCam:double);
 procedure UpdateThetaDestToMoveBack(robot:integer;thetaCam:double);
 procedure UpdateThetaDestAfterPiRotation(robot:integer;thetaCam:double);
-procedure MovementDecision(var CaminhosAgvs:Caminhos;var agvs:RobotsTeam;thetaCam:double;i:integer;Form:TFControlo);
+procedure MovementDecision(var CaminhosAgvs:Caminhos;var agvs:r_node;thetaCam:double;i:integer;Form:TFControlo);
 procedure UnpackUDPmessage(var xCam:array of double;var yCam:array of double; var thetaCam:array of double;data:string);
 procedure UpdateInitialPoints(var xCam:array of double;var yCam:array of double; var thetaCam:array of double);
 procedure PositionAndOrientationControl(i:integer;thetaCam:array of double;dist:double;angle:double);
 procedure NextDirectionToThetaDest(var CaminhosAgvs:Caminhos;i:integer);
 procedure DefineRotationCenterPoint(var CaminhosAgvs:Caminhos;i:integer);
-procedure InternalMazeCellsAsVirgins(var Map:TAStarMap);
-procedure ExternalMazeWallsAsObstacles(var Map:TAStarMap);
-procedure InternalWallsAsObstacles(var Map:TAStarMap;xi:integer;xf:integer;yi:integer;yf:integer);
-procedure ReadXMLmap(var Map:TAStarMap);
-procedure UpdateSubmissions(var agvs:RobotsTeam;i:integer);
+procedure UpdateSubmissions(var agvs:r_node;i:integer);
 
 var
   FControlo: TFControlo;
   MessageInitialPositions: string;
   MessageVelocities: string;
   Map: TAStarMap;
-  agvs: RobotsTeam;
+  agvs: r_node;
   CaminhosAgvs: Caminhos;
   flagMessageInitialPositions: boolean;
   flagVelocities: boolean;
@@ -115,12 +113,81 @@ var
   totalValidations: integer;
 
 implementation
-
+ uses
+   unit1;
 {$R *.lfm}
 
 { Functions/Procedures }
 
-procedure InitialPointsForAllRobots(var agvs:RobotsTeam);
+function blocked_node(var n1:integer; n2:integer):integer;
+var
+  n_id,ntl:integer;
+  l1,l2:integer;
+  aux1,aux2:integer;
+  c:integer;
+begin
+   l1:=length(form1.full_nodelist);
+   c:=0;
+   for aux1:=0 to l1-1 do
+   begin
+     n_id:=form1.full_nodelist[aux1].id;
+     if n_id=n2 then
+     begin
+       l2:=length(form1.full_nodelist[aux1].links);
+       for aux2:=0 to l2-1 do
+       begin
+         ntl:=form1.full_nodelist[aux1].links[aux2].node_to_link;
+         if n1=ntl then
+         begin
+             c:=1;
+         end;
+       end;
+     end;
+   end;
+   blocked_node:=c;
+end;
+
+function getXcoord(n1:integer):Double;
+var
+l1:integer;
+aux1,n_id:integer;
+c:double;
+begin
+ l1:=length(form1.full_nodelist);
+   c:=999999999;
+   for aux1:=0 to l1-1 do
+   begin
+     n_id:=form1.full_nodelist[aux1].id;
+     if n_id=n1 then
+     begin
+      c:=form1.full_nodelist[aux1].pos_X;
+
+     end;
+   end;
+   getXcoord:=c;
+end;
+
+function getYcoord(n1:integer):Double;
+var
+l1:integer;
+aux1,n_id:integer;
+c:double;
+begin
+ l1:=length(form1.full_nodelist);
+   c:=999999999;
+   for aux1:=0 to l1-1 do
+   begin
+     n_id:=form1.full_nodelist[aux1].id;
+     if n_id=n1 then
+     begin
+      c:=form1.full_nodelist[aux1].pos_Y;
+
+     end;
+   end;
+   getYcoord:=c;
+end;
+
+procedure InitialPointsForAllRobots(var agvs:r_node);
 var
   v:integer;
 begin
@@ -128,159 +195,21 @@ begin
     MessageInitialPositions := MessageInitialPositions + 'T' + IntToStr(NUMBER_ROBOTS);
     v:=0;
     while v < NUMBER_ROBOTS do begin
-      case v of
-      0: begin
-            agvs[0].InitialPoint.x:=3;
-            agvs[0].InitialPoint.y:=6;
-            agvs[0].TargetPoint.x:=2;
-            agvs[0].TargetPoint.y:=16;
-            agvs[0].InitialPoint.t_step:=0;
-            agvs[0].InitialPoint.direction:=6;
-            agvs[0].SubMissions[0].x:=agvs[0].TargetPoint.x;
-            agvs[0].SubMissions[0].y:=agvs[0].TargetPoint.y;
-            agvs[0].SubMissions[1].x:=6;
-            agvs[0].SubMissions[1].y:=14;
-            agvs[0].SubMissions[2].x:=18;
-            agvs[0].SubMissions[2].y:=8;
-            agvs[0].NumberSubMissions:=1;
-            agvs[0].CounterSubMissions:=1;
-            agvs[0].ActualSubMission:=1;
-            agvs[0].InitialIdPriority:=0;
-            agvs[0].Color:='Amarelo';
-         end;
-      1: begin
-            agvs[1].InitialPoint.x:=6;
-            agvs[1].InitialPoint.y:=4;
-            agvs[1].TargetPoint.x:=2;
-            agvs[1].TargetPoint.y:=18;
-            agvs[1].InitialPoint.t_step:=0;
-            agvs[1].InitialPoint.direction:=0;
-            agvs[1].SubMissions[0].x:=agvs[1].TargetPoint.x;
-            agvs[1].SubMissions[0].y:=agvs[1].TargetPoint.y;
-            agvs[1].SubMissions[1].x:=14;
-            agvs[1].SubMissions[1].y:=2;
-            agvs[1].SubMissions[2].x:=2;
-            agvs[1].SubMissions[2].y:=6;
-            agvs[1].NumberSubMissions:=1;
-            agvs[1].CounterSubMissions:=1;
-            agvs[1].ActualSubMission:=1;
-            agvs[1].InitialIdPriority:=1;
-            agvs[1].Color:='Azul';
-         end;
-      2: begin
-            agvs[2].InitialPoint.x:=2;
-            agvs[2].InitialPoint.y:=2;
-            agvs[2].TargetPoint.x:=2;
-            agvs[2].TargetPoint.y:=14;
-            agvs[2].InitialPoint.t_step:=0;
-            agvs[2].InitialPoint.direction:=0;
-            agvs[2].SubMissions[0].x:=agvs[2].TargetPoint.x;
-            agvs[2].SubMissions[0].y:=agvs[2].TargetPoint.y;
-            agvs[2].SubMissions[1].x:=18;
-            agvs[2].SubMissions[1].y:=14;
-            agvs[2].NumberSubMissions:=1;
-            agvs[2].CounterSubMissions:=1;
-            agvs[2].ActualSubMission:=1;
-            agvs[2].InitialIdPriority:=2;
-            agvs[2].Color:='Laranja';
-         end;
-      3: begin
-            agvs[3].InitialPoint.x:=6;
-            agvs[3].InitialPoint.y:=2;
-            agvs[3].TargetPoint.x:=4;
-            agvs[3].TargetPoint.y:=16;
-            agvs[3].InitialPoint.t_step:=0;
-            agvs[3].InitialPoint.direction:=2;
-            agvs[3].SubMissions[0].x:=agvs[3].TargetPoint.x;
-            agvs[3].SubMissions[0].y:=agvs[3].TargetPoint.y;
-            agvs[3].SubMissions[1].x:=2;
-            agvs[3].SubMissions[1].y:=2;
-            agvs[3].NumberSubMissions:=1;
-            agvs[3].CounterSubMissions:=1;
-            agvs[3].ActualSubMission:=1;
-            agvs[3].InitialIdPriority:=3;
-            agvs[3].Color:='Vermelho';
-         end;
-      4: begin
-            agvs[4].InitialPoint.x:=16;
-            agvs[4].InitialPoint.y:=6;
-            agvs[4].TargetPoint.x:=2;
-            agvs[4].TargetPoint.y:=18;
-            agvs[4].InitialPoint.t_step:=0;
-            agvs[4].InitialPoint.direction:=2;
-            agvs[4].SubMissions[0].x:=agvs[4].TargetPoint.x;
-            agvs[4].SubMissions[0].y:=agvs[4].TargetPoint.y;
-            agvs[4].SubMissions[1].x:=18;
-            agvs[4].SubMissions[1].y:=2;
-            agvs[4].NumberSubMissions:=1;
-            agvs[4].CounterSubMissions:=1;
-            agvs[4].ActualSubMission:=1;
-            agvs[4].Color:='Castanho';
-         end;
-      5: begin
-            agvs[5].InitialPoint.x:=7;
-            agvs[5].InitialPoint.y:=2;
-            agvs[5].TargetPoint.x:=18;
-            agvs[5].TargetPoint.y:=10;
-            agvs[5].InitialPoint.t_step:=0;
-            agvs[5].InitialPoint.direction:=5;
-            agvs[5].SubMissions[0].x:=agvs[5].TargetPoint.x;
-            agvs[5].SubMissions[0].y:=agvs[5].TargetPoint.y;
-            agvs[5].SubMissions[1].x:=2;
-            agvs[5].SubMissions[1].y:=12;
-            agvs[5].NumberSubMissions:=1;
-            agvs[5].CounterSubMissions:=1;
-            agvs[5].ActualSubMission:=1;
-            agvs[5].Color:='Rosa';
-         end;
-      6: begin
-            agvs[6].InitialPoint.x:=10;
-            agvs[6].InitialPoint.y:=10;
-            agvs[6].TargetPoint.x:=18;
-            agvs[6].TargetPoint.y:=18;
-            agvs[6].InitialPoint.t_step:=0;
-            agvs[6].InitialPoint.direction:=7;
-            agvs[6].SubMissions[0].x:=agvs[6].TargetPoint.x;
-            agvs[6].SubMissions[0].y:=agvs[6].TargetPoint.y;
-            agvs[6].SubMissions[1].x:=2;
-            agvs[6].SubMissions[1].y:=10;
-            agvs[6].NumberSubMissions:=1;
-            agvs[6].CounterSubMissions:=1;
-            agvs[6].ActualSubMission:=1;
-            agvs[6].Color:='Violeta';
-         end;
-      7: begin
-            agvs[7].InitialPoint.x:=14;
-            agvs[7].InitialPoint.y:=2;
-            agvs[7].TargetPoint.x:=8;
-            agvs[7].TargetPoint.y:=8;
-            agvs[7].InitialPoint.t_step:=0;
-            agvs[7].InitialPoint.direction:=0;
-            agvs[7].SubMissions[0].x:=agvs[7].TargetPoint.x;
-            agvs[7].SubMissions[0].y:=agvs[7].TargetPoint.y;
-            agvs[7].SubMissions[1].x:=2;
-            agvs[7].SubMissions[1].y:=4;
-            agvs[7].NumberSubMissions:=1;
-            agvs[7].CounterSubMissions:=1;
-            agvs[7].ActualSubMission:=1;
-            agvs[7].Color:='Ciano';
-         end;
-      end;
       ListPriorities[v]:=v;
       MessageInitialPositions := MessageInitialPositions + 'R' + 'X' +
-                                 IntToStr(agvs[v].InitialPoint.x) + 'Y' +
-                                 IntToStr(agvs[v].InitialPoint.y) + 'D' +
-                                 IntToStr(agvs[v].InitialPoint.direction);
-      xDest[v]:=agvs[v].InitialPoint.x;
-      yDest[v]:=agvs[v].InitialPoint.y;
+                                 floatToStr(agvs[v].ipos_X) + 'Y' +
+                                 floatToStr(agvs[v].ipos_Y) + 'D' +
+                                 floatToStr(agvs[v].iDirection);
+      xDest[v]:=agvs[v].ipos_X;
+      yDest[v]:=agvs[v].ipos_X;
       v:=v+1;
     end;
     MessageInitialPositions := MessageInitialPositions + 'F';
 end;
 
-procedure ChangeRobotPriorities(var Map:TAStarMap;var agvs:RobotsTeam);
+procedure ChangeRobotPriorities(var Map:TEAstar.TAStarMap;var agvs:r_node);
 var
-    aux_agv: robot;
+    aux_agv: TEAstar.Robot_Pos_info;
     aux_xDest,aux_yDest: double;
 
 begin
@@ -306,12 +235,12 @@ begin
 
 end;
 
-procedure InverseValidationOfPriorities(var Map:TAStarMap;var agvs:RobotsTeam;var CaminhosAgvs:Caminhos);
+procedure InverseValidationOfPriorities(var Map:TAStarMap;var agvs:r_node;var CaminhosAgvs:Caminhos);
 var
     stepPath: integer;
     v,robo: integer;
     i,j,k,count,steps: integer;
-    aux_agv: robot;
+    aux_agv: TEAstar.Robot_Pos_info;
     aux_xDest,aux_yDest: double;
 begin
 
@@ -328,18 +257,10 @@ begin
        while v >= 0 do begin
          stepPath:=CaminhosAgvs[v].steps;
          while stepPath > 0 do begin
-           i:=CaminhosAgvs[v].coords[stepPath].x;
-           j:=CaminhosAgvs[v].coords[stepPath].y;
-           k:=CaminhosAgvs[v].coords[stepPath].t_step;
-           if ((i=agvs[robo].TargetPoint.x) and (j=agvs[robo].TargetPoint.y) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x+1) and (j=agvs[robo].TargetPoint.y+1) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x+1) and (j=agvs[robo].TargetPoint.y) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x+1) and (j=agvs[robo].TargetPoint.y-1) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x) and (j=agvs[robo].TargetPoint.y+1) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x) and (j=agvs[robo].TargetPoint.y-1) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x-1) and (j=agvs[robo].TargetPoint.y+1) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x-1) and (j=agvs[robo].TargetPoint.y) and (k>CaminhosAgvs[robo].steps))
-               or ((i=agvs[robo].TargetPoint.x-1) and (j=agvs[robo].TargetPoint.y-1) and (k>CaminhosAgvs[robo].steps))
+           i:=CaminhosAgvs[v].coords[stepPath].node;
+           k:=CaminhosAgvs[v].coords[stepPath].steps;
+           if ((blocked_node(i,agvs[robo].target_node)=1) and (k>CaminhosAgvs[robo].steps))
+               or ((i=agvs[robo].target_node) and (k>CaminhosAgvs[robo].steps))
            then begin
 
               robotNoPlan:=robo;
@@ -377,7 +298,7 @@ begin
 
 end;
 
-procedure TEArun(var Map:TAStarMap;var agvs:RobotsTeam;var CaminhosAgvs:Caminhos);
+procedure TEArun(var Map:TAStarMap;var agvs:r_node;var CaminhosAgvs:Caminhos);
 begin
     flagTargetOverlapInverse:=false;
 
@@ -522,11 +443,10 @@ begin
    end;
 end;
 
-procedure MovementDecision(var CaminhosAgvs:Caminhos;var agvs:RobotsTeam;thetaCam:double;i:integer;Form:TFControlo);
+procedure MovementDecision(var CaminhosAgvs:Caminhos;var agvs:r_node;thetaCam:double;i:integer;Form:TFControlo);
 begin
         //Encontra-se na célula objetivo
-        if ((CaminhosAgvs[i].coords[0].x = agvs[i].TargetPoint.x) and
-            (CaminhosAgvs[i].coords[0].y = agvs[i].TargetPoint.y))
+        if (CaminhosAgvs[i].coords[0].node = agvs[i].target_node)
         then begin
             Form.Edit6.Text:='TARGET';
             linearVelocities[i]:=0;
@@ -536,8 +456,7 @@ begin
             rotate[i]:=false;
         end
 
-        else if ((CaminhosAgvs[i].coords[0].x = agvs[i].SubMissions[agvs[i].NumberSubMissions-1].x) and
-                 (CaminhosAgvs[i].coords[0].y = agvs[i].SubMissions[agvs[i].NumberSubMissions-1].y))
+        else if (CaminhosAgvs[i].coords[0].node = agvs[i].SubMissions[agvs[i].NumberSubMissions-1])
         then begin
             linearVelocities[i]:=0;
             angularVelocities[i]:=0;
@@ -547,11 +466,10 @@ begin
         end
 
         //Mudança de célula em 1 Step
-        else if ((CaminhosAgvs[i].coords[1].x <> CaminhosAgvs[i].coords[0].x) or
-                 (CaminhosAgvs[i].coords[1].y <> CaminhosAgvs[i].coords[0].y))
+        else if (CaminhosAgvs[i].coords[1].node <> CaminhosAgvs[i].coords[0].node)
         then begin
-            xDest[i]:=CaminhosAgvs[i].coords[1].x;
-            yDest[i]:=CaminhosAgvs[i].coords[1].y;
+            xDest[i]:=getXcoord(CaminhosAgvs[i].coords[1].node);
+            yDest[i]:=getYcoord(CaminhosAgvs[i].coords[1].node);
             if (abs(thetaDest[i]-thetaCam) < THRESHOLD_ANGLE) then begin
                 linearVelocities[i]:=VNOM;
                 angularVelocities[i]:=0;
@@ -649,12 +567,11 @@ begin
         end
 
         //Situação de Espera
-        else if ((CaminhosAgvs[i].coords[1].x = CaminhosAgvs[i].coords[0].x) and
-                 (CaminhosAgvs[i].coords[1].y = CaminhosAgvs[i].coords[0].y) and
+        else if ((CaminhosAgvs[i].coords[1].node = CaminhosAgvs[i].coords[0].node) and
                  (directionDest[i] = CaminhosAgvs[i].coords[0].direction))
         then begin
-             xDest[i]:=CaminhosAgvs[i].coords[1].x;
-             yDest[i]:=CaminhosAgvs[i].coords[1].y;
+             xDest[i]:=getXcoord(CaminhosAgvs[i].coords[1].node);
+             yDest[i]:=getYcoord(CaminhosAgvs[i].coords[1].node);
              linearVelocities[i]:=0;
              angularVelocities[i]:=0;
              followLine[i]:=true;
@@ -662,8 +579,7 @@ begin
 
         //Para considerar o robô parado e arrancar posteriormente de marcha atrás
         //Ao invés de entrar na condição da mudança de célula em 2 steps
-        else if ((CaminhosAgvs[i].coords[1].x = CaminhosAgvs[i].coords[0].x) and
-                 (CaminhosAgvs[i].coords[1].y = CaminhosAgvs[i].coords[0].y) and
+        else if ((CaminhosAgvs[i].coords[1].node = CaminhosAgvs[i].coords[0].node) and
                  ((directionDest[i] - CaminhosAgvs[i].coords[0].direction = 4) or
                   (CaminhosAgvs[i].coords[0].direction - directionDest[i] = 4)))
         then begin
@@ -672,11 +588,10 @@ begin
         end
 
         //Mudança de célula em 2 Steps
-        else if ((CaminhosAgvs[i].coords[1].x = CaminhosAgvs[i].coords[0].x) and
-                 (CaminhosAgvs[i].coords[1].y = CaminhosAgvs[i].coords[0].y))
+        else if (CaminhosAgvs[i].coords[1].node = CaminhosAgvs[i].coords[0].node)
         then begin
-             xDest[i]:=CaminhosAgvs[i].coords[2].x;
-             yDest[i]:=CaminhosAgvs[i].coords[2].y;
+             xDest[i]:=getXcoord(CaminhosAgvs[i].coords[2].node);
+             yDest[i]:=getYcoord(CaminhosAgvs[i].coords[2].node);
 
              if ((thetaDest[i]-thetaCam < -pi/4 + THRESHOLD_ANGLE) and
                       (thetaDest[i]-thetaCam > -pi/4 - THRESHOLD_ANGLE))
@@ -821,14 +736,14 @@ begin
              if (((wf[i] > 0) and (directionToFollow[i] = 1)) or
                  ((wf[i] > 0) and (directionToFollow[i] = 2)))
              then begin
-                s[i].x:=(CaminhosAgvs[i].coords[0].x-1)*CELLSCALE - rotationCenter[i].x;
-                s[i].y:=(CaminhosAgvs[i].coords[0].y-1)*CELLSCALE - rotationCenter[i].y;
+                s[i].x:=(getXcoord(CaminhosAgvs[i].coords[0].node)-1)*CELLSCALE - rotationCenter[i].x;
+                s[i].y:=(getYcoord(CaminhosAgvs[i].coords[0].node)-1)*CELLSCALE - rotationCenter[i].y;
              end
              else if (((wf[i] < 0) and (directionToFollow[i] = 1)) or
                       ((wf[i] < 0) and (directionToFollow[i] = 2)))
              then begin
-                s[i].x:=rotationCenter[i].x - (CaminhosAgvs[i].coords[0].x-1)*CELLSCALE;
-                s[i].y:=rotationCenter[i].y - (CaminhosAgvs[i].coords[0].y-1)*CELLSCALE;
+                s[i].x:=rotationCenter[i].x - (getXcoord(CaminhosAgvs[i].coords[0].node)-1)*CELLSCALE;
+                s[i].y:=rotationCenter[i].y - (getycoord(CaminhosAgvs[i].coords[0].node)-1)*CELLSCALE;
              end;
         end;
 end;
@@ -880,33 +795,33 @@ var
 begin
     i:=0;
     while i<NUMBER_ROBOTS do begin
-        agvs[i].InitialPoint.x := round((xCam[i]+CELLSCALE)/CELLSCALE);
-        agvs[i].InitialPoint.y := round((yCam[i]+CELLSCALE)/CELLSCALE);
+        form1.robots[i].pos_X := round((xCam[i]+CELLSCALE)/CELLSCALE);
+         form1.robots[i].pos_Y:= round((yCam[i]+CELLSCALE)/CELLSCALE);
         if ((thetaCam[i] <= pi/2 + THRESHOLD_ANGLE) and (thetaCam[i] >= pi/2 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 0;
+             form1.robots[i].Direction := 0;
         end
         else if ((thetaCam[i] <= pi/4 + THRESHOLD_ANGLE) and (thetaCam[i] >= pi/4 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 1;
+              form1.robots[i].Direction:= 1;
         end
         else if ((thetaCam[i] <= 0 + THRESHOLD_ANGLE) and (thetaCam[i] >= 0 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 2;
+              form1.robots[i].Direction:= 2;
         end
         else if ((thetaCam[i] <= -pi/4 + THRESHOLD_ANGLE) and (thetaCam[i] >= -pi/4 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 3;
+             form1.robots[i].Direction := 3;
         end
         else if ((thetaCam[i] <= -pi/2 + THRESHOLD_ANGLE) and (thetaCam[i] >= -pi/2 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 4;
+              form1.robots[i].Direction:= 4;
         end
         else if ((thetaCam[i] <= -pi*1.25 + THRESHOLD_ANGLE) and (thetaCam[i] >= -pi*1.25 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 5;
+              form1.robots[i].Direction := 5;
         end
         else if (((thetaCam[i] <= pi + THRESHOLD_ANGLE) and (thetaCam[i] >= pi - THRESHOLD_ANGLE)) or
                  ((thetaCam[i] <= -pi + THRESHOLD_ANGLE) and (thetaCam[i] >= -pi - THRESHOLD_ANGLE)))
         then begin
-            agvs[i].InitialPoint.direction := 6;
+              form1.robots[i].Direction := 6;
         end
         else if ((thetaCam[i] <= pi*1.25 + THRESHOLD_ANGLE) and (thetaCam[i] >= pi*1.25 - THRESHOLD_ANGLE)) then begin
-            agvs[i].InitialPoint.direction := 7;
+             form1.robots[i].Direction := 7;
         end;
         i:=i+1;
     end;
@@ -982,201 +897,17 @@ end;
 
 procedure DefineRotationCenterPoint(var CaminhosAgvs:Caminhos;i:integer);
 begin
-    if (((wf[i] > 0) and (directionToFollow[i] = 1)) or ((wf[i] > 0) and (directionToFollow[i] = 2))) then begin
-        case directionDest[i] of
-           1: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-1)*CELLSCALE;
-              end;
-           3: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-1)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-2)*CELLSCALE;
-              end;
-           5: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-2)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-1)*CELLSCALE;
-              end;
-           7: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-1)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y)*CELLSCALE;
-              end;
-        end;
-    end
-    else if (((wf[i] < 0) and (directionToFollow[i] = 1)) or ((wf[i] < 0) and (directionToFollow[i] = 2))) then begin
-        case directionDest[i] of
-           1: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-1)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y)*CELLSCALE;
-              end;
-           3: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-1)*CELLSCALE;
-              end;
-           5: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-1)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-2)*CELLSCALE;
-              end;
-           7: begin
-                 rotationCenter[i].x := (CaminhosAgvs[i].coords[0].x-2)*CELLSCALE;
-                 rotationCenter[i].y := (CaminhosAgvs[i].coords[0].y-1)*CELLSCALE;
-              end;
-        end;
-    end;
+    rotationCenter[i].x := getXcoord(CaminhosAgvs[i].coords[0].node)*CELLSCALE;
+    rotationCenter[i].y := getYcoord(CaminhosAgvs[i].coords[0].node)*CELLSCALE;
 end;
 
-procedure InternalMazeCellsAsVirgins(var Map:TAStarMap);
-var
-  i,j,countLayers:integer;
+
+procedure UpdateSubmissions(var agvs:R_NODE;i:integer);
 begin
-    i:=0;
-    j:=0;
-    while i <= AStarGridXSize do begin
-      while j <= AStarGridYSize do begin
-         countLayers:=0;
-         while countLayers < NUM_LAYERS do begin
-             Map.GridState[i,j,countLayers] := VIRGIN;
-             Map.Grid[i,j,countLayers].mycoord.x := i;
-             Map.Grid[i,j,countLayers].mycoord.y := j;
-             Map.Grid[i,j,countLayers].mycoord.t_step := countLayers;
-             countLayers:=countLayers+1;
-         end;
-         countLayers:=0;
-         j:=j+1;
-      end;
-      j:=0;
-      i:=i+1;
-    end;
-end;
-
-procedure ExternalMazeWallsAsObstacles(var Map:TAStarMap);
-var
-  i,j,countLayers:integer;
-begin
-  //external horizontal maze walls as obstacles
-  i:=1;
-  j:=1;
-  while i <= AStarGridXSize do begin
-    while j <= AStarGridYSize do begin
-
-       CountLayers:=0;
-       while countLayers < NUM_LAYERS do begin
-           Map.GridState[i,j,countLayers] := OBSTACLEWALL;
-           Map.Grid[i,j,countLayers].mycoord.x := i;
-           Map.Grid[i,j,countLayers].mycoord.y := j;
-           Map.Grid[i,j,countLayers].mycoord.t_step := countLayers;
-           countLayers:=countLayers+1;
-       end;
-       countLayers:=0;
-       j:=j+1;
-
-    end;
-    if i = 19 then break;
-    j:=1;
-    i:=19;
-  end;
-
-  //external vertical maze walls as obstacles
-  i:=1;
-  j:=1;
-  while j <= AStarGridYSize do begin
-    while i <= AStarGridXSize do begin
-
-       countLayers:=0;
-       while countLayers < NUM_LAYERS do begin
-           Map.GridState[i,j,countLayers] := OBSTACLEWALL;
-           Map.Grid[i,j,countLayers].mycoord.x := i;
-           Map.Grid[i,j,countLayers].mycoord.y := j;
-           Map.Grid[i,j,countLayers].mycoord.t_step := countLayers;
-           countLayers:=countLayers+1;
-       end;
-       countLayers:=0;
-       i:=i+1;
-
-    end;
-    if j = 19 then break;
-    i:=1;
-    j:=19;
-  end;
-end;
-
-procedure InternalWallsAsObstacles(var Map:TAStarMap;xi:integer;xf:integer;yi:integer;yf:integer);
-var
-  CountLayers:integer;
-begin
-      //verify if the wall is positioned horizontally then build it
-      if xf-xi > 0 then begin
-
-         //each segment of the whole wall is considered obstacle in every layer
-         while xi < xf do begin
-             CountLayers:=0;
-             while CountLayers < NUM_LAYERS do begin
-                 Map.GridState[xi+1,yi,CountLayers] := OBSTACLEWALL;    //xi+1 to have the edge center
-                 CountLayers:=CountLayers+1;
-             end;
-             CountLayers:=0;
-             xi:=xi+2;
-         end;
-
-      end
-
-      //verify if the wall is positioned vertically then build
-      else if yf-yi > 0 then begin
-
-         while yi < yf do begin
-             CountLayers:=0;
-             while CountLayers < NUM_LAYERS do begin
-                 Map.GridState[xi,yi+1,CountLayers] := OBSTACLEWALL;
-                 CountLayers:=CountLayers+1;
-             end;
-             CountLayers:=0;
-             yi:=yi+2;
-         end;
-
-      end;
-end;
-
-procedure ReadXMLmap(var Map:TAStarMap);
-var
-    Child: TDOMNode;
-    CountChilds: integer;
-    xi,yi,xf,yf: integer;
-    i: integer;
-begin
-
-    //Read the XML file, build the walls and consider it as obstacle
-    ReadXMLFile(Doc, 'C:\XMLfiles\mapTestNewApproach.xml');
-
-    CountChilds := 1;
-    Child := Doc.DocumentElement.FirstChild;
-
-    while Assigned(Child) do
-    begin
-
-      //read the attributes of each child that constitute the XML
-      xi:=StrToInt(Child.Attributes.Item[0].NodeValue);
-      xf:=StrToInt(Child.Attributes.Item[1].NodeValue);
-      yi:=StrToInt(Child.Attributes.Item[2].NodeValue);
-      yf:=StrToInt(Child.Attributes.Item[3].NodeValue);
-
-      InternalWallsAsObstacles(Map,xi,xf,yi,yf);
-
-      Child := Child.NextSibling;
-      CountChilds := CountChilds + 1;
-
-      i:=i+1;
-
-    end;
-
-end;
-
-procedure UpdateSubmissions(var agvs:RobotsTeam;i:integer);
-begin
-    if ((agvs[i].InitialPoint.x <> agvs[i].SubMissions[agvs[i].NumberSubMissions-1].x) or
-        (agvs[i].InitialPoint.y <> agvs[i].SubMissions[agvs[i].NumberSubMissions-1].y))
+    if ((agvs[i].inicial_node <> agvs[i].SubMissions[agvs[i].NumberSubMissions-1]))
     then begin
 
-        if ((agvs[i].InitialPoint.x = agvs[i].SubMissions[agvs[i].ActualSubMission-1].x) and
-            (agvs[i].InitialPoint.y = agvs[i].SubMissions[agvs[i].ActualSubMission-1].y) and
+        if ((agvs[i].inicial_node = agvs[i].SubMissions[agvs[i].ActualSubMission-1]) and
             (agvs[i].ActualSubMission <> agvs[i].NumberSubMissions))
         then begin
             agvs[i].ActualSubMission := agvs[i].ActualSubMission + 1;
@@ -1245,7 +976,7 @@ begin
 
           i:=0;
           while i<NUMBER_ROBOTS do begin
-              if ((((abs(xCam[i] - (xDest[i]-1)*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i]-1)*CELLSCALE)) > THRESHOLD_DIST)))
+              if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
               then begin
                   Edit4.Text:='MOVE';
                   dist := DistToReference(i,xCam[i],yCam[i]);
@@ -1254,7 +985,7 @@ begin
                   PositionAndOrientationControl(i,thetaCam,dist,angle);
 
               end
-              else if (((abs(xCam[i] - (xDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST)) then begin
+              else if (((abs(xCam[i] - (xDest[i])*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i])*CELLSCALE)) <= THRESHOLD_DIST)) then begin
 
                   Edit4.Text:='TEA';
                   followLine[i]:=false;
@@ -1308,7 +1039,7 @@ begin
     if flagVelocities = true then begin
         i:=0;
         while i<NUMBER_ROBOTS do begin
-           MessageVelocities := MessageVelocities + 'P' + IntToStr(agvs[i].InitialIdPriority)
+           MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority)
                                                   + 'V' + FloatToStr(linearVelocities[i])
                                                   + 'W' + FloatToStr(angularVelocities[i]);
            i:=i+1;
@@ -1317,7 +1048,7 @@ begin
         udpCom.SendMessage(MessageVelocities, '127.0.0.1:9808');
         MessageVelocities:='';
     end;
-    //Edit1.Text:='Entrei';
+   // Edit1.Text:='Entrei';
 end;
 
 procedure TFControlo.FormShow(Sender: TObject);
@@ -1345,10 +1076,8 @@ begin
     totalTrocas := 0;
     totalValidations := 0;
 
-    InitialPointsForAllRobots(agvs);
-    InternalMazeCellsAsVirgins(Map);
-    ExternalMazeWallsAsObstacles(Map);
-    ReadXMLmap(Map);
+    InitialPointsForAllRobots(form1.robots);
+
 
     i:=0;
     while i<NUMBER_ROBOTS do begin

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids,
   ExtCtrls, GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects,
-  GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses;
+  GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses, TEAstar;
 
 
 const
@@ -26,16 +26,7 @@ const
 
 
 type
-    link_full = object
-   private
-     {private declarations}
-   public
-     {public declarations}
-     var
-     id_l:integer;
-     node_to_link:integer;
-     distance:real;
-   end;
+
   node_full = object
    private
      {private declarations}
@@ -50,62 +41,6 @@ type
      links:array of link_full;
    end;
 
-   Robot_Pos_info = object
-  private
-    {private declarations}
-  public
-    {public declarations}
-    var
-    id_robot:integer;
-    current_nodes:array of integer;
-    inicial_node:integer;
-    target_node:integer;
-    pos_X:Double;
-    pos_Y:Double;
-    Direction:Double;
-    SubMissions: array[0..MAX_SUBMISSIONS] of TGridCoord;
-    NumberSubMissions: integer;
-    CounterSubMissions: integer;
-    ActualSubMission: integer;
-    InitialIdPriority: integer;
-  end;
-
-   TEA_Graph_node = object
-   private
-     {private declarations}
-   public
-     {public declarations}
-     var
-     id:integer;
-     pos_X:Double;
-     pos_Y:Double;
-     status:integer;
-     links:array of link_full;
-   end;
- 
- TAStarHeapArray = record
-      data: array of integer;
-      count: integer;
-    end;
-
-  TAStarProfiler = record
-    RemovePointFromAStarList_count: integer;
-    RemoveFromOpenList_count: integer;
-    AddToOpenList_count: integer;
-    HeapArrayTotal: integer;
-    comparesTotal: integer;
-    iter: integer;
-  end;  
-   
-  TAStarMap = record
-    TEA_GRAPH: array of array of TEA_Graph_node;
-    GraphState: array of array of byte;
-    HeapArray: TAStarHeapArray;
-    Profiler: TAStarProfiler;
-  end; 
-
-
-       r_node=array of Robot_Pos_info;
 
       a_node=array of node_full;
       a_i=array of integer;
@@ -141,11 +76,11 @@ type
   private
 
   public
-    map:TAStarMap;
     full_nodelist:array of node_full;
     robots:array of Robot_Pos_info;
     graphsize:integer;
     ws:array of integer;
+    map:TAStarMap;
   end;
 
 var
@@ -277,6 +212,8 @@ begin
        begin
          robotlist[aux4].pos_X:=nodelist[aux5].pos_X;
          robotlist[aux4].pos_Y:=nodelist[aux5].pos_Y;
+         robotlist[aux4].ipos_X:=nodelist[aux5].pos_X;
+         robotlist[aux4].ipos_Y:=nodelist[aux5].pos_Y;
        end;
      end;
     end;
@@ -883,10 +820,10 @@ begin
        i_curr:=full_nodelist[aux1].id;
        x:=full_nodelist[aux1].pos_X;
        y:=full_nodelist[aux1].pos_y;
-       if check_array(ws,i_curr)=1 then
-       begin
+       //if check_array(ws,i_curr)=1 then
+       //begin
        StringGrid1.InsertRowWithValues(1,[inttostr(i_curr), floattostr(x), floattostr(Y)]);
-       end;
+       //end;
       end;
       for aux1:=0 to l1-1 do
       begin
@@ -940,6 +877,7 @@ robots[l4].current_nodes[l1]:=id_r;
 robots[l4].inicial_node:=id_r;
 robots[l4].InitialIdPriority:=max_id+1;
 robots[l4].Direction:=0;
+robots[l4].NumberSubMissions:=0;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
   l2:=length(robots);
       if l2>0 then
@@ -947,8 +885,8 @@ update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
       for aux1:=0 to l2-1 do
       begin
          id_l:=robots[aux1].id_robot;
-         x_r:=robots[aux1].pos_X;
-         y_r:=robots[aux1].pos_y;
+         x_r:=robots[aux1].ipos_X;
+         y_r:=robots[aux1].ipos_y;
          StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
         end;
       end;
@@ -959,6 +897,7 @@ procedure TForm1.Button2Click(Sender: TObject);
 begin
    l1:=length(full_nodelist);
    setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
+   setlength(map.GraphState, l1,NUM_LAYERS);
    for aux1:=0 to NUM_LAYERS-1 do
    begin
       for aux2:=0 to l1-1 do
@@ -967,7 +906,7 @@ begin
          map.TEA_GRAPH[aux2][aux1].pos_X:=full_nodelist[aux2].pos_X;
          map.TEA_GRAPH[aux2][aux1].pos_Y:=full_nodelist[aux2].pos_Y;
          map.TEA_GRAPH[aux2][aux1].links:=full_nodelist[aux2].links;
-         map.TEA_GRAPH[aux2][aux1].status:=VIRGIN;
+         map.GraphState[aux2][aux1]:=VIRGIN;
       end;
    end;
    graphsize:=l1;

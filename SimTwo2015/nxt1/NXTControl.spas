@@ -111,8 +111,8 @@ begin
          SetRCValue(2, 3+i ,format('%s',[xString]));
          SetRCValue(3, 3+i ,format('%s',[yString]));
          SetRCValue(4, 3+i ,format('%s',[dString]));
-         x:=StrToFloat(xString)*0.18-0.18;
-         y:=StrToFloat(yString)*0.18-0.18;
+         x:=StrToFloat(xString);
+         y:=StrToFloat(yString);
          case StrToFloat(dString) of
          0:begin
             d := pi;

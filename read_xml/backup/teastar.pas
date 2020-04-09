@@ -30,7 +30,7 @@ unit TEAstar;
 interface
 
 uses
-  Classes, SysUtils, Graphics, laz2_XMLRead, laz2_DOM, Forms, unit1;
+  Classes, SysUtils, Graphics, laz2_XMLRead, laz2_DOM, Forms, math;
 
 const
 
@@ -120,6 +120,9 @@ type
      pos_X:Double;
      pos_Y:Double;
      Direction:Double;
+     ipos_X:Double;
+     ipos_Y:Double;
+     iDirection:Double;
      SubMissions: array[0..MAX_SUBMISSIONS] of integer;
      NumberSubMissions: integer;
      CounterSubMissions: integer;
@@ -145,9 +148,9 @@ type
      direction:double;
      links:array of link_full;
    end;
-
+PAStarCell = ^TEA_Graph_node;  // PAStarCell is a pointer to TAStarCell, just points to an adress
  TAStarHeapArray = record
-      data: array of integer;
+      data: array of PAStarCell;
       count: integer;
     end;
 
@@ -180,7 +183,7 @@ type
   ////  x, y, t_step, direction: Smallint;
   ////end;
 
-  //PAStarCell = ^TAStarCell;  // PAStarCell is a pointer to TAStarCell, just points to an adress
+
   //TAStarCell = record
   //  G,H: double;
   //  ParentPoint: TGridCoord;
@@ -238,6 +241,7 @@ type
   //
   Caminhos = array[0..NUMBER_ROBOTS-1] of Caminho;
 
+
 var
     noPath: boolean;
     flagTargetOverlap: boolean;
@@ -245,15 +249,18 @@ var
     flagTargetOverlapInverse: boolean;
     errorMessage: integer;
     vehicleError: integer;
+    robots:array of Robot_Pos_info;
 
 procedure A_starTimeInit(var Map: TAStarMap; agv: Robot_Pos_info);
 procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
 function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs: Caminhos; var agvs: r_node; maxIter: integer):integer;
-function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step):double;
+function get_node_dir (var Map:TAStarMap;n1:integer;n2:integer):integer;
+function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer):double;
+function get_int_dirr( var direction:Double):integer;
 procedure StorePath (var Map:TAStarMap; var agvs:r_node; var CaminhosAgvs:Caminhos; vehicle:integer; steps:integer);
 procedure CloserNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; tstep:integer);
-procedure LargeNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; tstep:integer);
-procedure UpdatePathDirections (var CaminhosAgvs:Caminhos; vehicle:integer);
+procedure LargeNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; j:integer; tstep:integer);
+procedure UpdatePathDirections (var CaminhosAgvs:Caminhos; vehicle:integer;  map:TAStarMap);
 procedure FreeCellsToVirgin (var Map:TAStarMap);
 procedure CellsToVirgin(var Map:TAStarMap;startLayer:integer);
 procedure PathsToVirgin (var Map:TAStarMap);
@@ -261,14 +268,16 @@ procedure CleanHeapArray (var Map:TAStarMap);
 procedure InitialPositionAsObstacles (var vehicle: integer; Map: TAStarMap; agvs: r_node);
 function CalcH(var Map: TAStarMap; Pi, Pf: integer): double; inline;
 function CalcF(var Map: TAStarMap; idx: integer): double; inline;
-procedure InsertInOpenList( var Map: TAStarMap; Pnt: integer);
+procedure InsertInOpenList( var Map: TAStarMap; id: integer; step:integer);
 procedure UpdateHeapPositionByPromotion(var Map: TAStarMap; idx: integer); inline;
 procedure SwapHeapElements(var Map: TAStarMap; idx1, idx2: integer); inline;
 procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer); inline;
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
-implementation
 
+implementation
+uses
+  unit1;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
@@ -279,7 +288,7 @@ begin
   //is inserted on heapArray
   Map.TEA_GRAPH[agv.inicial_node-1][0].direction:=agv.Direction;
 
-  InsertInOpenList(Map, agv.inicial_node);
+  InsertInOpenList(Map, agv.inicial_node,0);
   Map.TEA_GRAPH[agv.inicial_node-1][0].H := CalcH( Map, agv.inicial_node, agv.target_node);
 end;
 
@@ -293,7 +302,7 @@ begin
   //is inserted on heapArray
   Map.TEA_GRAPH[agv.inicial_partial_node-1][0].direction:=agv.Direction;
 
-   InsertInOpenList(Map, agv.inicial_partial_node);
+   InsertInOpenList(Map, agv.inicial_partial_node,0);
    Map.TEA_GRAPH[agv.inicial_partial_node-1][0].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
 end;
 
@@ -396,9 +405,25 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-function get_node_dir (var Map:TAStarMap;n1:integer;n2:integer):Double;
+function get_node_dir (var Map:TAStarMap;n1:integer;n2:integer):integer;
+var
+ x1,x2,y1,y2:Double;
+ dist:double;
+ d_x,d_y,aux2,aux3,aux1:double;
+ angle:double;
 begin
-  get_node_dir:=0;
+  x1:=Map.TEA_GRAPH[n1-1][0].pos_X;
+  x2:=Map.TEA_GRAPH[n2-1][0].pos_X;
+  y1:=Map.TEA_GRAPH[n1-1][0].pos_Y;
+  y2:=Map.TEA_GRAPH[n2-1][0].pos_Y;
+  d_x:=x2-x1;
+  d_y:=y2-y1;
+  aux2:=d_x*d_x;
+  aux3:=d_y*d_y;
+  aux1:=aux2+aux3;
+  dist:=sqrt(aux1);
+  angle:=arccos(dist/x2);
+  get_node_dir:=get_int_dirr(angle);
 end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
@@ -488,7 +513,7 @@ begin
       //rotate 45º and move parallel = 1 step
       //rotate 45º and move diagonally = 2 steps
       newPnt:=n2;
-      if ((rot_abs>=0) and (rot_abs<=45)) then
+      if (rot_abs<2) then
       begin
         newPnt_step:= curPnt_t_step+1;
       end
@@ -604,7 +629,7 @@ begin
                             end;
 
                             //Add node successor to the Open List
-                            InsertInOpenList(Map, newPnt);
+                            InsertInOpenList(Map, newPnt,newPnt_step);
 
                         end;
 
@@ -649,17 +674,17 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-  function get_int_dirr( var agv:Robot_Pos_info):integer;
+  function get_int_dirr( var direction:Double):integer;
 
   begin
-    if (agv.Direction=90) then begin get_int_dirr:=0; end
-    else if (((agv.Direction>0) and (agv.Direction<90)) or ((agv.Direction<-270) and (agv.Direction>-360))) then begin get_int_dirr:=1; end
-    else if (agv.Direction=0) then begin get_int_dirr:=2; end
-    else if (((agv.Direction<0) and (agv.Direction>-90)) or ((agv.Direction>270) and (agv.Direction<360))) then begin get_int_dirr:=3; end
-    else if (agv.Direction=-90) then begin get_int_dirr:=4; end
-    else if (((agv.Direction<-90) and (agv.Direction>-180)) or ((agv.Direction<270) and (agv.Direction>180))) then begin get_int_dirr:=5; end
-    else if (agv.Direction=180) then begin get_int_dirr:=6;end
-    else if (((agv.Direction>-270) and (agv.Direction<-180)) or ((agv.Direction<180) and (agv.Direction>90))) then begin get_int_dirr:=7; end;
+    if (Direction=90) then begin get_int_dirr:=0; end
+    else if (((Direction>0) and (Direction<90)) or ((Direction<-270) and (Direction>-360))) then begin get_int_dirr:=1; end
+    else if (Direction=0) then begin get_int_dirr:=2; end
+    else if (((Direction<0) and (Direction>-90)) or ((Direction>270) and (Direction<360))) then begin get_int_dirr:=3; end
+    else if (Direction=-90) then begin get_int_dirr:=4; end
+    else if (((Direction<-90) and (Direction>-180)) or ((Direction<270) and (Direction>180))) then begin get_int_dirr:=5; end
+    else if (Direction=180) then begin get_int_dirr:=6;end
+    else if (((Direction>-270) and (Direction<-180)) or ((Direction<180) and (Direction>90))) then begin get_int_dirr:=7; end;
   end;
 
 //------------------------------------------------------------------------------------------
@@ -772,10 +797,10 @@ begin
     end;
 
     //update the path directions in each step, from the step 0 to the end
-    d:=get_int_dirr(agvs[vehicle]);
+    d:=get_int_dirr(agvs[vehicle].Direction);
     CaminhosAgvs[vehicle].coords[0].direction:=d;
 
-    UpdatePathDirections(CaminhosAgvs,vehicle);
+    UpdatePathDirections(CaminhosAgvs,vehicle, map);
 
 end;
 
@@ -1332,7 +1357,7 @@ end;
 //------------------------------------------------------------------------------------------
 
 procedure SwapHeapElements(var Map: TAStarMap; idx1, idx2: integer); inline;
-var ptr1, ptr2: TEA_Graph_node;
+var ptr1, ptr2: PAStarCell;
 begin
   ptr1 := Map.HeapArray.data[idx1];   //points the adress of data of idx1 position
   ptr2 := Map.HeapArray.data[idx2];
@@ -1346,14 +1371,14 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: TGridCoord); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer); inline;
 begin
 
   inc(Map.Profiler.RemoveFromOpenList_count);
 
   with Map.HeapArray do begin
     // return the first node
-    Pnt := data[0]^.MyCoord;
+    Pnt := data[0]^.id;
     // move the last node into the first position
     data[count - 1]^.HeapIdx := 0;
     data[0] := data[count - 1];

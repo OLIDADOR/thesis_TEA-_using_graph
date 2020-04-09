@@ -7,7 +7,29 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Grids,
   ExtCtrls, GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects,
-  GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses;
+  GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses,character;
+
+
+const
+
+  // Cell States
+  VIRGIN = 0;
+  OBSTACLEWALL = 1;
+  CLOSED = 2;
+  OPENED = 3;
+  OBSTACLEROBOT = 4;
+
+  NUM_LAYERS = 160;
+  NUMBER_ROBOTS = 4;
+  MAX_EXCHANGES = 10;
+  MAX_ITERATIONS = 10000;
+  MAX_SUBMISSIONS = 4;
+  //Max_nodes=form1.graphsize;
+  //AStarHeapArraySize = form1.graphsize*NUM_LAYERS;
+
+  COST1 = 0.5;
+  COST2 = 0.5;
+  COST3 = 0.707;
 
 type
 
@@ -50,6 +72,8 @@ type
 
   end;
 
+
+
 var
   Form2: TForm2;
   mx, my, mx2, my2: integer;
@@ -67,7 +91,7 @@ var
   i_node:integer;
 implementation
       uses
-   unit1,main;
+   unit1,main,controlo;
 
 {$R *.lfm}
 
@@ -237,6 +261,24 @@ angle:double;
       end;
  end;
  end;
+
+
+procedure add_mission(var agv:Robot_Pos_info; nid:integer);
+var
+l1:integer;
+begin
+     if agv.NumberSubMissions>0 then
+     begin
+         agv.NumberSubMissions:=agv.NumberSubMissions+1;
+         agv.SubMissions[agv.NumberSubMissions]:=nid;
+     end
+     else
+     begin
+       agv.target_node:=nid;
+       agv.NumberSubMissions:=1;
+     end;
+
+end;
  { TForm2 }
 
 
@@ -269,7 +311,8 @@ begin
     r_id_curr:=form1.robots[aux1].id_robot;
     if r_id_curr=r_ID then
     begin
-       form1.robots[aux1].target_node:=form1.ws[ws_ID-1];
+       add_mission(form1.robots[aux1],form1.ws[ws_ID-1]);
+       //form1.robots[aux1].target_node:=form1.ws[ws_ID-1];
     end;
   end;
 end;
@@ -277,9 +320,9 @@ end;
 procedure TForm2.Button2Click(Sender: TObject);
 begin
   Application.CreateForm(TFMain, FMain);
- // Application.CreateForm(TFControlo, FControlo);
+  Application.CreateForm(TFControlo, FControlo);
   FMain.Show;
-  //FControlo.Show;
+  FControlo.Show;
 end;
 
 procedure TForm2.FormPaint(Sender: TObject);
