@@ -324,7 +324,7 @@ begin
 
   for count := 0 to (length(agvs)-1) do begin
 
-      curPnt:= 0;
+      curPnt:= agvs[count].inicial_node;
       curPnt_t_step := 0;
       steps := 0;
 
@@ -605,6 +605,7 @@ begin
                               //ParentPoint.y := curPnt.y;
                               Parent_step := curPnt_t_step;
                               //ParentPoint.direction := curPnt.direction;
+
                               H := CalcH(Map, newPnt, agv.target_node);
                               //mycoord.x := newPnt.x;
                               //mycoord.y := newPnt.y;
@@ -1005,7 +1006,7 @@ begin
 
   //change the state of the non obstacles cells to VIRGIN in every layer
   //scan the nodes
-  while i <= form1.graphsize do begin
+  while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
               if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
@@ -1038,7 +1039,7 @@ begin
 
   //change the state of the non obstacles cells to VIRGIN in every layer
   //scan the nodes
-  while i <= form1.graphsize do begin
+  while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
               if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
@@ -1071,7 +1072,7 @@ begin
 
   //change the state of the non obstacles cells to VIRGIN in every layer
   //scan the nodes
-  while i <= form1.graphsize do begin
+  while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
               if (Map.GraphState[i][tstep] = OBSTACLEROBOT) then begin
                  Map.GraphState[i][tstep] := VIRGIN;
@@ -1147,8 +1148,8 @@ begin
              l1:=length(Map.TEA_GRAPH[i-1][k].links);
              for aux1:=0 to l1-1 do begin
                  ntl:= Map.TEA_GRAPH[i-1][k].links[aux1].node_to_link;
-                 ind:=findindeposofnode(ntl,Map,l1);
-                 Map.GraphState[ind][k]:=OBSTACLEROBOT;
+                 //ind:=findindeposofnode(ntl,Map,l1);
+                 Map.GraphState[ntl-1][k]:=OBSTACLEROBOT;
              end;
              //if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
              //     //it's a center point of a cell

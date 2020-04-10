@@ -854,8 +854,8 @@ begin
       for aux1:=0 to l1-1 do
       begin
          id_l:=robots[aux1].id_robot;
-         x_r:=robots[aux1].pos_X;
-         y_r:=robots[aux1].pos_y;
+         x_r:=robots[aux1].ipos_X;
+         y_r:=robots[aux1].ipos_y;
          StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
         end;
       end;
@@ -898,6 +898,7 @@ begin
    l1:=length(full_nodelist);
    setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
    setlength(map.GraphState, l1,NUM_LAYERS);
+   setlength(map.HeapArray, l1*NUM_LAYERS);
    for aux1:=0 to NUM_LAYERS-1 do
    begin
       for aux2:=0 to l1-1 do

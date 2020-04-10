@@ -201,7 +201,7 @@ begin
                                  floatToStr(agvs[v].ipos_Y) + 'D' +
                                  floatToStr(agvs[v].iDirection);
       xDest[v]:=agvs[v].ipos_X;
-      yDest[v]:=agvs[v].ipos_X;
+      yDest[v]:=agvs[v].ipos_Y;
       v:=v+1;
     end;
     MessageInitialPositions := MessageInitialPositions + 'F';
@@ -976,25 +976,27 @@ begin
 
           i:=0;
           while i<NUMBER_ROBOTS do begin
-              if ((((abs(xCam[i] - (xDest[i]-1)*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i]-1)*CELLSCALE)) > THRESHOLD_DIST)))
+              if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
               then begin
                   Edit4.Text:='MOVE';
+                  Edit7.Text:=floattostr(yCam[0]);
+                  Edit8.Text:=floattostr(yDest[0]);
                   dist := DistToReference(i,xCam[i],yCam[i]);
                   angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
 
                   PositionAndOrientationControl(i,thetaCam,dist,angle);
 
               end
-              else if (((abs(xCam[i] - (xDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST)) then begin
+              else if (((abs(xCam[i] - (xDest[i])*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i])*CELLSCALE)) <= THRESHOLD_DIST)) then begin
 
                   Edit4.Text:='TEA';
                   followLine[i]:=false;
                   followCircle[i]:=false;
                   rotate[i]:=false;
 
-                  UpdateSubmissions(agvs,i);
+                  UpdateSubmissions(form1.robots,i);
 
-                  TEArun(Map,agvs,CaminhosAgvs);
+                  TEArun(form1.map,form1.robots,CaminhosAgvs);
 
                   //Deteta troca de prioridades e sai do ciclo para que não exista mistura de informação em índices errados
                   if ((flagChange = true) and (totalTrocas < MAX_EXCHANGES) and (totalTrocas <> totalValidations)) then begin
@@ -1012,7 +1014,7 @@ begin
 
                   NextDirectionToThetaDest(CaminhosAgvs,i);
 
-                  MovementDecision(CaminhosAgvs,agvs,thetaCam[i],i,FControlo);
+                  MovementDecision(CaminhosAgvs,form1.robots,thetaCam[i],i,FControlo);
 
               end;
               i:=i+1;

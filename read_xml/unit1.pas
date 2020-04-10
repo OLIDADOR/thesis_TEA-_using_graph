@@ -898,6 +898,7 @@ begin
    l1:=length(full_nodelist);
    setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
    setlength(map.GraphState, l1,NUM_LAYERS);
+   setlength(map.HeapArray.data, l1*NUM_LAYERS);
    for aux1:=0 to NUM_LAYERS-1 do
    begin
       for aux2:=0 to l1-1 do

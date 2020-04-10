@@ -269,12 +269,14 @@ l1:integer;
 begin
      if agv.NumberSubMissions>0 then
      begin
+         agv.SubMissions[agv.NumberSubMissions-1]:=nid;
          agv.NumberSubMissions:=agv.NumberSubMissions+1;
-         agv.SubMissions[agv.NumberSubMissions]:=nid;
      end
      else
      begin
        agv.target_node:=nid;
+       agv.SubMissions[0]:=nid;
+       agv.ActualSubMission:=1;
        agv.NumberSubMissions:=1;
      end;
 
@@ -367,7 +369,7 @@ begin
      end;
      if check_array(form1.ws,i_t)=1 then
      begin
-     StringGrid2.InsertRowWithValues(1,[inttostr(i_curr), floattostr(X),floattostr(Y), inttostr(i_t)]);
+     StringGrid2.InsertRowWithValues(1,[inttostr(i_node), floattostr(X),floattostr(Y), inttostr(i_t)]);
      end
      else
      begin
