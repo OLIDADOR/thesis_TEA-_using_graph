@@ -252,13 +252,13 @@ var
                              l_or_x:=node_t_x-node_x;
                              l_or_y:=node_t_y-node_y;
                              n_div:=dist/form1.vel_nom;
-                             if n_div>1 then
+                             if trunc(n_div)>2 then
                              begin
                              div_dist:=dist/trunc(n_div);
                              if (abs(l_or_x)>4) and  (abs(l_or_y)<4) then
                                 begin
                                    coord_dist_x:=l_or_x/trunc(n_div);
-                                   for aux12:=0 to trunc(n_div-1) do
+                                   for aux12:=0 to trunc(n_div-2) do
                                    begin
                                         if aux12=0 then
                                            begin
@@ -284,7 +284,7 @@ var
                                         R3:=R3+1;
                                         l_id_count:=l_id_count+1;
                                            end
-                                        else if aux12<trunc(n_div-1) then
+                                        else if aux12<trunc(n_div-2) then
                                         begin
                                         {Create link node}
                                         R4:=0;
@@ -352,7 +352,7 @@ var
                              else if (abs(l_or_x)<4) and  (abs(l_or_y)>4) then
                                 begin
                                   coord_dist_y:=l_or_y/trunc(n_div);
-                                    for aux12:=0 to trunc(n_div-1) do
+                                    for aux12:=0 to trunc(n_div-2) do
                                    begin
                                         if aux12=0 then
                                            begin
@@ -376,7 +376,7 @@ var
                                         R3:=R3+1;
                                         l_id_count:=l_id_count+1;
                                            end
-                                        else if aux12<trunc(n_div-1) then
+                                        else if aux12<trunc(n_div-2) then
                                         begin
                                         R4:=0;
                                         R5:=length(full_graph[R3-1].links);
@@ -447,7 +447,7 @@ var
                                 begin
                                     coord_dist_x:=l_or_x/trunc(n_div);
                                     coord_dist_y:=l_or_y/trunc(n_div);
-                                     for aux12:=0 to trunc(n_div-1) do
+                                     for aux12:=0 to trunc(n_div-2) do
                                      begin
                                           if aux12=0 then
                                              begin
@@ -471,7 +471,7 @@ var
                                             R3:=R3+1;
                                             l_id_count:=l_id_count+1;
                                              end
-                                          else if aux12<trunc(n_div-1) then
+                                          else if aux12<trunc(n_div-2) then
                                           begin
                                             R4:=0;
                                             R5:=length(full_graph[R3-1].links);
@@ -535,6 +535,52 @@ var
 
                                      end;
                                 end;
+                             end
+                             else if trunc(n_div)=2 then
+                             begin
+                             div_dist:=dist/trunc(n_div);
+                             if (abs(l_or_x)>4) and  (abs(l_or_y)<4) then
+                                begin
+                                   coord_dist_x:=l_or_x/trunc(n_div);
+                                   for aux12:=0 to trunc(n_div-2) do
+                                   begin
+                                        if aux12=0 then
+                                           begin
+                                        {Create first link node}
+                                        R4:=0;
+                                        R5:=length(full_graph[aux8].links);
+                                        SetLength(full_graph, R3+1);
+                                        full_graph[R3].id:=R3+1;
+                                        node_x:=node_x+coord_dist_x;
+                                        node_y:=node_y;
+                                        full_graph[R3].pos_X:=node_x;
+                                        full_graph[R3].pos_Y:=node_y;
+                                        full_graph[R3].defined:=0;
+                                        {Backwards link declaration}
+                                        SetLength(full_graph[aux8].links, R5+1);
+                                        full_graph[aux8].links[R5].id_l:=l_id_count;
+                                        full_graph[aux8].links[R5].distance:=div_dist;
+                                        full_graph[aux8].links[R5].node_to_link:=R3+1;
+                                        SetLength(full_graph[R3].links, R4+1);
+                                        full_graph[R3].links[R4].id_l:=l_id_count;
+                                        full_graph[R3].links[R4].distance:=div_dist;
+                                        full_graph[R3].links[R4].node_to_link:=aux8+1;
+                                        l_id_count:=l_id_count+1;
+                                        {Foward link declaration}
+                                        SetLength(full_graph[R3].links, R4+2);
+                                        full_graph[R3].links[R4+1].id_l:=l_id_count;
+                                        full_graph[R3].links[R4+1].distance:=div_dist;
+                                        full_graph[R3].links[R4+1].node_to_link:=node_t_id;
+                                        SetLength(full_graph[node_t_id-1].links, R8+1);
+                                        full_graph[node_t_id-1].links[R8].id_l:=l_id_count;
+                                        full_graph[node_t_id-1].links[R8].distance:=div_dist;
+                                        full_graph[node_t_id-1].links[R8].node_to_link:=R3+1;
+                                        R3:=R3+1;
+                                        l_id_count:=l_id_count+1;
+                                        SetLength(links_done, l8+1);
+                                        links_done[l8]:=l_id;
+
+                                       end;
                              end
                              else
                              begin
