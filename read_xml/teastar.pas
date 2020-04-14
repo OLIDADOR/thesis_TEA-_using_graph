@@ -42,7 +42,7 @@ const
   OBSTACLEROBOT = 4;
 
   NUM_LAYERS = 160;
-  NUMBER_ROBOTS = 4;
+  NUMBER_ROBOTS = 1;
   MAX_EXCHANGES = 10;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
@@ -114,6 +114,7 @@ type
      id_robot:integer;
      current_nodes:array of integer;
      inicial_node:integer;
+     inicial_step:integer;
      target_node:integer;
      target_node_step:integer;
      inicial_partial_node:integer;
@@ -143,7 +144,8 @@ type
      G:double;
      Parent_node:integer;
      Parent_step:integer;
-     //status:integer;
+     Parent_Direction:double;
+     steps:integer;
      HeapIdx:integer;
      direction:double;
      links:array of link_full;
@@ -270,7 +272,7 @@ function CalcF(var Map: TAStarMap; idx: integer): double; inline;
 procedure InsertInOpenList( var Map: TAStarMap; id: integer; step:integer);
 procedure UpdateHeapPositionByPromotion(var Map: TAStarMap; idx: integer); inline;
 procedure SwapHeapElements(var Map: TAStarMap; idx1, idx2: integer); inline;
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps:integer); inline;
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
 
@@ -325,7 +327,7 @@ begin
   for count := 0 to (length(agvs)-1) do begin
 
       curPnt:= agvs[count].inicial_node;
-      curPnt_t_step := 0;
+      curPnt_t_step := agvs[count].inicial_step;
       steps := 0;
 
       A_starTimeInit(Map,agvs[count]);
@@ -363,6 +365,7 @@ begin
              CleanHeapArray(Map);
              CellsToVirgin(Map,agvs[count].target_node_step);
              A_starTimeInitSubMission(Map,agvs[count]);
+             //aqui
           end;
         end;
 
@@ -421,7 +424,7 @@ begin
   aux3:=d_y*d_y;
   aux1:=aux2+aux3;
   dist:=sqrt(aux1);
-  angle:=arccos(dist/x2);
+  angle:=arctan2(d_y,d_x);
   get_node_dir:=get_int_dirr(angle);
 end;
 //------------------------------------------------------------------------------------------
@@ -469,7 +472,7 @@ begin
    else begin
 
       //Take from the open list the node with the lowest f
-      RemoveFromOpenList(Map,curPnt);
+      RemoveFromOpenList(Map,curPnt,curPnt_t_step);
 
       Map.GraphState[curPnt-1][curPnt_t_step] := CLOSED;
 
@@ -493,7 +496,7 @@ begin
    begin
       //Gerar a vizinhança
       //Verificar a rotação
-      if i=0 then
+      if i=l1 then
       begin
         //Possibilidade de permanecer no mesmo ponto
         newPnt:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].id;
@@ -502,7 +505,7 @@ begin
       else
       begin
       n1:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].id;
-      n2:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i-1].node_to_link;
+      n2:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].node_to_link;
       curr_dirr:=agv.Direction;
       node_dirr:=get_node_dir(Map,n1,n2);
       rot:=node_dirr-curr_dirr;
@@ -609,15 +612,15 @@ begin
                               H := CalcH(Map, newPnt, agv.target_node);
                               //mycoord.x := newPnt.x;
                               //mycoord.y := newPnt.y;
-                              //mycoord.t_step := newPnt.t_step;
+                              steps:=newPnt_step;
                               //mycoord.direction := newPnt.direction;
 
                               //The robot stays in the same point in both time stamps
-                              if (i=0) then begin
+                              if (i=l1) then begin
                                     G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST1;
                               end
                               else begin
-                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i-1].distance);
+                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i].distance);
                               end;
 
                               //to reflect the rotation cost
@@ -639,7 +642,7 @@ begin
                                   auxCost := COST1;
                             end
                             else begin
-                                  auxCost := COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i-1].distance);
+                                  auxCost := COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].distance);
                             end;
 
                             if (newPnt_step = curPnt_t_step + 2) then begin
@@ -656,6 +659,7 @@ begin
                             if newG < Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G then begin
                               Map.TEA_GRAPH[newPnt-1][newPnt_step].G := newG;
                               Map.TEA_GRAPH[newPnt-1][newPnt_step].Parent_node := curPnt;
+                              Map.TEA_GRAPH[newPnt-1][newPnt_step].Parent_step:=curPnt_t_step;
                               UpdateHeapPositionByPromotion(Map, Map.TEA_GRAPH[newPnt-1][newPnt_step].HeapIdx);
                             end;
 
@@ -967,9 +971,15 @@ begin
 
       diffx:=map.TEA_GRAPH[id2-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
       diffy:=map.TEA_GRAPH[id2-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
+      if count< CaminhosAgvs[vehicle].steps-1 then begin
       diffx2:=map.TEA_GRAPH[id3-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
       diffy2:=map.TEA_GRAPH[id3-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
-
+      end
+      else
+      begin
+        diffx2:=0;
+        diffy2:=0;
+      end;
       if ((diffx = 0) and (diffy = 0)) then begin
           if ((diffx2 = 0) and (diffy2 = 1)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 0; end
           else if ((diffx2 = 0) and (diffy2 < 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 4; end
@@ -1371,7 +1381,7 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps: integer); inline;
 begin
 
   inc(Map.Profiler.RemoveFromOpenList_count);
@@ -1379,6 +1389,7 @@ begin
   with Map.HeapArray do begin
     // return the first node
     Pnt := data[0]^.id;
+    steps:= data[0]^.steps;
     // move the last node into the first position
     data[count - 1]^.HeapIdx := 0;
     data[0] := data[count - 1];

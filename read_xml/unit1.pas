@@ -875,6 +875,7 @@ l1:=length(robots[l4].current_nodes);
 setlength(robots[l4].current_nodes,l1+1);
 robots[l4].current_nodes[l1]:=id_r;
 robots[l4].inicial_node:=id_r;
+robots[l4].inicial_step:=0;
 robots[l4].InitialIdPriority:=max_id+1;
 robots[l4].Direction:=0;
 robots[l4].NumberSubMissions:=0;

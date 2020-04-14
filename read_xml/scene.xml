@@ -5,25 +5,7 @@
   </defines>
   <robot>
     <ID name="LegoNXT1"/>
-    <pos x="0.12486308871851" y="0.0615883306320907" z="0"/>
-    <rot_deg x="0" y="0" z="0"/>
-    <body file="nxt.xml"/>
-  </robot>
-  <robot>
-    <ID name="LegoNXT2"/>
-    <pos x="0.131434830230011" y="1.96434359805511" z="0"/>
-    <rot_deg x="0" y="0" z="0"/>
-    <body file="nxt.xml"/>
-  </robot>
-  <robot>
-    <ID name="LegoNXT3"/>
-    <pos x="1.0933734939759" y="1.95461912479741" z="0"/>
-    <rot_deg x="0" y="0" z="0"/>
-    <body file="nxt.xml"/>
-  </robot>
-  <robot>
-    <ID name="LegoNXT4"/>
-    <pos x="1.91894852135816" y="1.95461912479741" z="0"/>
+    <pos x="0.12486308871851" y="0.0551053484602917" z="0"/>
     <rot_deg x="0" y="0" z="0"/>
     <body file="nxt.xml"/>
   </robot>

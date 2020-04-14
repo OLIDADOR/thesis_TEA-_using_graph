@@ -278,6 +278,7 @@ begin
        agv.SubMissions[0]:=nid;
        agv.ActualSubMission:=1;
        agv.NumberSubMissions:=1;
+       agv.CounterSubMissions:=1;
      end;
 
 end;

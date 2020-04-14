@@ -274,6 +274,7 @@ begin
      end
      else
      begin
+       agv.target_node:=nid;
        agv.SubMissions[0]:=nid;
        agv.ActualSubMission:=1;
        agv.NumberSubMissions:=1;

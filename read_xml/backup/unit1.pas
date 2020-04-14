@@ -875,9 +875,10 @@ l1:=length(robots[l4].current_nodes);
 setlength(robots[l4].current_nodes,l1+1);
 robots[l4].current_nodes[l1]:=id_r;
 robots[l4].inicial_node:=id_r;
+robots[l4].inicial_step:=0;
 robots[l4].InitialIdPriority:=max_id+1;
 robots[l4].Direction:=0;
-robots[l4].NumberSubMissions:=0;
+robots[l4].NumberSubMissions:=;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
   l2:=length(robots);
       if l2>0 then
@@ -898,7 +899,7 @@ begin
    l1:=length(full_nodelist);
    setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
    setlength(map.GraphState, l1,NUM_LAYERS);
-   setlength(map.HeapArray, l1*NUM_LAYERS);
+   setlength(map.HeapArray.data, l1*NUM_LAYERS);
    for aux1:=0 to NUM_LAYERS-1 do
    begin
       for aux2:=0 to l1-1 do

@@ -161,7 +161,6 @@ begin
      if n_id=n1 then
      begin
       c:=form1.full_nodelist[aux1].pos_X;
-
      end;
    end;
    getXcoord:=c;
@@ -328,16 +327,16 @@ begin
    if followLine[robot] = true then begin
        case directionDest[robot] of
        0: begin
-               result:=xCam-(xDest[robot]-1)*CELLSCALE;
+               result:=xCam-(xDest[robot])*CELLSCALE;
           end;
        2: begin
-               result:=(yDest[robot]-1)*CELLSCALE-yCam;
+               result:=(yDest[robot])*CELLSCALE-yCam;
           end;
        4: begin
-               result:=(xDest[robot]-1)*CELLSCALE-xCam;
+               result:=(xDest[robot])*CELLSCALE-xCam;
           end;
        6: begin
-               result:=yCam-(yDest[robot]-1)*CELLSCALE;
+               result:=yCam-(yDest[robot])*CELLSCALE;
           end;
        end;
    end
@@ -979,11 +978,14 @@ begin
               if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
               then begin
                   Edit4.Text:='MOVE';
-                  //Edit7.Text:=floattostr(yCam[0]);
-                  //Edit8.Text:=floattostr(yDest[0]);
+
                   dist := DistToReference(i,xCam[i],yCam[i]);
                   angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
-
+                  Edit5.Text:=floattostr(xCam[i]);
+                  Edit6.Text:=floattostr(yCam[i]);
+                  Edit7.Text:=floattostr(xDest[i]);
+                  Edit8.Text:=floattostr(yDest[i]);
+                  Edit9.Text:=floattostr(dist);
                   PositionAndOrientationControl(i,thetaCam,dist,angle);
 
               end
