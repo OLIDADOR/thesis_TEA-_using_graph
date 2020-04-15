@@ -15,7 +15,7 @@ var irobot, isensor: integer;
     MessageCurrentPositions: string;
     MessageVelocities: string;
 
-    vLinear,vAngular:array[1..10] of double;
+   X,Y,D:array[1..10] of array[1..161] of double;
 
 procedure KeyControl(v: double);
 var v1, v2: double;
@@ -148,45 +148,66 @@ end;
 
 procedure ReadVelocities();
 var i,j:integer;
-    vLinearStr,vAngularStr,robotIndexStr: string;
-    robotIndex: integer;
+    Y_D,X_D:Double;
+    INDStr,XStr,YStr,DStr,robotIndexStr: string;
+    robotIndex,ind: integer;
 begin
       i:=1;
       j:=2;
-      vLinearStr:='';
-      vAngularStr:='';
+      INDStr:='';
+      XStr:='';
+      YStr:='';
+      DStr:='';
       robotIndexStr:='';
       while (i<=totalRobots) do begin
            //WriteLn(format('%d',[j]));
            SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
            SetRCValue(6, 5 ,format('%d',[length(MessageVelocities)]));
-           while (MessageVelocities[j]<>'V') do begin
+           while (MessageVelocities[j]<>'I') do begin
                robotIndexStr := robotIndexStr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
-           while (MessageVelocities[j]<>'W') do begin
-               vLinearStr := vLinearStr + MessageVelocities[j];
+           while (MessageVelocities[j]<>'X') do begin
+               INDStr := INDStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           while (MessageVelocities[j]<>'Y') do begin
+               XStr := XStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           while (MessageVelocities[j]<>'D') do begin
+               YStr := YStr + MessageVelocities[j];
                j:=j+1;
            end;
            //WriteLn(format('%d',[j]));
            j:=j+1;
            while ((MessageVelocities[j]<>'P') and (MessageVelocities[j]<>'F')) do begin
-               vAngularStr := vAngularStr + MessageVelocities[j];
+               DStr := DStr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
            robotIndex := StrToInt(robotIndexStr);
-           vLinear[robotIndex+1] := StrToFloat(vLinearStr);
-           vAngular[robotIndex+1] := StrToFloat(vAngularStr);
-
+           ind := StrToInt(INDStr);
+           X_D:=StrToFloat(Xstr);
+           Y_D:=StrToFloat(Ystr);
+           IF ((X_D<=3) and (Y_D<=3)) then
+           begin
+            X[robotIndex+1][I] := StrToFloat(XStr);
+            Y[robotIndex+1][I] := StrToFloat(YStr);
+            D[robotIndex+1][I] := StrToInt(DStr);
+           end;
            //SetAxisSpeedRef(i-1, 0, vLinear+vAngular*b/2);
            //SetAxisSpeedRef(i-1, 1, vLinear-vAngular*b/2);
            //SetRCValue(7, 3+i ,format('%.3f',[vLinear]));
            //SetRCValue(8, 3+i ,format('%.3f',[vAngular]));
 
-           vLinearStr:='';
-           vAngularStr:='';
+           INDStr:='';
+           XStr:='';
+           YStr:='';
+           DStr:='';
            robotIndexStr:='';
            i:=i+1;
       end;
@@ -277,8 +298,8 @@ begin
           ReadInitialConfiguration();
           i:=1;
           while i<=totalRobots do begin
-              vLinear[i]:=0;
-              vAngular[i]:=0;
+              //vLinear[i]:=0;
+              //vAngular[i]:=0;
               i:=i+1;
           end;
           //para indicar ao Lazarus que já não precisa de enviar mais a mensagem
@@ -298,8 +319,10 @@ begin
   //Envia para os motores V1 e V2
   i:=1;
   while i <= totalRobots do begin
-      SetAxisSpeedRef(i-1, 0, vLinear[i]+vAngular[i]*b/2);
-      SetAxisSpeedRef(i-1, 1, vLinear[i]-vAngular[i]*b/2);
+
+      //gotoxy
+      //SetAxisSpeedRef(i-1, 0, vLinear[i]+vAngular[i]*b/2);
+      //SetAxisSpeedRef(i-1, 1, vLinear[i]-vAngular[i]*b/2);
       i:=i+1;
   end;
   

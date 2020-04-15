@@ -42,7 +42,7 @@ const
   OBSTACLEROBOT = 4;
 
   NUM_LAYERS = 160;
-  NUMBER_ROBOTS = 1;
+  NUMBER_ROBOTS = 2;
   MAX_EXCHANGES = 10;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
@@ -424,7 +424,7 @@ begin
   aux3:=d_y*d_y;
   aux1:=aux2+aux3;
   dist:=sqrt(aux1);
-  angle:=arctan2(d_y,d_x);
+  angle:=round(radtodeg(arctan2(d_y,d_x))*10)/10;
   get_node_dir:=get_int_dirr(angle);
 end;
 //------------------------------------------------------------------------------------------
@@ -620,7 +620,7 @@ begin
                                     G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST1;
                               end
                               else begin
-                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i].distance);
+                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].distance);
                               end;
 
                               //to reflect the rotation cost

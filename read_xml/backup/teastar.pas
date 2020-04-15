@@ -42,7 +42,7 @@ const
   OBSTACLEROBOT = 4;
 
   NUM_LAYERS = 160;
-  NUMBER_ROBOTS = 1;
+  NUMBER_ROBOTS = 2;
   MAX_EXCHANGES = 10;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
@@ -424,7 +424,7 @@ begin
   aux3:=d_y*d_y;
   aux1:=aux2+aux3;
   dist:=sqrt(aux1);
-  angle:=arctan2(d_y,d_x);
+  angle:=round(radtodeg(arctan2(d_y,d_x))*10)/10;
   get_node_dir:=get_int_dirr(angle);
 end;
 //------------------------------------------------------------------------------------------
@@ -516,7 +516,7 @@ begin
       //rotate 45º and move diagonally = 2 steps
       newPnt:=n2;
       if (rot_abs<2) then
-      begin                                                             node_dirr
+      begin
         newPnt_step:= curPnt_t_step+1;
       end
       else

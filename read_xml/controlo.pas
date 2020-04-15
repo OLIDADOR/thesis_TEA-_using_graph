@@ -118,7 +118,12 @@ implementation
 {$R *.lfm}
 
 { Functions/Procedures }
-
+function round2(const Number: extended; const Places: longint): extended;
+var t: extended;
+begin
+   t := power(10, places);
+   round2 := round(Number*t)/t;
+end;
 function blocked_node(var n1:integer; n2:integer):integer;
 var
   n_id,ntl:integer;
@@ -978,15 +983,15 @@ begin
               if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
               then begin
                   Edit4.Text:='MOVE';
-
-                  dist := DistToReference(i,xCam[i],yCam[i]);
-                  angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
-                  Edit5.Text:=floattostr(xCam[i]);
-                  Edit6.Text:=floattostr(yCam[i]);
-                  Edit7.Text:=floattostr(xDest[i]);
-                  Edit8.Text:=floattostr(yDest[i]);
-                  Edit9.Text:=floattostr(dist);
-                  PositionAndOrientationControl(i,thetaCam,dist,angle);
+                  //detetar falhas
+                  //dist := DistToReference(i,xCam[i],yCam[i]);
+                  //angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
+                  //Edit5.Text:=floattostr(xCam[i]);
+                  //Edit6.Text:=floattostr(yCam[i]);
+                  //Edit7.Text:=floattostr(xDest[i]);
+                  //Edit8.Text:=floattostr(yDest[i]);
+                  //Edit9.Text:=floattostr(dist);
+                  //PositionAndOrientationControl(i,thetaCam,dist,angle);
 
               end
               else if (((abs(xCam[i] - (xDest[i])*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i])*CELLSCALE)) <= THRESHOLD_DIST)) then begin
@@ -1035,6 +1040,8 @@ end;
 procedure TFControlo.TimerSendTimer(Sender: TObject);
 var
     i: integer;
+    l1:integer;
+    aux1:integer;
 begin
     if flagMessageInitialPositions = true then begin
        udpCom.SendMessage(MessageInitialPositions, '127.0.0.1:9808');
@@ -1043,9 +1050,26 @@ begin
     if flagVelocities = true then begin
         i:=0;
         while i<NUMBER_ROBOTS do begin
-           MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority)
-                                                  + 'V' + FloatToStr(linearVelocities[i])
-                                                  + 'W' + FloatToStr(angularVelocities[i]);
+           MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority);
+           l1:=length((CaminhosAgvs[i].coords));
+           for aux1:=0 to l1-1 do begin
+           MessageVelocities := MessageVelocities + 'I' + IntToStr(aux1+1)
+                                                  + 'X' + FloatToStr(round2(getXcoord(CaminhosAgvs[i].coords[aux1].node),3))
+                                                  + 'Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[i].coords[aux1].node),3))
+                                                  + 'D' + IntToStr(CaminhosAgvs[i].coords[aux1].direction);
+           end;
+           if i=1 then begin
+           Edit5.Text:=MessageVelocities;
+           end
+           else if i=2 then begin
+           Edit5.Text:=MessageVelocities;
+           end
+           else if i=3 then begin
+           Edit6.Text:=MessageVelocities;
+           end
+           else if i=0 then begin
+           Edit7.Text:=MessageVelocities;
+           end;
            i:=i+1;
         end;
         MessageVelocities := MessageVelocities + 'F';

@@ -9,5 +9,11 @@
     <rot_deg x="0" y="0" z="0"/>
     <body file="nxt.xml"/>
   </robot>
+  <robot>
+    <ID name="LegoNXT2"/>
+    <pos x="2.63198247535597" y="0.486223662884927" z="0"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <body file="nxt.xml"/>
+  </robot>
   <track file="track.xml"/>
 </scene>
