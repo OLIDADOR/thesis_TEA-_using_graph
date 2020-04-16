@@ -15,7 +15,24 @@ var irobot, isensor: integer;
     MessageCurrentPositions: string;
     MessageVelocities: string;
 
-   X,Y,D:array[1..10] of array[1..161] of double;
+   X,Y,Dir:array[1..10] of array[1..200] of double;
+    d1, d2: double;
+      v_nom:double;
+      Sumodo1, Sumodo2: integer;
+      imp: double;
+      k_1, d: double;
+      posx, posy: double;
+      dtheta, theta1, theta2: double;
+      x_k, y_k, theta_k: double;
+      aux, aux2: double;
+      state: integer;
+      x_goto, y_goto, theta_goto: double;
+      ang_ida, erro_ang_goto,erro_ang_final: double;
+      Velocity, something: matrix;
+      steps_a:array [1..10] of integer;
+
+  k_ref, b_ref : double;
+
 
 procedure KeyControl(v: double);
 var v1, v2: double;
@@ -147,57 +164,76 @@ end;
 
 
 procedure ReadVelocities();
-var i,j:integer;
+var S,si,i,j:integer;
     Y_D,X_D:Double;
-    INDStr,XStr,YStr,DStr,robotIndexStr: string;
+    SStr,INDStr,XStr,YStr,DStr,robotIndexStr: string;
     robotIndex,ind: integer;
 begin
       i:=1;
       j:=2;
+      si:=1;
       INDStr:='';
       XStr:='';
       YStr:='';
       DStr:='';
+      SStr:='';
       robotIndexStr:='';
+      SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
       while (i<=totalRobots) do begin
            //WriteLn(format('%d',[j]));
            SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
            SetRCValue(6, 5 ,format('%d',[length(MessageVelocities)]));
-           while (MessageVelocities[j]<>'I') do begin
+           while (MessageVelocities[j]<>'S') do begin
                robotIndexStr := robotIndexStr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
+           while (MessageVelocities[j]<>'I') do begin
+               SStr := SStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           S:=StrToInt(Sstr);
+           robotIndex := StrToInt(robotIndexStr);
+           steps_a[robotIndex+1]:=S;
+           si:=1;
+           while (si<=S) do begin
+
            while (MessageVelocities[j]<>'X') do begin
                INDStr := INDStr + MessageVelocities[j];
                j:=j+1;
            end;
+           SetRCValue(si, 3 ,format('%s',[INDStr]));
            j:=j+1;
            while (MessageVelocities[j]<>'Y') do begin
                XStr := XStr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
+            SetRCValue(si, 1 ,format('%s',[XStr]));
            while (MessageVelocities[j]<>'D') do begin
                YStr := YStr + MessageVelocities[j];
                j:=j+1;
            end;
+            SetRCValue(si, 2 ,format('%s',[YStr]));
            //WriteLn(format('%d',[j]));
            j:=j+1;
-           while ((MessageVelocities[j]<>'P') and (MessageVelocities[j]<>'F')) do begin
+
+           while ((MessageVelocities[j]<>'I') and (MessageVelocities[j]<>'F') and (MessageVelocities[j]<>'P') ) do begin
                DStr := DStr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
-           robotIndex := StrToInt(robotIndexStr);
+
+
            ind := StrToInt(INDStr);
            X_D:=StrToFloat(Xstr);
            Y_D:=StrToFloat(Ystr);
            IF ((X_D<=3) and (Y_D<=3)) then
            begin
-            X[robotIndex+1][I] := StrToFloat(XStr);
-            Y[robotIndex+1][I] := StrToFloat(YStr);
-            D[robotIndex+1][I] := StrToInt(DStr);
+            X[robotIndex+1][ind] := StrToFloat(XStr);
+            Y[robotIndex+1][ind] := StrToFloat(YStr);
+            Dir[robotIndex+1][ind] := StrToInt(DStr);
            end;
            //SetAxisSpeedRef(i-1, 0, vLinear+vAngular*b/2);
            //SetAxisSpeedRef(i-1, 1, vLinear-vAngular*b/2);
@@ -208,10 +244,16 @@ begin
            XStr:='';
            YStr:='';
            DStr:='';
+           si:=si+1;
+           end;
+
            robotIndexStr:='';
+           SetRCValue(6, 4 ,format('%s',[SStr]));
+           SStr:='';
            i:=i+1;
       end;
-      SetRCValue(6, 4 ,format('%s',[MessageVelocities]));
+      //SetRCValue(6, 4 ,format('%s',[SStr]));
+      SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
 end;
 
 
@@ -231,6 +273,118 @@ begin
   WriteUDPData('127.0.0.1',4040,MessageCurrentPositions);
   MessageCurrentPositions:='';
 end;
+
+
+function VelocityCalc_GoTo(i:integer; v, w : double): matrix;
+    var
+     v1, v2 : double;
+    Begin
+      Result:= Mzeros(2,1);
+      v1:= V_nom - ((b_ref*w)/2);
+      v2:= V_nom + ((b_ref*w)/2);
+      SetAxisSpeedRef(i-1, 0, v1);
+      SetAxisSpeedRef(i-1, 1, v2);
+      SetRCValue(37, 5 ,format('%g',[w]));
+      SetRCValue(38, 5 ,format('%g',[v]));
+      Msetv(Result,0,0,v1);
+      Msetv(Result,1,0,v2);
+    end;
+
+ function GoTo_XY(i:integer; xf, yf, tf : double): matrix;
+    var
+      k1, k2:double;
+      v_go: double;
+      tol_t, tol_pos: double;
+
+    Begin
+      k1:= 40;
+      k2:= 40;
+      v_go := 20;
+      tol_t := 0.03;
+      tol_pos := 0.03;
+      Result:= state;
+
+      x_k:= GetRobotX(i-1);
+      y_k:= GetRobotY(i-1);
+      theta_k := GetRobotTheta(i-1);
+      erro_ang_goto := DiffAngle(ang_ida, theta_k);
+      erro_ang_final := DiffAngle(tf, theta_k);
+      SetRCValue(33, 5 ,format('%g',[ang_ida]));
+      SetRCValue(34, 5 ,format('%g',[abs(erro_ang_goto)]));
+      SetRCValue(35, 5 ,format('%g',[abs(erro_ang_final)]));
+
+      case state Of
+      0:begin
+      SetRCValue(40, 5 ,'Ainda_zero');
+      ang_ida := atan2(yf-y_k, xf-x_k);
+      state := 1;
+
+      end;
+        //Rotação para posicionamente de partida
+        1:begin
+            Velocity := VelocityCalc_GoTo(i,0, k1*erro_ang_goto);
+            SetRCValue(40, 5 ,'Ainda_1')
+            if(abs(erro_ang_goto)< tol_t) then begin
+            SetRCValue(40, 6 ,'state1_erro');
+            state:= 2;
+            SetAxisSpeedRef(i-1, 0, 0);  //V1
+            SetAxisSpeedRef(i-1, 1, 0);  //V2
+            end;
+          end;
+
+          //Avançar para a posição
+        2:begin
+          //Ocorrencia de erro
+          SetRCValue(32, 5 ,format('%d',[state]));
+          SetRCValue(40,5,'state2');
+          SetRCValue(41, 5 ,'Ainda_2')
+           (* if(abs(erro_ang_goto)>0.05) then begin
+            state := 1;
+            SetRCValue(41, 7 ,'secalhar')
+            end;    *)
+
+           Velocity := VelocityCalc_GoTo(i,v_go, k2*erro_ang_goto);
+
+             if((abs(xf-x_k)< tol_pos) and (abs(yf-y_k)< tol_pos))then begin
+               state:=3;
+               SetAxisSpeedRef(i-1, 0, 0);
+               SetAxisSpeedRef(i-1, 1, 0);
+             end;
+          end;
+
+          //Rodar para o ângulo final
+          3:begin
+          SetRCValue(32, 5 ,format('%d',[state]));
+
+              if(abs(erro_ang_final)> tol_t) then begin
+              Velocity := VelocityCalc_GoTo(i,0, k2*erro_ang_final);
+              end;
+           SetRCValue(40,5,'state3');
+              if(abs(erro_ang_final)< tol_pos) then begin
+              state:=4;
+              end;
+          end;
+          4:begin
+          SetRCValue(32, 5 ,format('%d',[state]));
+          aux:= 0;
+          SetRCValue(40,5,'state4');
+          //Nothing
+          end;
+    end;
+end;
+//function get_nsteps(i,l:integer): integer;
+// var
+ // aux1:integer;
+  //count:integer;
+//Begin
+  //count:=0;
+ //for aux1:=1 to l do
+ //begin
+   // if X[i][aux1]<>0
+ //end;
+
+//end;
+
 
 
 procedure Control;
@@ -321,6 +475,9 @@ begin
   while i <= totalRobots do begin
 
       //gotoxy
+      
+     // GoTo_XY(2,2,2,2);
+      
       //SetAxisSpeedRef(i-1, 0, vLinear[i]+vAngular[i]*b/2);
       //SetAxisSpeedRef(i-1, 1, vLinear[i]-vAngular[i]*b/2);
       i:=i+1;
@@ -357,14 +514,17 @@ begin
   
   t := 0;
   w := 1;
-  
+  b_ref := 0.1;
+  k_ref := 0.0005;
+  v_nom :=10;
+
   ControlMode := 'keys';
   
   udpdata := '';
   flagFirstMessage:=0;
   totalRobots:=0;
 
-  
+
   //SetRobotPos(0, 0.18, 0.18, 0, pi/2);
   //SetRobotPos(1, 1.08, 0.18, 0, pi/2);
   

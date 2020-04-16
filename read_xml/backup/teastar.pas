@@ -120,10 +120,10 @@ type
      inicial_partial_node:integer;
      pos_X:Double;
      pos_Y:Double;
-     Direction:Double;
+     Direction:integer;
      ipos_X:Double;
      ipos_Y:Double;
-     iDirection:Double;
+     iDirection:integer;
      SubMissions: array[0..MAX_SUBMISSIONS] of integer;
      NumberSubMissions: integer;
      CounterSubMissions: integer;
@@ -147,7 +147,7 @@ type
      Parent_Direction:double;
      steps:integer;
      HeapIdx:integer;
-     direction:double;
+     direction:integer;
      links:array of link_full;
    end;
 PAStarCell = ^TEA_Graph_node;  // PAStarCell is a pointer to TAStarCell, just points to an adress
@@ -256,7 +256,7 @@ procedure A_starTimeInit(var Map: TAStarMap; agv: Robot_Pos_info);
 procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
 function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs: Caminhos; var agvs: r_node; maxIter: integer):integer;
 function get_node_dir (var Map:TAStarMap;n1:integer;n2:integer):integer;
-function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer):double;
+function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer; var curr_dirr:integer):double;
 function get_int_dirr( var direction:Double):integer;
 procedure StorePath (var Map:TAStarMap; var agvs:r_node; var CaminhosAgvs:Caminhos; vehicle:integer; steps:integer);
 procedure CloserNeighborhoodAsObstacle (var Map:TAStarMap; i:integer; tstep:integer);
@@ -272,7 +272,7 @@ function CalcF(var Map: TAStarMap; idx: integer): double; inline;
 procedure InsertInOpenList( var Map: TAStarMap; id: integer; step:integer);
 procedure UpdateHeapPositionByPromotion(var Map: TAStarMap; idx: integer); inline;
 procedure SwapHeapElements(var Map: TAStarMap; idx1, idx2: integer); inline;
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps:integer); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps:integer; out dir:integer); inline;
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
 
@@ -315,6 +315,7 @@ function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs:Caminhos; var agvs: r
 var
     curPnt: integer;
     curPnt_t_step: integer;
+    curr_dirr:integer;
     count,vehicle,steps: integer;
 
 begin
@@ -328,6 +329,7 @@ begin
 
       curPnt:= agvs[count].inicial_node;
       curPnt_t_step := agvs[count].inicial_step;
+      curr_dirr:=agvs[count].Direction;
       steps := 0;
 
       A_starTimeInit(Map,agvs[count]);
@@ -350,7 +352,7 @@ begin
           break;
         end;
 
-        if TEAstep(Map,agvs[count],steps,curPnt,curPnt_t_step) > 0 then break;
+        if TEAstep(Map,agvs[count],steps,curPnt,curPnt_t_step,curr_dirr) > 0 then break;
 
         // found the way
         if Map.GraphState[agvs[count].target_node-1][agvs[count].target_node_step] = CLOSED then begin
@@ -420,28 +422,30 @@ begin
   y2:=Map.TEA_GRAPH[n2-1][0].pos_Y;
   d_x:=x2-x1;
   d_y:=y2-y1;
-  aux2:=d_x*d_x;
-  aux3:=d_y*d_y;
-  aux1:=aux2+aux3;
-  dist:=sqrt(aux1);
-  angle:=round(radtodeg(arctan2(d_y,d_x))*10)/10;
-  get_node_dir:=get_int_dirr(angle);
+  if ((d_x = 0) and (d_y >0)) then begin get_node_dir := 0; end
+  else if ((d_x = 0) and (d_y <0)) then begin get_node_dir := 4; end
+  else if ((d_x > 0) and (d_y = 0)) then begin get_node_dir := 2; end
+  else if ((d_x <0) and (d_y = 0)) then begin get_node_dir := 6; end
+  else if ((d_x >0) and (d_y >0)) then begin get_node_dir := 1; end
+  else if ((d_x >0) and (d_y <0)) then begin get_node_dir := 3; end
+  else if ((d_x <0) and (d_y >0)) then begin get_node_dir := 7; end
+  else if ((d_x <0) and (d_y <0)) then begin get_node_dir := 5; end;
 end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
-function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer):double;
+function TEAstep(var Map:TAStarMap; var agv:Robot_Pos_info; var steps:integer; var curPnt:integer; var curPnt_t_step:integer; var curr_dirr:integer):double;
 var
     newPnt: integer;
     newPnt_step:integer;
-    newPnt_dirr:real;
+    newPnt_dirr:integer;
     newG,auxCost: double;
     edge: integer;
     i,j,l1: integer;
     contador: integer;
     n1,n2:integer;
-    curr_dirr,node_dirr,rot:Double;
+    node_dirr,rot:integer;
     rot_abs:double;
 begin
 
@@ -472,7 +476,7 @@ begin
    else begin
 
       //Take from the open list the node with the lowest f
-      RemoveFromOpenList(Map,curPnt,curPnt_t_step);
+      RemoveFromOpenList(Map,curPnt,curPnt_t_step,curr_dirr);
 
       Map.GraphState[curPnt-1][curPnt_t_step] := CLOSED;
 
@@ -506,7 +510,6 @@ begin
       begin
       n1:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].id;
       n2:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].node_to_link;
-      curr_dirr:=agv.Direction;
       node_dirr:=get_node_dir(Map,n1,n2);
       rot:=node_dirr-curr_dirr;
       rot_abs:=abs(rot);
@@ -613,14 +616,14 @@ begin
                               //mycoord.x := newPnt.x;
                               //mycoord.y := newPnt.y;
                               steps:=newPnt_step;
-                              //mycoord.direction := newPnt.direction;
+                              direction := newPnt_dirr;
 
                               //The robot stays in the same point in both time stamps
                               if (i=l1) then begin
                                     G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST1;
                               end
                               else begin
-                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt][curPnt_t_step].links[i].distance);
+                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].distance);
                               end;
 
                               //to reflect the rotation cost
@@ -801,7 +804,7 @@ begin
     end;
 
     //update the path directions in each step, from the step 0 to the end
-    d:=get_int_dirr(agvs[vehicle].Direction);
+    d:=agvs[vehicle].Direction;
     CaminhosAgvs[vehicle].coords[0].direction:=d;
 
     UpdatePathDirections(CaminhosAgvs,vehicle, map);
@@ -1381,7 +1384,7 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
-procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps: integer); inline;
+procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps: integer; out dir:integer); inline;
 begin
 
   inc(Map.Profiler.RemoveFromOpenList_count);
@@ -1390,6 +1393,7 @@ begin
     // return the first node
     Pnt := data[0]^.id;
     steps:= data[0]^.steps;
+    dir:=data[0]^.direction;
     // move the last node into the first position
     data[count - 1]^.HeapIdx := 0;
     data[0] := data[count - 1];

@@ -38,23 +38,31 @@ type
   TForm2 = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    Button3: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera3: TGLCamera;
+    GLCamera4: TGLCamera;
     GLCube3: TGLCube;
+    GLCube4: TGLCube;
     GLDummyCube3: TGLDummyCube;
+    GLDummyCube4: TGLDummyCube;
     GLLightSource3: TGLLightSource;
+    GLLightSource4: TGLLightSource;
     GLPlane1: TGLPlane;
     GLScene3: TGLScene;
+    GLScene4: TGLScene;
     GLSceneViewer1: TGLSceneViewer;
     GLSceneViewer2: TGLSceneViewer;
     Label1: TLabel;
     Label2: TLabel;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
+    LabeledEdit3: TLabeledEdit;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
@@ -134,7 +142,44 @@ end;
  check_array:=count;
 end;
 
+  function getXcoord(n1:integer):Double;
+var
+l1:integer;
+aux1,n_id:integer;
+c:double;
+begin
+ l1:=length(form1.full_nodelist);
+   c:=999999999;
+   for aux1:=0 to l1-1 do
+   begin
+     n_id:=form1.full_nodelist[aux1].id;
+     if n_id=n1 then
+     begin
+      c:=form1.full_nodelist[aux1].pos_X;
+     end;
+   end;
+   getXcoord:=c;
+end;
 
+function getYcoord(n1:integer):Double;
+var
+l1:integer;
+aux1,n_id:integer;
+c:double;
+begin
+ l1:=length(form1.full_nodelist);
+   c:=999999999;
+   for aux1:=0 to l1-1 do
+   begin
+     n_id:=form1.full_nodelist[aux1].id;
+     if n_id=n1 then
+     begin
+      c:=form1.full_nodelist[aux1].pos_Y;
+
+     end;
+   end;
+   getYcoord:=c;
+end;
 
 procedure Print_map_in_GLS(nodelist:a_node; width_line:integer; GLScene: TGLScene; base:TGLDummyCube ; scale:integer);
       var
@@ -326,6 +371,32 @@ begin
   Application.CreateForm(TFControlo, FControlo);
   FMain.Show;
   FControlo.Show;
+end;
+
+procedure TForm2.Button3Click(Sender: TObject);
+var
+i,aux1:integer;
+X,y:double;
+newcube: TGLCube;
+angle:double;
+begin
+  i:=strtoint(LabeledEdit3.Text);
+  for aux1:=0 to NUMBER_ROBOTS-1 do
+  begin
+   X:=getXcoord(controlo.CaminhosAgvs[aux1].coords[i].node);
+   Y:=getYcoord(controlo.CaminhosAgvs[aux1].coords[i].node);
+   newcube:=TGLCube.CreateAsChild(GLScene3.Objects);
+   newcube.CubeHeight:=25;
+   newcube.CubeWidth:=25;
+   newcube.CubeDepth:=1;
+   newcube.Position.X:=x*200-1.5*200;
+   newcube.Position.y:=y*200-1.1*200;
+   newcube.Position.z:=1;
+   angle:=0;
+   newcube.RollAngle:=angle;
+   //colour.
+   newcube.Material.FrontProperties.Ambient.RandomColor;
+  end;
 end;
 
 procedure TForm2.FormPaint(Sender: TObject);

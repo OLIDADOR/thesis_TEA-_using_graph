@@ -43,6 +43,7 @@ type
     Edit7: TEdit;
     Edit8: TEdit;
     Edit9: TEdit;
+    LabeledEdit1: TLabeledEdit;
     SendButton: TButton;
     Edit1: TEdit;
     TimerSend: TTimer;
@@ -1051,32 +1052,25 @@ begin
         i:=0;
         while i<NUMBER_ROBOTS do begin
            MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority);
+           MessageVelocities := MessageVelocities + 'S' + IntToStr( CaminhosAgvs[i].steps);
            l1:=length((CaminhosAgvs[i].coords));
            for aux1:=0 to l1-1 do begin
+           if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)) then
+           begin
            MessageVelocities := MessageVelocities + 'I' + IntToStr(aux1+1)
                                                   + 'X' + FloatToStr(round2(getXcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'D' + IntToStr(CaminhosAgvs[i].coords[aux1].direction);
            end;
-           if i=1 then begin
-           Edit4.Text:=MessageVelocities;
-           end
-           else if i=2 then begin
-           Edit5.Text:=MessageVelocities;
-           end
-           else if i=3 then begin
-           Edit6.Text:=MessageVelocities;
-           end
-           else if i=0 then begin
-           Edit7.Text:=MessageVelocities;
            end;
            i:=i+1;
         end;
         MessageVelocities := MessageVelocities + 'F';
         udpCom.SendMessage(MessageVelocities, '127.0.0.1:9808');
+        Edit8.Text:=MessageVelocities;
         MessageVelocities:='';
     end;
-   // Edit1.Text:='Entrei';
+
 end;
 
 procedure TFControlo.FormShow(Sender: TObject);
