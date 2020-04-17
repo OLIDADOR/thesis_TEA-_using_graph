@@ -42,7 +42,7 @@ const
   OBSTACLEROBOT = 4;
 
   NUM_LAYERS = 160;
-  NUMBER_ROBOTS = 2;
+  NUMBER_ROBOTS = 4;
   MAX_EXCHANGES = 10;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
@@ -239,6 +239,7 @@ PAStarCell = ^TEA_Graph_node;  // PAStarCell is a pointer to TAStarCell, just po
   Caminho = record
       coords: array[0 .. NUM_LAYERS] of nodes;
       steps: integer;
+      st:integer;
   end;
   //
   Caminhos = array[0..NUMBER_ROBOTS-1] of Caminho;
@@ -715,7 +716,7 @@ begin
     CaminhosAgvs[vehicle].coords[tstep].node:=i;
     CaminhosAgvs[vehicle].coords[tstep].steps:=tstep;
     CaminhosAgvs[vehicle].steps:=steps;
-
+     CaminhosAgvs[vehicle].st:=tstep;
 
     //The target point is considered as obstacle in every layers, starting at the
     //step that reaches the goal until the maximum NUM_LAYERS

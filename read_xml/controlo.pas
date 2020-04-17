@@ -192,6 +192,59 @@ begin
    getYcoord:=c;
 end;
 
+function get_closest_node_id (nodelist:a_node; x:Double; y:Double; scale:integer):integer;
+
+var
+    l4:integer;
+    aux4:integer;
+    n_curr:integer;
+    x_p:Double;
+    y_p:Double;
+    id_min:integer;
+    diff1:Double;
+    diff2:Double;
+    Difft:Double;
+    diff_min:Double;
+begin
+  l4:=length(nodelist);
+  diff_min:=10*scale;
+  id_min:=0;
+  if l4>0 then
+  begin
+  for aux4:=0 to l4-1 do
+  begin
+     n_curr:=nodelist[aux4].id;
+     x_p:=nodelist[aux4].pos_X*scale;
+     y_p:=nodelist[aux4].pos_Y*scale;
+     diff1:=abs(x_p-x*scale);
+     diff2:=abs(y_p-y*scale);
+     Difft:=diff1+diff2;
+  if diff_min>Difft then
+     begin
+      diff_min:=Difft;
+      id_min:=n_curr;
+    end;
+ end;
+  get_closest_node_id:=id_min;
+end;
+end;
+
+function get_steps(var CaminhosAgvs:Caminhos;i:integer):integer;
+ var
+ l1,aux1,aux2:integer;
+
+ Begin
+l1:=length((CaminhosAgvs[i].coords));
+aux2:=0;
+for aux1:=0 to l1-1 do begin
+if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)) then
+           begin
+           aux2:=aux2+1
+           end;
+   end;
+get_steps:=aux2;
+end;
+
 procedure InitialPointsForAllRobots(var agvs:r_node);
 var
   v:integer;
@@ -801,7 +854,8 @@ begin
     i:=0;
     while i<NUMBER_ROBOTS do begin
         form1.robots[i].pos_X := round((xCam[i]+CELLSCALE)/CELLSCALE);
-         form1.robots[i].pos_Y:= round((yCam[i]+CELLSCALE)/CELLSCALE);
+        form1.robots[i].pos_Y:= round((yCam[i]+CELLSCALE)/CELLSCALE);
+        form1.robots[i].inicial_node:=get_closest_node_id(form1.full_nodelist,form1.robots[i].pos_X ,form1.robots[i].pos_Y,1);
         if ((thetaCam[i] <= pi/2 + THRESHOLD_ANGLE) and (thetaCam[i] >= pi/2 - THRESHOLD_ANGLE)) then begin
              form1.robots[i].Direction := 0;
         end
@@ -955,7 +1009,7 @@ begin
 
           UnpackUDPmessage(xCam,yCam,thetaCam,data);
 
-          UpdateInitialPoints(xCam,yCam,thetaCam);
+          //UpdateInitialPoints(xCam,yCam,thetaCam);
 
           //i:=0;
           //thetaDest[i]:=-pi;
@@ -1022,7 +1076,7 @@ begin
 
                   NextDirectionToThetaDest(CaminhosAgvs,i);
 
-                  MovementDecision(CaminhosAgvs,form1.robots,thetaCam[i],i,FControlo);
+                  //MovementDecision(CaminhosAgvs,form1.robots,thetaCam[i],i,FControlo);
 
               end;
               i:=i+1;
@@ -1052,7 +1106,7 @@ begin
         i:=0;
         while i<NUMBER_ROBOTS do begin
            MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority);
-           MessageVelocities := MessageVelocities + 'S' + IntToStr( CaminhosAgvs[i].steps+1);
+           MessageVelocities := MessageVelocities + 'S' + IntToStr(get_steps(CaminhosAgvs,i));
            l1:=length((CaminhosAgvs[i].coords));
            for aux1:=0 to l1-1 do begin
            if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)) then
