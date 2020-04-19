@@ -1,0 +1,224 @@
+<?xml version="1.0" ?>
+<track>
+
+  <defines>
+    <const name='track_length' value='5' />
+    <const name='track_width' value='1.5' />
+    <const name='black_margin' value='0.2' />
+    <const name='line_width' value='0.05' />
+    <const name='curve_radius' value='2.3' />
+    <const name='heps' value='0.01' />
+    <const name='deg_step' value='5' />
+    <const name='x_ce' value='track_length - 2*curve_radius' />
+    <const name='ro' value='curve_radius + track_width/2' />
+    <const name='y_ct' value='track_width/2 + line_width' />
+    <const name='teta_ct' value='arcsin((curve_radius - y_ct)/ro)' />
+    <const name='x_ct' value='x_ce + ro * cos(teta_ct)' />
+    <const name='dot_length' value='0.2' />
+    <const name='dot_space' value='0.15' />
+    <const name='dot_angle' value='dot_length / curve_radius' />
+    <const name='dot_angle_space' value='dot_space / curve_radius' />
+    <const name='park_A' value='0.2' />
+    <const name='park_B' value='0.8' />
+  </defines>
+
+  <!--
+  <polygon>
+    <color rgb24='8F8F8F'/>
+    <vertice x='0' y='0' z='0'/>
+    <vertice x='-0.1' y='-0.4' z='0'/>
+    <vertice x='0.4' y='0.4' z='0'/>
+  </polygon>
+    <position x='0' y='0' z='0.001' angle='45'/>
+  -->
+  <line>  <!-- Segmento Preto grande -->
+    <color rgb24='0F0F0F'/>
+    <position x='0' y='-track_width/2 - black_margin' z='heps/2' angle='0'/>
+    <size width='track_width + 2*black_margin' length='track_length'/>
+    <tag value='black'/>
+    <clone_hvflip/>
+  </line>
+
+  <arc> <!-- Curva Preta grande -->
+    <color rgb24='0F0F0F'/>
+    <center x='track_length' y='curve_radius' z='heps/2'/>
+    <radius inner='curve_radius - track_width/2 - black_margin' outer='curve_radius + track_width/2 + black_margin'/>
+    <angle_deg start='-90' stop='180' step='deg_step'/>
+    <tag value='black'/>
+    <clone_hvflip/>
+  </arc>
+
+  <arc> <!-- Curva preta pequena -->
+    <color rgb24='0F0F0F'/>
+    <center x='x_ce' y='curve_radius' z='heps/2'/>
+    <radius inner='curve_radius - track_width/2 - black_margin' outer='curve_radius + track_width/2 + black_margin'/>
+    <angle_deg start='-90' stop='0' step='deg_step'/>
+    <tag value='black'/>
+    <clone_hvflip/>
+  </arc>
+
+  <line>  <!-- Segmento exterior grande -->
+    <color rgb24='8F8F8F'/>
+    <position x='0' y='-track_width/2 - line_width' z='heps' angle='0'/>
+    <size width='line_width' length='track_length'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </line>
+
+  <line>  <!-- Segmento interior -->
+    <color rgb24='8F8F8F'/>
+    <position x='x_ct' y='track_width/2' z='heps' angle='0'/>
+    <size width='line_width' length='track_length - x_ct'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </line>
+
+  <polygon> <!-- Bico interior (0.03 a olho)-->
+    <color rgb24='8F8F8F'/>
+    <vertice x='x_ct' y='track_width/2' z='heps'/>
+    <vertice x='x_ct' y='track_width/2 + line_width' z='heps'/>
+    <vertice x='x_ct - 0.03' y='track_width/2' z='heps'/>
+    <tag value='white'/>
+  </polygon>
+
+  <polygon> <!-- Bico interior simetrico (0.03 a olho)-->
+    <color rgb24='8F8F8F'/>
+    <vertice x='-x_ct' y='-track_width/2' z='heps'/>
+    <vertice x='-x_ct' y='-track_width/2 - line_width' z='heps'/>
+    <vertice x='-x_ct + 0.03' y='-track_width/2' z='heps'/>
+    <tag value='white'/>
+  </polygon>
+  
+  <arc> <!-- Curva exterior grande -->
+    <color rgb24='8F8F8F'/>
+    <center x='track_length' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius + track_width/2' outer='curve_radius + track_width/2 + line_width'/>
+    <angle_deg start='-90' stop='180' step='deg_step'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </arc>
+
+  <arc> <!-- Curva interior grande -->
+    <color rgb24='8F8F8F'/>
+    <center x='track_length' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius - track_width/2 - line_width' outer='curve_radius - track_width/2'/>
+    <angle_deg start='-90' stop='180' step='deg_step'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </arc>
+
+  <arc> <!-- Curva exterior pequena -->
+    <color rgb24='8F8F8F'/>
+    <center x='x_ce' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius - track_width/2 - line_width' outer='curve_radius - track_width/2'/>
+    <angle_deg start='-90' stop='0' step='deg_step'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </arc>
+
+  <arc> <!-- Curva interior pequena -->
+    <color rgb24='8F8F8F'/>
+    <center x='x_ce' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius + track_width/2' outer='curve_radius + track_width/2 + line_width'/>
+    <angle_deg start='-teta_ct/pi()*180' stop='0' step='deg_step'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </arc>
+
+  <line>  <!-- Segmento exterior pequeno -->
+    <color rgb24='8F8F8F'/>
+    <position x='0' y='track_width/2' z='heps' angle='0'/>
+    <size width='line_width' length='track_length - 2*curve_radius'/>
+    <tag value='white'/>
+    <clone_hvflip/>
+  </line>
+
+  <line>  <!-- Segmento tracejado grande -->
+    <color rgb24='8F8F8F'/>
+    <position x='0.3 + dot_space' y='-line_width/2' z='heps' angle='0'/>
+    <size width='line_width' length='dot_length'/>
+    <repeat times='12' x_disp='dot_length + dot_space' y_disp='0' angle_disp='0'/>
+    <tag value='stripes'/>
+    <clone_hvflip/>
+  </line>
+
+  <arc> <!-- Curva tracejada grande -->
+    <color rgb24='8F8F8F'/>
+    <center x='track_length' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius - line_width/2' outer='curve_radius + line_width/2'/>
+    <angle_deg start='-90' stop='-90 + dot_angle/pi()*180' step='5'/>
+    <repeat times='30' x_disp='0' y_disp='0' angle_disp='(dot_angle + dot_angle_space)/pi()*180'/>
+    <tag value='stripes'/>
+    <clone_hvflip/>
+  </arc>
+
+  <arc> <!-- Curva tracejada pequena -->
+    <color rgb24='8F8F8F'/>
+    <center x='x_ce' y='curve_radius' z='heps'/>
+    <radius inner='curve_radius - line_width/2' outer='curve_radius + line_width/2'/>
+    <angle_deg start='0' stop='-dot_angle/pi()*180' step='5'/>
+    <repeat times='4' x_disp='0' y_disp='0' angle_disp='-(dot_angle + dot_angle_space)/pi()*180'/>
+    <tag value='stripes'/>
+    <clone_hvflip/>
+  </arc>
+
+  <line>  <!-- passadeira linhas horizontais -->
+    <color rgb24='8F8F8F'/>
+    <position x='-0.15' y='-0.65' z='heps' angle='0'/>
+    <size width='0.1' length='0.3'/>
+    <tag value='crosswalk'/>
+    <repeat times='6' x_disp='0' y_disp='0.2' angle_disp='0'/>
+  </line>
+
+  <line>  <!-- passadeira linhas verticais -->
+    <color rgb24='8F8F8F'/>
+    <position x='-0.3' y='-0.65' z='heps' angle='0'/>
+    <size width='1.3' length='0.1'/>
+    <tag value='crosswalk'/>
+    <repeat times='1' x_disp='0.5' y_disp='0' angle_disp='0'/>
+  </line>
+
+  <line>  <!-- parque linhas verticais -->
+    <color rgb24='8F8F8F'/>
+    <position x='0.3 + park_A' y='-(track_width/2 + line_width + park_B + 1.05)' z='heps' angle='0'/>
+    <size width='1.05' length='0.05'/>
+    <tag value='parklines'/>
+    <repeat times='1' x_disp='1.55' y_disp='0' angle_disp='0'/>
+  </line>
+
+  <line>  <!-- parque linha vertical tracejada -->
+    <color rgb24='8F8F8F'/>
+    <position x='0.3 + park_A  + 0.8 - 0.05/2' y='-(track_width/2 + line_width + park_B + 1)' z='heps' angle='0'/>
+    <size width='0.2' length='0.05'/>
+    <tag value='parklines'/>
+    <repeat times='3' x_disp='0' y_disp='0.25' angle_disp='0'/>
+  </line>
+
+  <line>  <!-- parque linhas horizontais -->
+    <color rgb24='8F8F8F'/>
+    <position x='0.3 + park_A' y='-(track_width/2 + line_width + park_B +0.05)' z='heps' angle='0'/>
+    <size width='0.05' length='1.6'/>
+    <tag value='parklines'/>
+    <repeat times='1' x_disp='0' y_disp='-1.0' angle_disp='0'/>
+  </line>
+
+  <line>  <!-- parque linhas do P verticais -->
+    <color rgb24='8F8F8F'/>
+    <position x='0.3 + park_A + 0.5' y='-(track_width/2 + line_width + park_B + 1.05 - 0.2)' z='heps' angle='0'/>
+    <size width='0.6' length='0.05'/>
+    <tag value='parkletters'/>
+    <repeat times='1' x_disp='0.8' y_disp='0' angle_disp='0'/>
+  </line>
+
+  <arc> <!-- parque curvas do P -->
+    <color rgb24='8F8F8F'/>
+    <center x='0.3 + park_A + 0.5' y='-(track_width/2 + line_width + park_B + 1.05 - 0.4)' z='heps'/>
+    <radius inner='0.15' outer='0.2'/>
+    <angle_deg start='90' stop='270' step='deg_step'/>
+    <tag value='parkletters'/>
+    <repeat times='1' x_disp='0.8' y_disp='0' angle_disp='0'/>
+  </arc>
+
+
+</track>
+

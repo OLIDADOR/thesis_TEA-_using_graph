@@ -1,0 +1,5 @@
+Trimares.State.x.
+Trimares.State.y.
+Trimares.State.theta.
+Trimares.State.Vx.
+Trimares.State.Vy.

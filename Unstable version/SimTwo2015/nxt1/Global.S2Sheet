@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+    <col num="3" width="611" />
+    <col num="4" width="129" />
+    <col num="5" width="105" />
+    <col num="6" width="86" />
+    <col num="7" width="106" />
+  </columns>
+  <cells>
+    <cell r="33" c="5" text="-0.0396159042526737" />
+    <cell r="34" c="5" text="3.07385276202378" />
+    <cell r="35" c="5" text="0.0297166409031304" />
+    <cell r="40" c="5" text="state3" />
+    <cell r="37" c="5" text="-1.21898099582372" />
+    <cell r="38" c="5" text="0" />
+    <cell r="40" c="6" text="state1_erro" />
+    <cell r="32" c="5" text="3" />
+    <cell r="41" c="5" text="Ainda_2" />
+    <cell r="41" c="4" text="aqui" />
+    <cell r="1" c="1" text="0" />
+    <cell r="2" c="1" text="0" />
+    <cell r="9" c="4" text="3.14" />
+    <cell r="9" c="5" text="3.14" />
+    <cell r="9" c="6" text="3.14" />
+    <cell r="9" c="7" text="3.14" />
+    <cell r="6" c="3" text="6" />
+    <cell r="6" c="5" text="834" />
+    <cell r="1" c="3" text="1" />
+    <cell r="19" c="1" text="2S17I1" />
+    <cell r="22" c="1" text="13" />
+    <cell r="2" c="3" text="2" />
+    <cell r="3" c="3" text="3" />
+    <cell r="4" c="3" text="4" />
+    <cell r="5" c="3" text="5" />
+    <cell r="7" c="3" text="7" />
+    <cell r="8" c="3" text="8" />
+    <cell r="9" c="3" text="9" />
+    <cell r="10" c="3" text="10" />
+    <cell r="11" c="3" text="11" />
+    <cell r="20" c="1" text="1" />
+    <cell r="19" c="2" text="17" />
+    <cell r="22" c="2" text="0.93" />
+    <cell r="12" c="3" text="12" />
+    <cell r="13" c="3" text="2S17I1" />
+    <cell r="14" c="3" text="14" />
+    <cell r="15" c="3" text="15" />
+    <cell r="20" c="2" text="2" />
+    <cell r="19" c="3" text="17" />
+    <cell r="22" c="3" text="1.25" />
+    <cell r="16" c="3" text="16" />
+    <cell r="20" c="3" text="3" />
+    <cell r="19" c="4" text="11" />
+    <cell r="22" c="4" text="0.486" />
+    <cell r="20" c="4" text="4" />
+    <cell r="18" c="2" text="liv" />
+    <cell r="25" c="1" text="3" />
+    <cell r="25" c="2" text="3" />
+    <cell r="25" c="3" text="3" />
+    <cell r="25" c="4" text="3" />
+    <cell r="23" c="1" text="1.48" />
+    <cell r="23" c="2" text="0.841" />
+    <cell r="23" c="3" text="2.28" />
+    <cell r="23" c="4" text="0.125" />
+    <cell r="17" c="3" text="17" />
+    <cell r="18" c="3" text="18" />
+    <cell r="21" c="3" text="21" />
+    <cell r="24" c="3" text="24" />
+    <cell r="26" c="3" text="26" />
+    <cell r="27" c="3" text="27" />
+    <cell r="30" c="1" text="2" />
+    <cell r="31" c="1" text="i" />
+    <cell r="31" c="2" text="i" />
+    <cell r="31" c="3" text="i" />
+    <cell r="31" c="4" text="i" />
+    <cell r="31" c="5" text="i" />
+    <cell r="31" c="6" text="i" />
+    <cell r="31" c="7" text="i" />
+    <cell r="31" c="8" text="i" />
+    <cell r="31" c="9" text="i" />
+    <cell r="31" c="10" text="i" />
+  </cells>
+</sheet>

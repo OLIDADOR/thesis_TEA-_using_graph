@@ -1,0 +1,274 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value="NAO"/>
+
+  <solids>
+    <cuboid>
+      <ID value="torso"/>
+      <pos x="0" y="0" z="0.02"/>
+      <size x="0.1" y="0.1" z="0.14"/>
+      <mass value="1.2171"/>
+    </cuboid>
+  
+    <sphere>
+      <ID value="leftPelvis"/>
+      <pos x="0.0" y="0.055" z="-0.105"/>
+      <radius value="0.03"/>
+      <mass value="0.1"/>
+    </sphere>
+
+    <sphere>
+      <ID value="rightPelvis"/>
+      <pos x="0.0" y="-0.055" z="-0.105"/>
+      <radius value="0.03"/>
+      <mass value="0.1"/>
+    </sphere>
+
+    <cuboid>
+      <ID value="leftThigh"/>
+      <pos x="0.0" y="0.055" z="-0.150"/>
+      <size x="0.07" y="0.07" z="0.11"/>
+      <mass value="0.533"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="rightThigh"/>
+      <pos x="0.0" y="-0.055" z="-0.150"/>
+      <size x="0.07" y="0.07" z="0.11"/>
+      <mass value="0.533"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="leftShank"/>
+      <pos x="0.0" y="0.055" z="-0.280"/>
+      <size x="0.07" y="0.08" z="0.13"/>
+      <mass value="0.423"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="rightShank"/>
+      <pos x="0.0" y="-0.055" z="-0.280"/>
+      <size x="0.07" y="0.08" z="0.13"/>
+      <mass value="0.423"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="leftFoot"/>
+      <pos x="0.012" y="0.055" z="-0.360"/>
+      <size x="0.16" y="0.08" z="0.045"/>
+      <mass value="0.158"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="rightFoot"/>
+      <pos x="0.012" y="-0.055" z="-0.360"/>
+      <size x="0.16" y="0.08" z="0.045"/>
+      <mass value="0.158"/>
+     </cuboid>
+  
+    <cuboid>
+      <ID value="leftArm"/>
+      <pos x="0.0" y="0.1" z="0.05"/>
+      <size x="0.05" y="0.05" z="0.08"/>
+      <mass value="0.163"/>
+    </cuboid>
+  
+    <cuboid>
+      <ID value="rightArm"/>
+      <pos x="0.0" y="-0.1" z="0.05"/>
+      <size x="0.05" y="0.05" z="0.08"/>
+      <mass value="0.163"/>
+    </cuboid>
+  
+    <cuboid>
+      <ID value="leftForearm"/>
+      <pos x="0.0" y="0.1" z="-0.01"/>
+      <size x="0.05" y="0.05" z="0.08"/>
+      <mass value="0.087"/>
+    </cuboid>
+  
+    <cuboid>
+      <ID value="rightForearm"/>
+      <pos x="0.0" y="-0.1" z="-0.01"/>
+      <size x="0.05" y="0.05" z="0.08"/>
+      <mass value="0.087"/>
+    </cuboid>
+ 
+    <sphere>
+      <ID value="head"/>
+      <pos x="0.0" y="0.0" z="0.13"/>
+      <radius value="0.045"/>
+      <mass value="0.2"/>
+    </sphere>
+  </solids>
+
+  <articulations>
+   <default>
+    <draw radius="0.005" height="0.1" rgb24="8F0000"/>
+    <motor ri="6.44" li= "0.05" ki="21.3e-3" vmax="18" imax="0.598" active="1"/>
+    <friction bv="5e-3" fc="1e-2"/>
+    <gear ratio="130.85" />
+    <gear2 ratio="201.3" />
+    <encoder ppr="1024" mean="0" stdev="0"/>
+    <controller mode="pidposition" kp="200" ki="0" kd="0" kf="0.00" active="1" period="10"/>
+<!--		<controller mode="pidposition" kp="350" ki="5" kd="2" kf="0.00" active="1" period="10"/> -->
+    <spring k="0" zeropos="0"/>
+   </default>
+  
+  <joint>
+    <ID value="left_hip_45"/>
+    <pos x="0.0" y="0.055" z="-0.105"/>
+    <axis x="0" y="1" z="-1"/>
+    <gear ratio="130.85" />
+    <connect B1="torso" B2="leftPelvis"/>
+    <limits Min="-44" Max="68"/>
+    <type value="Hinge"/>
+   </joint>
+
+
+  <joint>
+    <ID value="left_hip"/>
+    <pos x="0.0" y="0.055" z="-0.105"/>
+    <axis x="0" y="1" z="0"/>
+    <axis2 x="-1" y="0" z="0"/>
+    <gear ratio="130.85" />
+    <gear2 ratio="201.3" />
+    <connect B1="leftPelvis" B2="leftThigh"/>
+    <limits Min="-25" Max="100"/>
+    <limits2 Min="-25" Max="45"/>
+    <type value="Universal"/>
+   </joint>
+  
+  <joint>
+    <ID value="right_hip_45"/>
+    <pos x="0.0" y="-0.055" z="-0.105"/>
+    <axis x="0" y="1" z="1"/>
+    <gear ratio="130.85" />
+    <connect B1="torso" B2="rightPelvis"/>
+    <limits Min="-68" Max="44"/>
+    <type value="Hinge"/>
+   </joint>
+
+  <joint>
+    <ID value="right_hip"/>
+    <pos x="0.0" y="-0.055" z="-0.105"/>
+    <axis x="0" y="1" z="0"/>
+    <axis2 x="1" y="0" z="0"/>
+    <gear ratio="130.85" />
+    <gear2 ratio="201.3" />
+    <connect B1="rightPelvis" B2="rightThigh"/>
+    <limits Min="-25" Max="100"/>
+    <limits2 Min="-25" Max="45"/>
+    <type value="Universal"/>
+   </joint>
+  
+  <joint>
+    <ID value="left_knee"/>
+    <pos x="0.0" y="0.055" z="-0.215"/>
+    <axis x="0" y="1" z="0"/>
+    <gear ratio="130.85" />
+    <connect B1="leftThigh" B2="leftShank"/>
+    <limits Min="-130" Max="1"/>
+    <type value="Hinge"/>
+   </joint>
+  
+  <joint>
+    <ID value="right_knee"/>
+    <pos x="0.0" y="-0.055" z="-0.215"/>
+    <axis x="0" y="1" z="0"/>
+    <gear ratio="130.85" />
+    <connect B1="rightThigh" B2="rightShank"/>
+    <limits Min="-130" Max="1"/>
+    <type value="Hinge"/>
+   </joint>
+  
+  <joint>
+    <ID value="left_ankle"/>
+    <pos x="0.0" y="0.055" z="-0.34"/>
+    <axis x="0" y="1" z="0"/>
+    <axis2 x="-1" y="0" z="0"/>
+    <gear ratio="130.85" />
+    <gear2 ratio="201.3" />
+    <connect B1="leftShank" B2="leftFoot"/>
+    <limits Min="-45" Max="75"/>
+    <limits2 Min="-25" Max="45"/>
+    <type value="Universal"/>
+   </joint>
+  
+  <joint>
+    <ID value="right_ankle"/>
+    <pos x="0.0" y="-0.055" z="-0.34"/>
+    <axis x="0" y="1" z="0"/>
+    <axis2 x="1" y="0" z="0"/>
+    <gear ratio="130.85" />
+    <gear2 ratio="201.3" />
+    <connect B1="rightShank" B2="rightFoot"/>
+    <limits Min="-45" Max="75"/>
+    <limits2 Min="-25" Max="45"/>
+    <type value="Universal"/>
+   </joint>
+  
+  <joint>
+    <ID value="left_shoulder"/>
+    <pos x="0.0" y="0.1" z="0.085"/>
+    <axis x="0" y="1" z="0"/>
+    <connect B1="torso" B2="leftArm"/>
+    <limits Min="-120" Max="120"/>
+    <type value="Hinge"/>
+    <motor ri="23.1" ki="16.6e-3" vmax="21" imax="0.248" active="1"/>
+    <gear ratio="150.85"/>
+    <encoder ppr="4096" mean="0" stdev="0"/>
+   </joint>
+  
+  <joint>
+    <ID value="right_shoulder"/>
+    <pos x="0.0" y="-0.1" z="0.085"/>
+    <axis x="0" y="1" z="0"/>
+    <connect B1="torso" B2="rightArm"/>
+    <limits Min="-120" Max="120"/>
+    <type value="Hinge"/>
+    <motor ri="23.1" ki="16.6e-3" vmax="21" imax="0.248" active="1"/>
+    <gear ratio="150.85"/>
+    <encoder ppr="4096" mean="0" stdev="0"/>
+   </joint>
+  
+  <joint>
+    <ID value="left_elbow"/>
+    <pos x="0.0" y="0.1" z="0.025"/>
+    <axis x="0" y="1" z="0"/>
+    <connect B1="leftArm" B2="leftForearm"/>
+    <limits Min="-120" Max="120"/>
+    <type value="Hinge"/>
+    <motor ri="23.1" ki="16.6e-3" vmax="21" imax="0.248" active="1"/>
+    <gear ratio="150.85"/>
+    <encoder ppr="4096" mean="0" stdev="0"/>
+   </joint>
+  
+  <joint>
+    <ID value="right_elbow"/>
+    <pos x="0.0" y="-0.1" z="0.025"/>
+    <axis x="0" y="1" z="0"/>
+    <connect B1="rightArm" B2="rightForearm"/>
+    <limits Min="-120" Max="120"/>
+    <type value="Hinge"/>
+    <motor ri="23.1" ki="16.6e-3" vmax="21" imax="0.248" active="1"/>
+    <gear ratio="150.85"/>
+    <encoder ppr="4096" mean="0" stdev="0"/>
+   </joint>
+  
+  <joint>
+    <ID value="neck"/>
+    <pos x="0.0" y="0.0" z="0.1"/>
+    <axis x="0" y="0" z="1"/>
+    <connect B1="torso" B2="head"/>
+    <limits Min="-1" Max="1"/>
+    <type value="Hinge"/>
+    <motor ri="23.1" ki="16.6e-3" vmax="21" imax="0.248" active="1"/>
+    <gear ratio="150.85"/>
+    <encoder ppr="4096" mean="0" stdev="0"/>
+  </joint>
+
+  </articulations>
+  
+</robot>
+

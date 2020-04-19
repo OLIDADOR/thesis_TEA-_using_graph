@@ -1,0 +1,117 @@
+object FControlo: TFControlo
+  Left = 1184
+  Height = 579
+  Top = 251
+  Width = 568
+  Caption = 'FControlo'
+  ClientHeight = 579
+  ClientWidth = 568
+  DesignTimePPI = 120
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object Edit1: TEdit
+    Left = 60
+    Height = 28
+    Top = 70
+    Width = 146
+    ParentFont = False
+    TabOrder = 0
+    Text = 'Edit1'
+  end
+  object SendButton: TButton
+    Left = 280
+    Height = 50
+    Top = 290
+    Width = 174
+    Caption = 'Send Velocities'
+    OnClick = SendButtonClick
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Edit2: TEdit
+    Left = 30
+    Height = 28
+    Top = 170
+    Width = 100
+    ParentFont = False
+    TabOrder = 2
+    Text = 'Edit2'
+  end
+  object Edit3: TEdit
+    Left = 30
+    Height = 28
+    Top = 220
+    Width = 100
+    ParentFont = False
+    TabOrder = 3
+    Text = 'Edit3'
+  end
+  object Edit4: TEdit
+    Left = 30
+    Height = 28
+    Top = 270
+    Width = 100
+    ParentFont = False
+    TabOrder = 4
+    Text = 'Edit4'
+  end
+  object Edit5: TEdit
+    Left = 30
+    Height = 28
+    Top = 320
+    Width = 100
+    ParentFont = False
+    TabOrder = 5
+    Text = 'Edit5'
+  end
+  object Edit6: TEdit
+    Left = 30
+    Height = 28
+    Top = 370
+    Width = 100
+    ParentFont = False
+    TabOrder = 6
+    Text = 'Edit6'
+  end
+  object Edit7: TEdit
+    Left = 30
+    Height = 28
+    Top = 420
+    Width = 100
+    ParentFont = False
+    TabOrder = 7
+    Text = 'Edit7'
+  end
+  object Edit8: TEdit
+    Left = 30
+    Height = 28
+    Top = 470
+    Width = 100
+    ParentFont = False
+    TabOrder = 8
+    Text = 'Edit8'
+  end
+  object Edit9: TEdit
+    Left = 30
+    Height = 28
+    Top = 520
+    Width = 100
+    ParentFont = False
+    TabOrder = 9
+    Text = 'Edit9'
+  end
+  object udpCom: TLUDPComponent
+    Port = 0
+    OnReceive = udpComReceive
+    Timeout = 0
+    left = 279
+    top = 195
+  end
+  object TimerSend: TTimer
+    Interval = 80
+    OnTimer = TimerSendTimer
+    left = 390
+    top = 195
+  end
+end

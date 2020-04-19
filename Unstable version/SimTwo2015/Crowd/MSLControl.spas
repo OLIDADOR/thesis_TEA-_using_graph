@@ -1,0 +1,95 @@
+const NumWheels = 3;
+
+// Global Variables
+var irobot: integer;
+    t, w: double;
+    UDP: TStream;
+    ControlMode: string;
+    
+
+procedure Crowd;
+var i, idx: integer;
+    s: string;
+    mass, x, y, r, radius, dteta, speed: double;
+    pos, nextPos: TPoint3d;
+    kp, kv: double;
+begin
+  t := t + 0.02;
+
+  i :=  4;
+  s := GetRCText(i, 1);
+  while s <> '' do begin
+    idx := GetThingIndex(s);
+    mass := GetRCValue(i, 2);
+    x := GetRCValue(i, 3);
+    y := GetRCValue(i, 4);
+    r := GetRCValue(i, 5);
+    radius := GetRCValue(i, 6);
+    dteta := rad(GetRCValue(i, 7));
+    speed := GetRCValue(i, 8);
+
+    Kp := GetRCValue(1, 5);
+    Kv := GetRCValue(1, 7);
+
+    if idx < 0 then begin
+      T := 0;
+      AddThingSphere(s, mass, x + R * cos(t + dteta), y + R * sin(t + dteta), radius, radius, $00FF00);
+    end else begin
+      Pos := GetThingPos(idx);
+      nextPos.x := x + R * cos(speed * (t + dteta));
+      nextPos.y := y + R * sin(speed * (t + dteta));
+      //SetThingPos(idx, Pos.x, Pos.y, Pos.z);
+      SetThingForce(idx, kp*(nextPos.x - Pos.x), kp*(nextPos.y - Pos.y), 0);
+    end;
+
+    i := i + 1;
+    s := GetRCText(i, 1);
+  end;
+
+end;
+
+
+procedure Control;
+var ref: double;
+    //s: string;
+    s, mess, in_mess: string;
+    sl_mess: TStringList;
+    i, j, mi, r_number:integer;
+begin
+  Crowd;
+
+  if RCButtonPressed(1,2) then begin
+    ClearThings();
+    SetRobotPos(irobot, -4, 1.5, 0, 0);
+  end;
+
+
+//  if keyPressed(ord('R')) then begin
+//  end;
+
+  mess := ReadUDPData();
+
+  if mess <> '' then begin
+    sl_mess :=TStringlist.create;
+    sl_mess.text := mess;
+
+    sl_mess.free;
+  end;
+end;
+
+
+procedure Initialize;
+var
+  i:integer;
+begin
+  irobot := 0;
+  
+  t := 0;
+  w := 1;
+
+  
+  ControlMode := 'keys';
+  //StartSolidFire(0,1);
+  //startFire;
+  //WriteUDPData('127.0.0.1', 9808, 'ola');
+end;

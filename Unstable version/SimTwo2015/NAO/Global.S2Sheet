@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+  </columns>
+  <cells>
+    <cell r="4" c="2" text="1" />
+    <cell r="4" c="3" text="2" />
+    <cell r="5" c="2" text="=rc(4,2)" />
+    <cell r="5" c="3" text="3" />
+    <cell r="6" c="2" text="[oi]" />
+    <cell r="6" c="3" text="0" />
+    <cell r="6" c="5" text="[oi]" />
+    <cell r="6" c="6" text="0" />
+    <cell r="6" c="9" text="[oi]" />
+    <cell r="6" c="10" text="0" />
+    <cell r="4" c="5" text="12" />
+    <cell r="4" c="6" text="2" />
+    <cell r="5" c="5" text="=rc(4,2)" />
+    <cell r="5" c="6" text="3" />
+    <cell r="4" c="9" text="12" />
+    <cell r="4" c="10" text="2" />
+    <cell r="5" c="9" text="=rc(4,2)" />
+    <cell r="5" c="10" text="3" />
+    <cell r="1" c="1" text="12" />
+    <cell r="1" c="2" text="2" />
+    <cell r="2" c="1" text="=rc(4,2)" />
+    <cell r="2" c="2" text="3" />
+    <cell r="3" c="1" text="[oi]" />
+    <cell r="3" c="2" text="0" />
+  </cells>
+</sheet>

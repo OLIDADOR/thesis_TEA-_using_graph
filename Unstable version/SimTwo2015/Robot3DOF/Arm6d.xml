@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='Arm'/>
+  
+  <defines>
+    <const name='B1_height' value='0.5' />
+    <const name='B23_width' value='0.05' />
+    <const name='B2_length' value='0.4' />
+    <const name='B2_height' value='0.1' />
+    <const name='B3_length' value='0.3' />
+    <const name='B3_height' value='0.1' />
+  </defines>
+  
+  <solids>
+
+    <cylinder>
+      <ID value='B1'/>
+      <mass value='1'/>
+      <size radius='0.1' z='B1_height'/>
+      <pos x='0' y='0' z='B1_height/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+    </cylinder>
+
+    <cuboid>
+      <ID value='B2'/>
+      <mass value='1'/>
+      <size x='B2_length' y='B23_width' z='B2_height'/>
+      <pos x='B2_length/2' y='0' z='B1_height+B2_height/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B3'/>
+      <mass value='1'/>
+      <size x='B3_length' y='B23_width' z='B3_height'/>
+      <pos x='B2_length+B3_length/2' y='0' z='B1_height+B2_height/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+
+  </solids>
+
+  <articulations>
+    <default>
+      <draw radius='0.015' height='0.25' rgb24='FFFFFF'/>
+      <motor ri='0.5' li='0.001'  ki='0.03' vmax='24' imax='20' active='1'/>
+      <rotor J='1e-4' bv='1e-3' fc='0'/>
+      <gear ratio='500' bv='1e-5' ke='1'/>
+      <friction bv='0.2' fc='0.1'/>
+      <encoder ppr='1000' mean='0' stdev='0'/>
+      <controller mode='pidposition' kp='100' ki='0.1' kd='50' kf='0.0' active='1' period='10'/>
+      <spring k='0' zeropos='0'/>
+    </default>
+    
+
+    <joint>
+      <ID value='J1'/>
+      <pos x='0' y='0' z='B1_height'/>
+      <axis x='0' y='0' z='1' wrap='0'/>
+      <connect B1='B1' B2='world'/>
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J2'/>
+      <pos x='0' y='0' z='B1_height+B2_height/2'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B2' B2='B1'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J3'/>
+      <pos x='B2_length' y='0' z='B1_height+B2_height/2'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B3' B2='B2'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+    </joint>
+
+  </articulations>
+
+</robot>
+

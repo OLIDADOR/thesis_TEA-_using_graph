@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<track>
+
+  <defines>
+    <const name='track_length' value='5' />
+    <const name='track_width' value='1.5' />
+    <const name='black_margin' value='0.2' />
+    <const name='line_width' value='0.05' />
+    <const name='curve_radius' value='2.3' />
+    <const name='heps' value='0.01' />
+    <const name='deg_step' value='5' />
+    <const name='x_ce' value='track_length - 2*curve_radius' />
+    <const name='ro' value='curve_radius + track_width/2' />
+    <const name='y_ct' value='track_width/2 + line_width' />
+    <const name='teta_ct' value='arcsin((curve_radius - y_ct)/ro)' />
+    <const name='x_ct' value='x_ce + ro * cos(teta_ct)' />
+    <const name='dot_length' value='0.2' />
+    <const name='dot_space' value='0.15' />
+    <const name='dot_angle' value='dot_length / curve_radius' />
+    <const name='dot_angle_space' value='dot_space / curve_radius' />
+    <const name='park_A' value='0.2' />
+    <const name='park_B' value='0.8' />
+  </defines>
+
+  <!--
+  <polygon>
+    <color rgb24='8F8F8F'/>
+    <vertice x='0' y='0' z='0'/>
+    <vertice x='-0.1' y='-0.4' z='0'/>
+    <vertice x='0.4' y='0.4' z='0'/>
+  </polygon>
+    <position x='0' y='0' z='0.001' angle='45'/>
+  -->
+  <line>  <!-- Segmento Preto grande -->
+    <color rgb24='0F0F0F'/>
+    <position x='0' y='-track_width/2 - black_margin' z='heps/2' angle='0'/>
+    <size width='track_width + 2*black_margin' length='track_length'/>
+    <clone_hvflip/>
+  </line>
+
+  <line>  <!-- Segmento exterior grande -->
+    <color rgb24='8F8F8F'/>
+    <position x='0' y='-track_width/2 - line_width' z='heps' angle='0'/>
+    <size width='line_width' length='track_length'/>
+    <clone_hvflip/>
+  </line>
+
+
+</track>
+
