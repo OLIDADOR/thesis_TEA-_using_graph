@@ -812,6 +812,7 @@ aux1:integer;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+     max_id:=0;
     full_nodelist:=read_xml();
     ws:=get_Workstations(full_nodelist);
     l1:=length(full_nodelist);
@@ -868,8 +869,8 @@ y_r:=strtofloat(Labelededit3.Text);
   //Create_robots(robots,full_nodelist,x_r,y_r,10);
 l4:=length(robots);
 setlength(robots,l4+1);
-max_id:=get_max_robotid(robots);
-robots[l4].id_robot:=max_id+1;
+robots[l4].id_robot:=max_id;
+max_id:=max_id+1;
 id_r:=get_closest_node_id(full_nodelist, x_r, y_r, 200);
 l1:=length(robots[l4].current_nodes);
 setlength(robots[l4].current_nodes,l1+1);
@@ -878,7 +879,7 @@ robots[l4].inicial_node:=id_r;
 robots[l4].inicial_step:=0;
 robots[l4].InitialIdPriority:=max_id+1;
 robots[l4].Direction:=0;
-robots[l4].NumberSubMissions:=;
+robots[l4].NumberSubMissions:=0;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
   l2:=length(robots);
       if l2>0 then

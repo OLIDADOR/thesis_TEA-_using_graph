@@ -17,9 +17,13 @@ var irobot, isensor: integer;
 
    X,Y:array[1..10] of array[1..200] of double;
    Dir:array[1..10] of array[1..200] of integer;
+   Xd,Yd:array[1..10] of array[1..200] of double;
+   Dird:array[1..10] of array[1..200] of integer;
+   ae2:integer;
     d1, d2: double;
       v_nom:double;
       Sumodo1, Sumodo2: integer;
+      ca:integer;
       imp: double;
       k_1, d: double;
       posx, posy: double;
@@ -34,10 +38,11 @@ var irobot, isensor: integer;
       X_a:array [1..10] of Double;
       Y_a:array [1..10] of Double;
       D_a:array [1..10] of Double;
+      C_a:array [1..10] of integer;
       Count_s:array [1..10] of integer;
       aux1:matrix;
       l1:integer;
-      flag1,flag2:integer;
+      flag1,flag2,flagcoms:integer;
   k_ref, b_ref : double;
 
 
@@ -173,7 +178,7 @@ end;
 procedure ReadVelocities();
 var S,si,i,j:integer;
     Y_D,X_D:Double;
-    SStr,INDStr,XStr,YStr,DStr,robotIndexStr: string;
+    CStr,SStr,INDStr,XStr,YStr,DStr,robotIndexStr: string;
     robotIndex,ind: integer;
 begin
       i:=1;
@@ -184,6 +189,7 @@ begin
       YStr:='';
       DStr:='';
       SStr:='';
+      CStr:='';
       robotIndexStr:='';
       SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
      while j<length(MessageVelocities)do begin
@@ -192,8 +198,13 @@ begin
            SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
            SetRCValue(6, 5 ,format('%d',[length(MessageVelocities)]));
 
-           while (MessageVelocities[j]<>'S') do begin
+           while (MessageVelocities[j]<>'C') do begin
                robotIndexStr := robotIndexStr + MessageVelocities[j];
+               j:=j+1;
+           end;
+           j:=j+1;
+           while (MessageVelocities[j]<>'S') do begin
+               Cstr := Cstr + MessageVelocities[j];
                j:=j+1;
            end;
            j:=j+1;
@@ -203,6 +214,7 @@ begin
            end;
            j:=j+1;
            S:=StrToInt(Sstr);
+           C_a[i]:= 1;
            robotIndex := StrToInt(robotIndexStr);
            steps_a[i]:=S;
            si:=1;
@@ -262,8 +274,11 @@ begin
            SetRCValue(20, i ,format('%d',[i]));
            robotIndexStr:='';
            SStr:='';
+           //Count_s[i]:=2;
+           SetRCValue(1, i+4 ,format('%d',[Count_s[i]]));
            i:=i+1;
       end;
+      flagcoms:=1;
       end;
       //SetRCValue(6, 4 ,format('%s',[SStr]));
       SetRCValue(6, 3 ,format('%s',[MessageVelocities]));
@@ -312,7 +327,7 @@ function VelocityCalc_GoTo(i:integer; V_nom, w : double): matrix;
     Begin
       k1:= 40;
       k2:= 40;
-      v_go := 20;
+      v_go := 10;
       tol_t := 0.03;
       tol_pos := 0.03;
       Result:= Mzeros(1,1);
@@ -388,16 +403,34 @@ end;
 
 function inttorad(var i:integer): Double;
 begin
-if i=0 then begin Result:=3.14/2; end
-else if i=1 then begin Result:=3.14/4; end
-else if i=2 then begin Result:=0; end
-else if i=3 then begin Result:=7*3.14/4; end
-else if i=4 then begin Result:=3*3.14/2; end
-else if i=5 then begin Result:=5*3.14/4; end
-else if i=6 then begin Result:=2*3.14/2; end
-else if i=7 then begin Result:=3*3.14/4; end;
+case i of
+         0:begin
+            d := pi/2;
+         end;
+         1:begin
+            d := pi/4;
+         end;
+         2:begin
+            d := 0;
+         end;
+         3:begin
+            d := - pi/4;
+         end;
+         4:begin
+            d :=-pi/2;
+         end;
+         5:begin
+            d :=- pi*0.75;
+         end;
+         6:begin
+            d := pi;
+         end;
+         7:begin
+            d := pi*0.75;
+         end;
 end;
-
+Result:=d;
+end;
 
 //function get_nsteps(i,l:integer): integer;
 // var
@@ -411,8 +444,50 @@ end;
  //end;
 
 //end;
+Procedure equalarrays();
+var
+ae1,ae2,c:integer;
+
+begin
+ae2:=1;
+for ae1:=1 to totalRobots do
+begin
+SetRCValue(31, ae1 ,'i')
+while ae2<=steps_a[ae1] do
+begin
+xd[ae1][ae2]:=x[ae1][ae2];
+Yd[ae1][ae2]:=Y[ae1][ae2];
+Dird[ae1][ae2]:=Dir[ae1][ae2];
+ae2:=ae2+1;
+end;
+end;
+end;
 
 
+function checkarray():integer;
+var
+a1,a2,c:integer;
+
+begin
+a1:=1;
+a2:=1;
+c:=0;
+while a1<=totalRobots do
+begin
+while a2<=20 do
+begin
+
+if (x[a1][a2]<>xd[a1][a2]) or (Y[a1][a2]<>Yd[a1][a2]) or (Dir[a1][a2]<>Dird[a1][a2]) then
+begin
+c:=1;
+end;
+
+a2:=a2+1;
+end;
+a1:=a1+1;
+end;
+ Result:=c;
+end;
 
 procedure Control;
 var ref: double;
@@ -508,31 +583,65 @@ begin
        X_a[i]:= X[i][1];
        Y_a[i]:= Y[i][1];
        D_a[i]:= inttorad(Dir[i][1]);
-       i:=i+1
+       SetRCValue(25, i ,'2');
+       Count_s[i]:=1;
+       i:=i+1;
  end;
  flag2:=1;
  end;
+ {
+ ca:=checkarray();
+ if (ca=1) and(flag2=1) and (flag1=1) then
+ begin
+   SetRCValue(30, 1 ,'2')
+   i:=1;
+   while i <= totalRobots do begin
+   Count_s[i]:=1;
+   i:=i+1;
+ end;
+ end;
+ }
+ 
   i:=1;
  while i <= totalRobots do begin
 
-      if ((Count_s[i]<steps_a[i]) and (flag1=1)) then
+      if ((Count_s[i]<=steps_a[i]) and (flag1=1)) then
       begin
-      SetRCValue(25, i ,'2')
 
       SetRCValue(25, i ,'3')
       SetRCValue(23, i ,format('%.3g',[X_a[i]]));
       SetRCValue(22, i ,format('%.3g',[Y_a[i]]));
       aux1:=GoTo_XY(i,X_a[i],Y_a[i],D_a[i]);
+      SetRCValue(5, i+4 ,format('%d',[state[i]]));
       if state[i]=4 then
       begin
+      if C_a[i]=1 then
+      begin
+       Count_s[i]:=1;
+       C_a[i]:=0;
+      end
+      else
+      begin
       Count_s[i]:=Count_s[i]+1;
+      end;
       ang_ida[i] := 0;
       erro_ang_goto[i] := 0;
       erro_ang_final[i] := 0;
       state[i]:=0;
-      X_a[i]:= X[i][Count_s[i]+1];
-      Y_a[i]:= Y[i][Count_s[i]+1];
-      D_a[i]:= inttorad(Dir[i][Count_s[i]+1]);
+
+
+      SetRCValue(1, i+4 ,format('%d',[Count_s[i]]));
+      SetRCValue(2, i+4 ,format('%d',[C_a[i]]));
+      X_a[i]:= X[i][Count_s[i]];
+      Y_a[i]:= Y[i][Count_s[i]];
+      D_a[i]:= inttorad(Dir[i][Count_s[i]]);
+      SetRCValue(3, i+4 ,format('%.3g',[X_a[i]]));
+      SetRCValue(4, i+4 ,format('%.3g',[y_a[i]]));
+      SetRCValue(7, i+4 ,format('%d',[Dir[i][Count_s[i]]]));
+      SetRCValue(8, i+4 ,format('%.3g',[D_a[i]]));
+      SetRCValue(9, i+4 ,format('%.3g',[GetRobotX(i-1)]));
+      SetRCValue(10, i+4 ,format('%.3g',[GetRobotY(i-1)]));
+      SetRCValue(11, i+4 ,format('%.3g',[GetRobotTheta(i-1)]));
       end;
       end;
       //gotoxy

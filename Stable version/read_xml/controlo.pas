@@ -9,7 +9,7 @@ uses
   Dialogs, StdCtrls, ExtCtrls, lNet, TEAstar, laz2_DOM, laz2_XMLRead, math, Utils3DS,Utils;
 
 const
-  THRESHOLD_DIST = 0.03;//0.025;
+  THRESHOLD_DIST = 0.033;//0.025;
   THRESHOLD_ANGLE = 0.34;   //0.33
   //THRESHOLD_ANGLE_BACK = 0.3;
   CELLSCALE = 1;
@@ -87,6 +87,8 @@ var
   Map: TAStarMap;
   agvs: r_node;
   CaminhosAgvs: Caminhos;
+  CaminhosAgvs_a: Caminhos;
+  Ca: array[0..NUMBER_ROBOTS-1] of integer;
   flagMessageInitialPositions: boolean;
   flagVelocities: boolean;
   xDest: array[0..NUMBER_ROBOTS-1] of double;
@@ -112,6 +114,7 @@ var
   //mantém-se a ordem inicial dos robôs e guarda-se a prioridade atual
   totalTrocas: integer;
   totalValidations: integer;
+  ct:integer;
 
 implementation
  uses
@@ -225,8 +228,8 @@ begin
       id_min:=n_curr;
     end;
  end;
-  get_closest_node_id:=id_min;
 end;
+  get_closest_node_id:=id_min;
 end;
 
 function get_steps(var CaminhosAgvs:Caminhos;i:integer):integer;
@@ -255,14 +258,36 @@ begin
     while v < NUMBER_ROBOTS do begin
       ListPriorities[v]:=v;
       MessageInitialPositions := MessageInitialPositions + 'R' + 'X' +
-                                 floatToStr(agvs[v].ipos_X) + 'Y' +
-                                 floatToStr(agvs[v].ipos_Y) + 'D' +
-                                 floatToStr(agvs[v].iDirection);
-      xDest[v]:=agvs[v].ipos_X;
-      yDest[v]:=agvs[v].ipos_Y;
+                                 floatToStr(round2(agvs[v].pos_X,3)) + 'Y' +
+                                 floatToStr(round2(agvs[v].pos_Y,3)) + 'D' +
+                                 floatToStr(agvs[v].Direction);
+      xDest[v]:=agvs[v].pos_X;
+      yDest[v]:=agvs[v].pos_Y;
       v:=v+1;
     end;
     MessageInitialPositions := MessageInitialPositions + 'F';
+end;
+
+function checkforpathchange(caminhosagv:caminhos; i:integer; c:integer):integer;
+var
+  l1,aux1,r:integer;
+begin
+  r:=0;
+  if c=0 then
+     begin
+       CaminhosAgvs_a[i]:=caminhosagv[i];
+     end
+  else
+      begin
+       l1:=length(caminhosagv[i].coords);
+       for aux1:=0 to l1-1 do begin
+       if (CaminhosAgvs_a[i].coords[aux1].node<>caminhosagv[i].coords[aux1].node) then
+          begin
+            r:=1;
+          end;
+       end;
+      end;
+      checkforpathchange:=r;
 end;
 
 procedure ChangeRobotPriorities(var Map:TEAstar.TAStarMap;var agvs:r_node);
@@ -274,20 +299,7 @@ begin
         noPath:=false;
         trocas:=trocas+1;
 
-        ListPriorities[agvs[robotNoPlan].InitialIdPriority]:=robotNoPlan-1;
-        ListPriorities[agvs[robotNoPlan-1].InitialIdPriority]:=robotNoPlan;
 
-        aux_agv := agvs[robotNoPlan];
-        agvs[robotNoPlan] := agvs[robotNoPlan-1];
-        agvs[robotNoPlan-1] := aux_agv;
-
-        aux_xDest := xDest[robotNoPlan];
-        xDest[robotNoPlan] := xDest[robotNoPlan-1];
-        xDest[robotNoPlan-1] := aux_xDest;
-
-        aux_yDest := yDest[robotNoPlan];
-        yDest[robotNoPlan] := yDest[robotNoPlan-1];
-        yDest[robotNoPlan-1] := aux_yDest;
 
         robotNoPlan := A_starTimeGo(Map,CaminhosAgvs,agvs,MAX_ITERATIONS);
 
@@ -378,7 +390,6 @@ begin
         flagChange:=true;
     end;
     totalValidations:=trocas;
-
 end;
 
 function DistToReference(robot:integer;xCam:double;yCam:double):double;
@@ -834,9 +845,9 @@ begin
                j:=j+1;
             end;
 
-            xCam[ListPriorities[i]] := StrToFloat(xCamStr);
-            yCam[ListPriorities[i]] := StrToFloat(yCamStr);
-            thetaCam[ListPriorities[i]] := StrToFloat(thetaCamStr);
+            xCam[i] := StrToFloat(xCamStr);
+            yCam[i] := StrToFloat(yCamStr);
+            thetaCam[i] := StrToFloat(thetaCamStr);
 
             xCamStr:='';
             yCamStr:='';
@@ -853,8 +864,8 @@ var
 begin
     i:=0;
     while i<NUMBER_ROBOTS do begin
-        form1.robots[i].pos_X := round((xCam[i]+CELLSCALE)/CELLSCALE);
-        form1.robots[i].pos_Y:= round((yCam[i]+CELLSCALE)/CELLSCALE);
+        form1.robots[i].pos_X := xCam[i];
+        form1.robots[i].pos_Y:= yCam[i];
         form1.robots[i].inicial_node:=get_closest_node_id(form1.full_nodelist,form1.robots[i].pos_X ,form1.robots[i].pos_Y,1);
         if ((thetaCam[i] <= pi/2 + THRESHOLD_ANGLE) and (thetaCam[i] >= pi/2 - THRESHOLD_ANGLE)) then begin
              form1.robots[i].Direction := 0;
@@ -1009,48 +1020,17 @@ begin
 
           UnpackUDPmessage(xCam,yCam,thetaCam,data);
 
-          //UpdateInitialPoints(xCam,yCam,thetaCam);
-
-          //i:=0;
-          //thetaDest[i]:=-pi;
-          //xDest[i]:=17;
-          //yDest[i]:=2;
-          //if (((abs(xCam[i] - (xDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i]-1)*CELLSCALE)) <= THRESHOLD_DIST)) then begin
-          //    linearVelocities[i]:=0;
-          //    angularVelocities[i]:=0;
-          //end
-          //else begin
-          //    followLine[i] := false;
-          //    followCircle[i] := true;
-          //    rotationCenter[i].x:=(17-1)*CELLSCALE;
-          //    rotationCenter[i].y:=(3-1)*CELLSCALE;
-          //    s[i].x:=rotationCenter[i].x - (16-1)*CELLSCALE;
-          //    s[i].y:=rotationCenter[i].y - (3-1)*CELLSCALE;
-          //    dist := DistToReference(i,xCam[i],yCam[i]);
-          //    angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
-          //    linearVelocities[i] := -VNOM;
-          //    angularVelocities[i] := -GANHO_DIST_CIRCLE_BACK*dist +GANHO_THETA_CIRCLE_BACK*angle + linearVelocities[i]/RAIO_CURVATURA;
-          //    i:=0;
-          //end;
+          UpdateInitialPoints(xCam,yCam,thetaCam);
 
           i:=0;
           while i<NUMBER_ROBOTS do begin
-              if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
+              {if ((((abs(xCam[i] - (xDest[i])*CELLSCALE)) > THRESHOLD_DIST) or ((abs(yCam[i] - (yDest[i])*CELLSCALE)) > THRESHOLD_DIST)))
               then begin
                   Edit4.Text:='MOVE';
-                  //detetar falhas
-                  //dist := DistToReference(i,xCam[i],yCam[i]);
-                  //angle := AngleToReference(i,xCam[i],yCam[i],thetaCam[i]);
-                  //Edit5.Text:=floattostr(xCam[i]);
-                  //Edit6.Text:=floattostr(yCam[i]);
-                  //Edit7.Text:=floattostr(xDest[i]);
-                  //Edit8.Text:=floattostr(yDest[i]);
-                  //Edit9.Text:=floattostr(dist);
-                  //PositionAndOrientationControl(i,thetaCam,dist,angle);
 
               end
               else if (((abs(xCam[i] - (xDest[i])*CELLSCALE)) <= THRESHOLD_DIST) and ((abs(yCam[i] - (yDest[i])*CELLSCALE)) <= THRESHOLD_DIST)) then begin
-
+               }
                   Edit4.Text:='TEA';
                   followLine[i]:=false;
                   followCircle[i]:=false;
@@ -1078,7 +1058,7 @@ begin
 
                   //MovementDecision(CaminhosAgvs,form1.robots,thetaCam[i],i,FControlo);
 
-              end;
+             // end;
               i:=i+1;
           end;
         end;
@@ -1105,24 +1085,28 @@ begin
     if flagVelocities = true then begin
         i:=0;
         while i<NUMBER_ROBOTS do begin
+           Ca[i]:=checkforpathchange(CaminhosAgvs,i,ct);
            MessageVelocities := MessageVelocities + 'P' + IntToStr( form1.robots[i].InitialIdPriority);
-           MessageVelocities := MessageVelocities + 'S' + IntToStr(get_steps(CaminhosAgvs,i));
+           MessageVelocities := MessageVelocities + 'C' + IntToStr( Ca[i]);
+           MessageVelocities := MessageVelocities + 'S' + IntToStr(get_steps(CaminhosAgvs,i)-1);
            l1:=length((CaminhosAgvs[i].coords));
-           for aux1:=0 to l1-1 do begin
+           for aux1:=1 to l1-1 do begin
            if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)) then
            begin
-           MessageVelocities := MessageVelocities + 'I' + IntToStr(aux1+1)
+           MessageVelocities := MessageVelocities + 'I' + IntToStr(aux1)
                                                   + 'X' + FloatToStr(round2(getXcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'D' + IntToStr(CaminhosAgvs[i].coords[aux1].direction);
            end;
+            // Edit7.Text:=MessageVelocities;
            end;
            i:=i+1;
         end;
         MessageVelocities := MessageVelocities + 'F';
         udpCom.SendMessage(MessageVelocities, '127.0.0.1:9808');
-        Edit8.Text:=MessageVelocities;
+        Edit7.Text:=MessageVelocities;
         MessageVelocities:='';
+        ct:=1;
     end;
 
 end;
@@ -1161,7 +1145,7 @@ begin
       angularVelocities[i]:=0;
       i:=i+1;
     end;
-
+   ct:=0;
 end;
 
 procedure TFControlo.SendButtonClick(Sender: TObject);

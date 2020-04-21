@@ -389,8 +389,8 @@ begin
    newcube.CubeHeight:=25;
    newcube.CubeWidth:=25;
    newcube.CubeDepth:=1;
-   newcube.Position.X:=x-1.5*200;
-   newcube.Position.y:=y-1.1*200;
+   newcube.Position.X:=x*200-1.5*200;
+   newcube.Position.y:=y*200-1.1*200;
    newcube.Position.z:=1;
    angle:=0;
    newcube.RollAngle:=angle;

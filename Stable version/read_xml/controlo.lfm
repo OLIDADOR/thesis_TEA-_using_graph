@@ -1,11 +1,11 @@
 object FControlo: TFControlo
-  Left = 1158
+  Left = 298
   Height = 722
-  Top = 93
-  Width = 568
+  Top = 111
+  Width = 559
   Caption = 'FControlo'
   ClientHeight = 722
-  ClientWidth = 568
+  ClientWidth = 559
   DesignTimePPI = 120
   OnClose = FormClose
   OnShow = FormShow

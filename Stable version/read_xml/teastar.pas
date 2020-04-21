@@ -36,7 +36,7 @@ const
 
   // Cell States
   VIRGIN = 0;
-  OBSTACLEWALL = 1;
+  OBSTACLEROBOTINIT = 1;
   CLOSED = 2;
   OPENED = 3;
   OBSTACLEROBOT = 4;
@@ -310,14 +310,30 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+function return_id_frompriority(var agvs: r_node; p:integer):integer;
+var
+ l1,aux1,r:integer;
+Begin
+  r:=0;
+  l1:=length(agvs);
+  for aux1:=0 to l1-1 do
+  begin
+    if p=agvs[aux1].InitialIdPriority then
+    begin
+         r:=aux1;
+    end;
+  end;
+   return_id_frompriority:=r;
+end;
+
 
 function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs:Caminhos; var agvs: r_node; maxIter: integer):integer;
 var
     curPnt: integer;
     curPnt_t_step: integer;
     curr_dirr:integer;
-    count,vehicle,steps: integer;
-
+    count1,count,vehicle,steps: integer;
+    t:integer;
 begin
 
   flagTargetOverlap:=false;
@@ -325,8 +341,9 @@ begin
   errorMessage:=0;
   vehicleError:=0;
 
-  for count := 0 to (length(agvs)-1) do begin
+  for count1 := 0 to (NUMBER_ROBOTS-1) do begin
 
+      count:=return_id_frompriority(agvs,count1+1);
       curPnt:= agvs[count].inicial_node;
       curPnt_t_step := agvs[count].inicial_step;
       curr_dirr:=agvs[count].Direction;
@@ -394,7 +411,11 @@ begin
       FreeCellsToVirgin(Map);
 
       //if path is not found, returns the vehicle and do not plan the next robots
-      if ((noPath=true) or (flagTargetOverlap=true)) then break;
+      if ((noPath=true) or (flagTargetOverlap=true)) then
+      begin
+      t:=vehicle;
+      break;
+      end;
 
       vehicle:=vehicle+1;
 
@@ -447,13 +468,17 @@ var
     n1,n2:integer;
     node_dirr,rot:integer;
     rot_abs:double;
+    t:integer;
 begin
 
    contador:=0;
 
    //VERIFICAR RESULT NO PROCEDURE "GO"
    result := 0;
-
+   if agv.id_robot=2 then
+   begin
+     result := 0;
+   end;
    //"inc" increase the adress of the pointer (with syze of variable type)
    inc(Map.Profiler.iter);
    inc(Map.Profiler.HeapArrayTotal, Map.HeapArray.count);
@@ -462,6 +487,7 @@ begin
    if (curPnt= agv.target_node) then begin
       Map.TEA_GRAPH[curPnt-1][curPnt_t_step].H := CalcH(Map, curPnt, agv.target_node);
       result := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].H;
+       Map.GraphState[curPnt-1][curPnt_t_step]:=CLOSED;
       //if ((agv.TargetPoint.x = agv.InitialPoint.x) and (agv.TargetPoint.x = agv.InitialPoint.x)) then begin
       //   result:=0;
       //end;
@@ -596,11 +622,15 @@ begin
 
                     case Map.GraphState[newPnt-1][newPnt_step] of
 
-                        OBSTACLEWALL: continue;
+                        OBSTACLEROBOTINIT: continue;
 
-                        OBSTACLEROBOT: continue;
+                        OBSTACLEROBOT: begin
+                        t:=1;
+                        end;
 
-                        CLOSED: continue;
+                        CLOSED: begin
+                        t:=2;
+                        end;
 
                         VIRGIN: begin
                             //The node is not in the Open List neither in the Close List
@@ -825,7 +855,7 @@ begin
       for aux1:=0 to l1-1 do
       begin
         ntl:=Map.TEA_GRAPH[i-1][tstep].links[aux1].node_to_link;
-       if Map.GraphState[ntl-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
+        Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
       end;
 
       //if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
@@ -869,12 +899,12 @@ begin
       for aux1:=0 to l1-1 do
       begin
         ntl:=Map.TEA_GRAPH[i-1][tstep].links[aux1].node_to_link;
-       if Map.GraphState[ntl-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
+        Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
         l2:=length(Map.TEA_GRAPH[ntl-1][tstep].links);
          for aux2:=0 to l2-1 do
         begin
           ntl2:=Map.TEA_GRAPH[ntl-1][tstep].links[aux2].node_to_link;
-          if Map.GraphState[ntl2-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl2-1][tstep]:=OBSTACLEROBOT;
+          Map.GraphState[ntl2-1][tstep]:=OBSTACLEROBOT;
         end;
       end;
      // if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
@@ -959,6 +989,12 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+function round2(const Number: extended; const Places: longint): extended;
+var t: extended;
+begin
+   t := power(10, places);
+   round2 := round(Number*t)/t;
+end;
 
 procedure UpdatePathDirections (var CaminhosAgvs:Caminhos; vehicle:integer; map:TAStarMap);
 var
@@ -972,11 +1008,11 @@ begin
       id2:=CaminhosAgvs[vehicle].coords[count+1].node;
       id3:=CaminhosAgvs[vehicle].coords[count+2].node;
 
-      diffx:=map.TEA_GRAPH[id2-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
-      diffy:=map.TEA_GRAPH[id2-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
+      diffx:=round2(map.TEA_GRAPH[id2-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X,1);
+      diffy:=round2(map.TEA_GRAPH[id2-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y,1);
       if count< CaminhosAgvs[vehicle].steps-1 then begin
-      diffx2:=map.TEA_GRAPH[id3-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
-      diffy2:=map.TEA_GRAPH[id3-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
+      diffx2:=round2(map.TEA_GRAPH[id3-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X,1);
+      diffy2:=round2(map.TEA_GRAPH[id3-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y,1);
       end
       else
       begin
@@ -984,7 +1020,7 @@ begin
         diffy2:=0;
       end;
       if ((diffx = 0) and (diffy = 0)) then begin
-          if ((diffx2 = 0) and (diffy2 = 1)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 0; end
+          if ((diffx2 = 0) and (diffy2 > 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 0; end
           else if ((diffx2 = 0) and (diffy2 < 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 4; end
           else if ((diffx2 >0) and (diffy2 = 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 2; end
           else if ((diffx2 <0) and (diffy2 = 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 6; end
@@ -1021,7 +1057,7 @@ begin
   //scan the nodes
   while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
-              if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
+              if ((Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
                  Map.TEA_GRAPH[i][tstep].G := 0;
                  Map.TEA_GRAPH[i][tstep].H := 0;
@@ -1054,7 +1090,7 @@ begin
   //scan the nodes
   while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
-              if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
+              if ((Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
                  Map.TEA_GRAPH[i][tstep].G := 0;
                  Map.TEA_GRAPH[i][tstep].H := 0;
@@ -1157,12 +1193,12 @@ begin
            //change the state of the cell to occupy in k={0,1}
            for k:=0 to 1 do begin
              i:=agvs[v].inicial_node;
-             Map.GraphState[i-1][k] := OBSTACLEROBOT;
+             Map.GraphState[i-1][k] := OBSTACLEROBOTINIT;
              l1:=length(Map.TEA_GRAPH[i-1][k].links);
              for aux1:=0 to l1-1 do begin
                  ntl:= Map.TEA_GRAPH[i-1][k].links[aux1].node_to_link;
                  //ind:=findindeposofnode(ntl,Map,l1);
-                 Map.GraphState[ntl-1][k]:=OBSTACLEROBOT;
+                 Map.GraphState[ntl-1][k]:=OBSTACLEROBOTINIT;
              end;
              //if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
              //     //it's a center point of a cell
