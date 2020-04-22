@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="23"/>
-        <UsageCount Value="160"/>
+        <UsageCount Value="169"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -20,10 +20,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <TopLine Value="767"/>
-        <CursorPos X="29" Y="767"/>
-        <UsageCount Value="160"/>
+        <TopLine Value="889"/>
+        <CursorPos Y="899"/>
+        <ComponentState Value="1"/>
+        <UsageCount Value="169"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="unit2.pas"/>
@@ -33,9 +35,10 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit2"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="375"/>
-        <CursorPos X="34" Y="398"/>
-        <UsageCount Value="126"/>
+        <TopLine Value="19"/>
+        <CursorPos X="14" Y="31"/>
+        <ComponentState Value="1"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit2>
@@ -44,9 +47,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="TEAstar"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="28"/>
-        <CursorPos X="20" Y="45"/>
-        <UsageCount Value="124"/>
+        <TopLine Value="1185"/>
+        <CursorPos X="72" Y="1213"/>
+        <UsageCount Value="133"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -55,7 +58,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="64"/>
         <CursorPos X="5" Y="97"/>
-        <UsageCount Value="105"/>
+        <UsageCount Value="114"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -65,8 +68,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="4"/>
+        <TopLine Value="7"/>
         <CursorPos X="46" Y="19"/>
-        <UsageCount Value="104"/>
+        <UsageCount Value="113"/>
         <Loaded Value="True"/>
       </Unit5>
       <Unit6>
@@ -77,11 +81,10 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="1098"/>
-        <CursorPos X="15" Y="1115"/>
-        <UsageCount Value="98"/>
+        <TopLine Value="184"/>
+        <CursorPos X="61" Y="197"/>
+        <UsageCount Value="107"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\TESTE2\unit3.pas"/>
@@ -91,7 +94,7 @@
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <CursorPos X="26" Y="9"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\TESTE2\unit1_dall.pas"/>
@@ -99,14 +102,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="157"/>
         <CursorPos Y="39"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit8>
       <Unit9>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="4952"/>
-        <CursorPos Y="5047"/>
-        <UsageCount Value="19"/>
+        <TopLine Value="2902"/>
+        <CursorPos Y="2915"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
@@ -114,7 +117,7 @@
         <EditorIndex Value="13"/>
         <TopLine Value="2495"/>
         <CursorPos X="16" Y="2507"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="75"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
@@ -123,7 +126,7 @@
         <EditorIndex Value="12"/>
         <TopLine Value="75"/>
         <CursorPos X="20" Y="99"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
@@ -133,7 +136,7 @@
         <EditorIndex Value="9"/>
         <TopLine Value="1251"/>
         <CursorPos Y="1265"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
       </Unit12>
       <Unit13>
@@ -141,7 +144,7 @@
         <EditorIndex Value="10"/>
         <TopLine Value="43"/>
         <CursorPos Y="48"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit13>
       <Unit14>
@@ -149,7 +152,7 @@
         <EditorIndex Value="11"/>
         <TopLine Value="2656"/>
         <CursorPos Y="2681"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit14>
       <Unit15>
@@ -157,130 +160,130 @@
         <EditorIndex Value="8"/>
         <TopLine Value="1407"/>
         <CursorPos Y="1421"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit15>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="controlo.pas"/>
-        <Caret Line="1120" Column="9" TopLine="1099"/>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="749" TopLine="732"/>
       </Position1>
       <Position2>
         <Filename Value="teastar.pas"/>
-        <Caret Line="615" Column="25" TopLine="600"/>
+        <Caret Line="751" TopLine="732"/>
       </Position2>
       <Position3>
         <Filename Value="teastar.pas"/>
-        <Caret Line="463" TopLine="450"/>
+        <Caret Line="752" TopLine="732"/>
       </Position3>
       <Position4>
         <Filename Value="teastar.pas"/>
-        <Caret Line="466" TopLine="450"/>
+        <Caret Line="753" TopLine="732"/>
       </Position4>
       <Position5>
         <Filename Value="teastar.pas"/>
-        <Caret Line="467" TopLine="450"/>
+        <Caret Line="759" TopLine="740"/>
       </Position5>
       <Position6>
         <Filename Value="teastar.pas"/>
-        <Caret Line="470" TopLine="450"/>
+        <Caret Line="775" TopLine="762"/>
       </Position6>
       <Position7>
         <Filename Value="teastar.pas"/>
-        <Caret Line="611" TopLine="602"/>
+        <Caret Line="776" TopLine="762"/>
       </Position7>
       <Position8>
         <Filename Value="teastar.pas"/>
-        <Caret Line="342" Column="33" TopLine="324"/>
+        <Caret Line="777" TopLine="762"/>
       </Position8>
       <Position9>
         <Filename Value="teastar.pas"/>
-        <Caret Line="1158" Column="76" TopLine="1179"/>
+        <Caret Line="779" TopLine="762"/>
       </Position9>
       <Position10>
         <Filename Value="teastar.pas"/>
-        <Caret Line="463" TopLine="450"/>
+        <Caret Line="780" TopLine="762"/>
       </Position10>
       <Position11>
         <Filename Value="teastar.pas"/>
-        <Caret Line="611" TopLine="598"/>
+        <Caret Line="782" TopLine="771"/>
       </Position11>
       <Position12>
         <Filename Value="teastar.pas"/>
-        <Caret Line="463" TopLine="450"/>
+        <Caret Line="783" TopLine="771"/>
       </Position12>
       <Position13>
         <Filename Value="teastar.pas"/>
-        <Caret Line="611" TopLine="598"/>
+        <Caret Line="787" TopLine="771"/>
       </Position13>
       <Position14>
         <Filename Value="teastar.pas"/>
-        <Caret Line="342" Column="33" TopLine="327"/>
+        <Caret Line="788" TopLine="771"/>
       </Position14>
       <Position15>
         <Filename Value="teastar.pas"/>
-        <Caret Line="1174" TopLine="1155"/>
+        <Caret Line="789" TopLine="771"/>
       </Position15>
       <Position16>
         <Filename Value="teastar.pas"/>
-        <Caret Line="463" TopLine="450"/>
+        <Caret Line="790" TopLine="771"/>
       </Position16>
       <Position17>
         <Filename Value="teastar.pas"/>
-        <Caret Line="403" TopLine="390"/>
+        <Caret Line="792" TopLine="771"/>
       </Position17>
       <Position18>
         <Filename Value="teastar.pas"/>
-        <Caret Line="1174" TopLine="1160"/>
+        <Caret Line="797" TopLine="791"/>
       </Position18>
       <Position19>
         <Filename Value="teastar.pas"/>
-        <Caret Line="1172" TopLine="1160"/>
+        <Caret Line="825" TopLine="799"/>
       </Position19>
       <Position20>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="1170" TopLine="1160"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1102" TopLine="1093"/>
       </Position20>
       <Position21>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="1223" TopLine="1210"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1103" TopLine="1093"/>
       </Position21>
       <Position22>
         <Filename Value="controlo.pas"/>
-        <Caret Line="1120" Column="9" TopLine="1099"/>
+        <Caret Line="1104" TopLine="1093"/>
       </Position22>
       <Position23>
         <Filename Value="controlo.pas"/>
-        <Caret Line="1105" Column="4" TopLine="1101"/>
+        <Caret Line="1107" TopLine="1090"/>
       </Position23>
       <Position24>
         <Filename Value="controlo.pas"/>
-        <Caret Line="1104" Column="4" TopLine="1100"/>
+        <Caret Line="1109" TopLine="1096"/>
       </Position24>
       <Position25>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="368" Column="27" TopLine="358"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1110" TopLine="1096"/>
       </Position25>
       <Position26>
         <Filename Value="teastar.pas"/>
-        <Caret Line="394" Column="24" TopLine="372"/>
+        <Caret Line="53" Column="14"/>
       </Position26>
       <Position27>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="39" Column="20" TopLine="30"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1036" Column="30" TopLine="1016"/>
       </Position27>
       <Position28>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="831" Column="39" TopLine="826"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="77" Column="30" TopLine="84"/>
       </Position28>
       <Position29>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="262" Column="39" TopLine="248"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="882" Column="58" TopLine="863"/>
       </Position29>
       <Position30>
-        <Filename Value="teastar.pas"/>
-        <Caret Line="342" Column="33" TopLine="336"/>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="203" Column="30" TopLine="184"/>
       </Position30>
     </JumpHistory>
     <RunParams>

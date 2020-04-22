@@ -1,0 +1,239 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='Mares'/>
+  <defines>
+    <const name='back_prop_x' value='-0.67' />
+    <const name='back_prop_y' value='0.22' />
+    <const name='back_prop_z' value='0.06' />
+    <const name='alfa' value='0.01' />
+  </defines>
+  
+
+  <solids>
+    <cuboid>
+      <ID value='S2'/>
+      <mesh file='little_trimares_aw.3ds' scale='1'  shadow='0'/>
+      <mass value='32'/>
+      <buoyant mass='-32.08' x='-0.001' z='0.02'/>
+      <drag coefficient='1500'/>
+      <size x='1.05' y='0.19/sqrt(2)' z='0.19/sqrt(2)'/>
+      <pos x='0' y='0' z='0'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+    
+    <propeller>
+      <ID value='P1'/>
+      <nomesh file='propeller.3ds' scale='0.9'  shadow='0'/>
+      <mass value='0.02'/>
+      <size x='0.03' y='0.08' z='0.03'/>
+      <pos x='back_prop_x' y='back_prop_y' z='back_prop_z'/>
+      <rot_deg x='0' y='-90' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+    </propeller>    
+    <propeller>
+      <ID value='P2'/>
+      <nomesh file='propeller.3ds' scale='0.9'  shadow='0'/>
+      <mass value='0.02'/>
+      <size x='0.03' y='0.08' z='0.03'/>
+      <pos x='back_prop_x' y='-back_prop_y' z='back_prop_z'/>
+      <rot_deg x='0' y='-90' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+    </propeller>    
+    
+    <propeller>
+      <ID value='P3'/>
+      <nomesh file='propeller.3ds' scale='0.9'  shadow='0'/>
+      <mass value='0.02'/>
+      <size x='0.03' y='0.08' z='0.03'/>
+      <pos x='0.43' y='0.0' z='-0.185'/>
+      <rot_deg x='0' y='-180' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+    </propeller>
+
+    <propeller>
+      <ID value='P4'/>
+      <nomesh file='propeller.3ds' scale='0.9'  shadow='0'/>
+      <mass value='0.02'/>
+      <size x='0.03' y='0.08' z='0.03'/>
+      <pos x='-0.41' y='0.0' z='-0.185'/>
+      <rot_deg x='0' y='-180' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+    </propeller>
+
+  </solids>
+
+  <articulations>
+    <default>
+      <motor ri='10' ki='1.2e-3' vmax='9' imax='1' active='1'/>
+      <gear ratio='100'/>
+      <friction bv='1e-5' fc='1e-3' coulomblimit='1e-2'/>
+      <encoder ppr='1000' mean='0' stdev='0'/>
+      <controller mode='pidspeed' kp='20' ki='1' kd='0' kf='0.05' active='0' period='10'/>
+    </default>
+    <joint>
+      <ID value='JP1'/>
+      <pos x='back_prop_x' y='back_prop_y' z='back_prop_z'/>
+      <axis x='1' y='0' z='0'/>
+      <connect B1='P1' B2='S2'/>
+      <type value='Hinge'/>
+    </joint>
+    <joint>
+      <ID value='JP2'/>
+      <pos x='back_prop_x' y='-back_prop_y' z='back_prop_z'/>
+      <axis x='1' y='0' z='0'/>
+      <connect B1='P2' B2='S2'/>
+      <type value='Hinge'/>
+    </joint>
+    <joint>
+      <ID value='JP3'/>
+      <pos x='0.43' y='0.0' z='0'/>
+      <axis x='0' y='0' z='1'/>
+      <connect B1='P3' B2='S2'/>
+      <type value='Hinge'/>
+    </joint>
+    <joint>
+      <ID value='JP4'/>
+      <pos x='-0.41' y='0.0' z='0'/>
+      <axis x='0' y='0' z='1'/>
+      <connect B1='P4' B2='S2'/>
+      <type value='Hinge'/>
+    </joint>
+
+
+  </articulations>
+
+  <shells>
+    <nocamera>
+      <ID value='camera'/>
+      <size x='0.005' y='0.005' z='0.010'/>
+      <pos x='0.65' y='0' z='0.10'/> 
+      <focal length='30'/>
+      <frame decimation='4'/>
+      <rot_deg x='110' y='0' z='90'/>
+      <color_rgb r='50' g='140' b='250'/>
+    </nocamera>
+
+    <cylinder>
+      <ID value='bot0'/>
+      <size x='0.095' y='0.19/sqrt(2)' z='1.08'/>
+      <pos x='0.04' y='0' z='-0.185'/>
+      <rot_deg x='0' y='90' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cylinder>
+    
+    <sphere>
+      <ID value='bot1'/>
+      <radius value='0.5 * 0.19'/>
+      <pos x='0.56' y='0' z='-0.185'/>
+      <transparency alpha='alfa'/>
+    </sphere>     
+    <sphere>
+      <ID value='bot2'/>
+      <radius value='0.095'/>
+      <pos x='-0.49' y='0' z='-0.185'/>
+      <transparency alpha='alfa'/>
+    </sphere>  
+
+    <cylinder>
+      <ID value='right0'/>
+      <size x='0.095' y='0.19/sqrt(2)' z='1.08'/>
+      <pos x='0.04' y='-0.30' z='0.115'/>
+      <rot_deg x='0' y='90' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cylinder>
+    
+    <sphere>
+      <ID value='right1'/>
+      <radius value='0.5 * 0.19'/>
+      <pos x='0.56' y='-0.30' z='0.115'/>
+      <transparency alpha='alfa'/>
+    </sphere>     
+    <sphere>
+      <ID value='right2'/>
+      <radius value='0.095'/>
+      <pos x='-0.49' y='-0.30' z='0.115'/>
+      <transparency alpha='alfa'/>
+    </sphere>  
+
+    <cylinder>
+      <ID value='left0'/>
+      <size x='0.095' y='0.19/sqrt(2)' z='1.08'/>
+      <pos x='0.04' y='0.30' z='0.115'/>
+      <rot_deg x='0' y='90' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cylinder>
+    
+    <sphere>
+      <ID value='left1'/>
+      <radius value='0.5 * 0.19'/>
+      <pos x='0.56' y='0.30' z='0.115'/>
+      <transparency alpha='alfa'/>
+    </sphere>     
+    <sphere>
+      <ID value='left2'/>
+      <radius value='0.095'/>
+      <pos x='-0.49' y='0.30' z='0.115'/>
+      <transparency alpha='alfa'/>
+    </sphere>  
+
+    <cuboid>
+      <ID value='front_top_strap'/>
+      <size x='0.058' y='0.6' z='0.02'/>
+      <pos x='0.365' y='0' z='0.197'/> 
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='back_top_strap'/>
+      <size x='0.058' y='0.6' z='0.02'/>
+      <pos x='-0.295' y='0' z='0.197'/> 
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='front_right_strap'/>
+      <size x='0.058' y='0.48' z='0.02'/>
+      <pos x='0.365' y='-0.22' z='-0.1'/> 
+      <rot_deg x='-45' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='front_left_strap'/>
+      <size x='0.058' y='0.48' z='0.02'/>
+      <pos x='0.365' y='0.22' z='-0.1'/> 
+      <rot_deg x='45' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='back_right_strap'/>
+      <size x='0.058' y='0.48' z='0.02'/>
+      <pos x='-0.295' y='-0.22' z='-0.1'/> 
+      <rot_deg x='-45' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='back_left_strap'/>
+      <size x='0.058' y='0.48' z='0.02'/>
+      <pos x='-0.295' y='0.22' z='-0.1'/> 
+      <rot_deg x='45' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='0'/>
+      <transparency alpha='alfa'/>
+    </cuboid>
+
+  </shells>
+</robot>

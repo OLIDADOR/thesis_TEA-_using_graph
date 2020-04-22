@@ -1,11 +1,11 @@
 object Form2: TForm2
-  Left = 552
+  Left = -90
   Height = 853
-  Top = 423
+  Top = 109
   Width = 1893
   Caption = 'Form2'
-  ClientHeight = 853
-  ClientWidth = 1893
+  ClientHeight = 0
+  ClientWidth = 0
   DesignTimePPI = 120
   OnPaint = FormPaint
   OnShow = FormShow
@@ -192,7 +192,7 @@ object Form2: TForm2
       FocalLength = 50
       TargetObject = GLDummyCube3
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000
@@ -316,7 +316,7 @@ object Form2: TForm2
       FocalLength = 50
       TargetObject = GLDummyCube4
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000

@@ -194,6 +194,68 @@ begin
    end;
    getYcoord:=c;
 end;
+function getmaxid(map:TAStarMap):integer;
+var
+aux1:integer;
+id,id_m,l1:integer;
+begin
+  l1:=length(map.TEA_GRAPH);
+  id_m:=0;
+  for aux1:=0 to l1-1 do
+  begin
+    id:=map.TEA_GRAPH[aux1][0].id;
+    if id>id_m then
+    begin
+      id_m:=id;
+    end;
+  end;
+    getmaxid:=id_m;
+end;
+
+function getmaxlid(map:TAStarMap):integer;
+var
+aux1,aux2:integer;
+id,lid,lid_m,l1,l2:integer;
+begin
+  l1:=length(map.TEA_GRAPH);
+  lid_m:=0;
+  for aux1:=0 to l1-1 do
+  begin
+    l2:=length(map.TEA_GRAPH[aux1][0].links);
+    id:=map.TEA_GRAPH[aux1][0].id;
+     for aux2:=0 to l2-1 do
+     begin
+         lid:=map.TEA_GRAPH[aux1][0].links[aux2].id_l;
+         if lid>lid_m then
+         begin
+           lid_m:=lid;
+         end;
+     end;
+  end;
+    getmaxlid:=lid_m;
+end;
+
+function create_temp_node(id1:integer; id2:integer; X:Double; Y:Double):integer;
+var
+  s,l1:integer;
+begin
+  l1:=length(form1.map.TEA_GRAPH);
+  setlength(form1.map.TEA_GRAPH, l1,NUM_LAYERS);
+  setlength(form1.map.GraphState, l1,NUM_LAYERS);
+  setlength(form1.map.HeapArray.data, l1*NUM_LAYERS);
+  for s:=0 to 1 do
+  begin
+      form1.map.TEA_GRAPH[l1][s].id:=getmaxid(form1.map);
+      form1.map.TEA_GRAPH[l1][s].pos_X:=X;
+      form1.map.TEA_GRAPH[l1][s].pos_Y:=Y;
+      setlength(form1.map.TEA_GRAPH[l1][s].links,2);
+      form1.map.TEA_GRAPH[l1][s].links[0].id_l:=getmaxlid(form1.map);
+      form1.map.TEA_GRAPH[l1][s].links[0].node_to_link:=id1;
+      form1.map.TEA_GRAPH[l1][s].links[1].id_l:=getmaxlid(form1.map);
+      form1.map.TEA_GRAPH[l1][s].links[1].node_to_link:=id2;
+      form1.map.GraphState[l1][s]:=VIRGIN;
+  end;
+end;
 
 function get_closest_node_id (nodelist:a_node; x:Double; y:Double; scale:integer):integer;
 
@@ -289,20 +351,40 @@ begin
       end;
       checkforpathchange:=r;
 end;
+function return_id_frompriority(var agvs: r_node; p:integer):integer;
+var
+ l1,aux1,r:integer;
+Begin
+  r:=0;
+  l1:=length(agvs);
+  for aux1:=0 to l1-1 do
+  begin
+    if p=agvs[aux1].InitialIdPriority then
+    begin
+         r:=aux1;
+    end;
+  end;
+   return_id_frompriority:=r;
+end;
+
+
+
 
 procedure ChangeRobotPriorities(var Map:TEAstar.TAStarMap;var agvs:r_node);
 var
     aux_agv: TEAstar.Robot_Pos_info;
-    aux_xDest,aux_yDest: double;
-
+    p_id,aux1:integer;
 begin
         noPath:=false;
         trocas:=trocas+1;
-
-
-
+        p_id:=agvs[robotNoPlan].InitialIdPriority;
+        if p_id>1 then
+        begin
+        aux1:=return_id_frompriority(agvs,p_id-1);
+        agvs[robotNoPlan].InitialIdPriority:=p_id-1;
+        agvs[aux1].InitialIdPriority:=p_id;
         robotNoPlan := A_starTimeGo(Map,CaminhosAgvs,agvs,MAX_ITERATIONS);
-
+        end;
 end;
 
 procedure InverseValidationOfPriorities(var Map:TAStarMap;var agvs:r_node;var CaminhosAgvs:Caminhos);
@@ -311,7 +393,7 @@ var
     v,robo: integer;
     i,j,k,count,steps: integer;
     aux_agv: TEAstar.Robot_Pos_info;
-    aux_xDest,aux_yDest: double;
+    p_id,aux1:integer;
 begin
 
      //inverse validation of the planning to avoid that a robot with lower priority
@@ -338,21 +420,14 @@ begin
 
                 noPath:=false;
                 trocas:=trocas+1;
-
-                ListPriorities[agvs[robotNoPlan].InitialIdPriority]:=robotNoPlan-1;
-                ListPriorities[agvs[robotNoPlan-1].InitialIdPriority]:=robotNoPlan;
-
-                aux_agv := agvs[robotNoPlan];
-                agvs[robotNoPlan] := agvs[robotNoPlan-1];
-                agvs[robotNoPlan-1] := aux_agv;
-
-                aux_xDest := xDest[robotNoPlan];
-                xDest[robotNoPlan] := xDest[robotNoPlan-1];
-                xDest[robotNoPlan-1] := aux_xDest;
-
-                aux_yDest := yDest[robotNoPlan];
-                yDest[robotNoPlan] := yDest[robotNoPlan-1];
-                yDest[robotNoPlan-1] := aux_yDest;
+                p_id:=agvs[robotNoPlan].InitialIdPriority;
+                if p_id>1 then
+                begin
+                aux1:=return_id_frompriority(agvs,p_id-1);
+                agvs[robotNoPlan].InitialIdPriority:=p_id-1;
+                agvs[aux1].InitialIdPriority:=p_id;
+                robotNoPlan := A_starTimeGo(Map,CaminhosAgvs,agvs,MAX_ITERATIONS);
+                end;
 
                 robotNoPlan := A_starTimeGo(Map,CaminhosAgvs,agvs,MAX_ITERATIONS);
 
@@ -1077,6 +1152,7 @@ var
     i: integer;
     l1:integer;
     aux1:integer;
+    count:integer;
 begin
     if flagMessageInitialPositions = true then begin
        udpCom.SendMessage(MessageInitialPositions, '127.0.0.1:9808');
@@ -1090,6 +1166,7 @@ begin
            MessageVelocities := MessageVelocities + 'C' + IntToStr( Ca[i]);
            MessageVelocities := MessageVelocities + 'S' + IntToStr(get_steps(CaminhosAgvs,i)-1);
            l1:=length((CaminhosAgvs[i].coords));
+           count:=0;
            for aux1:=1 to l1-1 do begin
            if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)) then
            begin
@@ -1097,13 +1174,17 @@ begin
                                                   + 'X' + FloatToStr(round2(getXcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[i].coords[aux1].node),3))
                                                   + 'D' + IntToStr(CaminhosAgvs[i].coords[aux1].direction);
+           count:=count+1;
            end;
             // Edit7.Text:=MessageVelocities;
            end;
            i:=i+1;
         end;
         MessageVelocities := MessageVelocities + 'F';
+        if count>1 then
+        begin
         udpCom.SendMessage(MessageVelocities, '127.0.0.1:9808');
+        end;
         Edit7.Text:=MessageVelocities;
         MessageVelocities:='';
         ct:=1;

@@ -314,8 +314,8 @@ l1:integer;
 begin
      if agv.NumberSubMissions>0 then
      begin
-         agv.SubMissions[agv.NumberSubMissions-1]:=nid;
          agv.NumberSubMissions:=agv.NumberSubMissions+1;
+         agv.SubMissions[agv.NumberSubMissions-1]:=nid;
      end
      else
      begin
@@ -324,6 +324,7 @@ begin
        agv.ActualSubMission:=1;
        agv.NumberSubMissions:=1;
        agv.CounterSubMissions:=1;
+       agv.TotalSubMissions:=1;
      end;
 
 end;

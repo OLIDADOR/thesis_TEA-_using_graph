@@ -607,7 +607,11 @@ begin
 
       if ((Count_s[i]<=steps_a[i]) and (flag1=1)) then
       begin
-
+      {
+      X_a[i]:= X[i][Count_s[i]];
+      Y_a[i]:= Y[i][Count_s[i]];
+      D_a[i]:= inttorad(Dir[i][Count_s[i]]);
+      }
       SetRCValue(25, i ,'3')
       SetRCValue(23, i ,format('%.3g',[X_a[i]]));
       SetRCValue(22, i ,format('%.3g',[Y_a[i]]));

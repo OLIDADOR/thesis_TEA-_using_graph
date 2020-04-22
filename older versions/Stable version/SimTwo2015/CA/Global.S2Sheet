@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+    <col num="1" width="72" />
+    <col num="2" width="56" />
+    <col num="3" width="49" />
+  </columns>
+  <cells>
+    <cell r="1" c="1" text="[clear]" />
+    <cell r="3" c="1" text="Speed:" />
+    <cell r="3" c="2" text="1" />
+    <cell r="3" c="3" text="[Set]" />
+    <cell r="4" c="2" text="0.00" />
+    <cell r="5" c="2" text="0.00" />
+    <cell r="7" c="1" text="Steer:" />
+    <cell r="3" c="4" text="[Stop]" />
+    <cell r="7" c="2" text="20" />
+    <cell r="8" c="2" text="0.00" />
+    <cell r="7" c="4" text="[zero]" />
+    <cell r="9" c="2" text="0.00" />
+  </cells>
+</sheet>

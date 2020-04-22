@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<scene>
+  <robot>
+    <ID name='Omni3_11'/>
+    <pos x='0' y='-1' z='0'/>
+    <rot_deg x='0' y='0' z='0'/>
+    <body file='f2000.xml'/>
+  </robot>
+
+  <!--<things file='things.xml'/>-->
+
+  <obstacles file='obstacles.xml'/>
+
+  <track file='field.xml'/>
+
+</scene>

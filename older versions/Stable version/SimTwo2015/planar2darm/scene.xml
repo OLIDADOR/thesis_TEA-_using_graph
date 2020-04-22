@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<scene>
+
+  <robot>
+    <ID name='Arm2D'/>
+    <pos x='0' y='0' z='0'/>
+    <rot_deg x='0' y='0' z='0'/>
+
+    <body file='Arm2d.xml'/>
+  </robot>
+
+
+  <things file='things.xml'/>
+
+  <noobstacles file='obstacles.xml'/>
+
+  <track file='track.xml'/>
+  <notrack file='field.xml'/>
+
+</scene>
+

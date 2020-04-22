@@ -1,0 +1,345 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='Arm2D'/>
+  
+  <defines>
+    <const name='B1_height' value='0.3' />
+    <const name='B2_length' value='0.4' />
+    <const name='B2_height' value='0.1' />
+    <const name='B3_length' value='0.80 + 0.35' />
+    <const name='B3_height' value='0.1' />
+
+    <const name='B4_length' value='0.42' />
+    <const name='B4_width'  value='0.24' />
+    <const name='B5_length' value='0.04' />
+    <const name='B5_height' value='0.04' />
+    <const name='B6_length' value='0.03' />
+    <const name='B6_height' value='0.03' />
+  </defines>
+  
+  <solids>
+
+    
+    <cuboid>
+      <ID value='B1'/>
+      <mass value='0.1'/>
+      <size x='0.50' y='0.50' z='0.03'/>
+      <pos x='0/2' y='0' z='0.274 + 0.03/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+    
+    <cuboid>
+      <ID value='B2'/>
+      <mass value='0.1'/>
+      <size x='0.12' y='0.03' z='0.80'/>
+      <pos x='0.15' y='0.092' z='0.574 + 0.80/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B3'/>
+      <mass value='0.1'/>
+      <size x='B3_length' y='0.03' z='0.08'/>
+      <pos x='0.15 + B3_length/2 - 0.35' y='0.092 + 0.03' z='0.574 + 0.80'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B4'/>
+      <size x='B4_length' y='B4_width' z='0.03'/>
+      <mass value='0.1'/>
+      <pos x='0.15 + 0.80 - 0.18 + B4_length/2' y='-0.015' z='0.574 + 0.80'/>
+      <color_rgb r='0' g='0' b='0'/>
+      <drag stokes='1e-2' roll='1e-1'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B5'/>
+      <mass value='0.1'/>
+      <size x='0.20' y='0.08' z='0.03'/>
+      <pos x='0.15 + 0.80 + 0.18 + 0.20/2' y='-0.015 + 0.09' z='0.574 + 0.80'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+      <drag stokes='1e-2' roll='1e-1'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B6'/>
+      <mass value='0.1'/>
+      <size x='0.20' y='0.08' z='0.03'/>
+      <pos x='0.15 + 0.80 + 0.18 + 0.20/2' y='-0.015 - 0.09' z='0.574 + 0.80'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='0' g='0' b='0'/>
+      <drag stokes='1e-2' roll='1e-1'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B7'/>
+      <mass value='0.1'/>
+      <size x='0.08' y='0.03' z='0.80'/>
+      <pos x='-0.21' y='-0.25 - 0.03/2' z='0.743 + 0.80/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B8'/>
+      <mass value='0.1'/>
+      <size x='0.21 + 0.25' y='0.03' z='0.08'/>
+      <pos x='-0.21 + (0.21 + 0.25)/2' y='-0.25 + 1.5 * 0.03' z='0.743 + 0.80'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B9'/>
+      <mass value='0.1'/>
+      <size x='0.80' y='0.03' z='0.08'/>
+      <pos x='0.25+ 0.80/2' y='-0.25 + 2.5 * 0.03' z='0.743 + 0.80'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+
+    <cuboid>
+      <ID value='B10'/>
+      <mass value='0.1'/>
+      <size x='0.08' y='0.03' z='0.80'/>
+      <pos x='-0.20' y='0.092 + 2 * 0.03' z='0.574 + 0.80/2'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='32' g='32' b='32'/>
+    </cuboid>
+    
+    <cuboid>
+      <ID value='B11'/>
+      <mass value='0.1'/>
+      <size x='0.35' y='0.03' z='0.08'/>
+      <pos x='0.155 - 0.35/2' y='0.092 + 3 * 0.03' z='0.574'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='64' g='64' b='64'/>
+    </cuboid>
+    
+    
+  </solids>
+  
+  <shells>
+    <cuboid>
+      <solid id='B5'/>
+        <size x='0.18 / sqrt(2)' y='0.08 / sqrt(2)' z='0.03'/>
+        <pos x='0.20/2 + 0.035 / sqrt(2)' y='-0.035 / sqrt(2)' z='0'/>
+        <rot_deg x='0' y='0' z='-45'/>
+        <color_rgb r='0' g='0' b='0'/>
+      </cuboid>
+    <cuboid>
+      <solid id='B6'/>
+        <size x='0.18 / sqrt(2)' y='0.08 / sqrt(2)' z='0.03'/>
+        <pos x='0.20/2 + 0.035 / sqrt(2)' y='0.035 / sqrt(2)' z='0'/>
+        <rot_deg x='0' y='0' z='45'/>
+        <color_rgb r='0' g='0' b='0'/>
+      </cuboid>
+
+    <cuboid>
+      <solid id='B5'/>
+        <size x='0.08 / 2' y='0.08 / 2' z='0.03'/>
+        <pos x='0.20/2 + 0.098 / sqrt(2)' y='- 0.098/sqrt(2)' z='0'/>
+        <rot_deg x='0' y='0' z='0'/>
+        <color_rgb r='0' g='0' b='0'/>
+      </cuboid>
+
+    <cuboid>
+      <solid id='B6'/>
+        <size x='0.08 / 2' y='0.08 / 2' z='0.03'/>
+        <pos x='0.20/2 + 0.098 / sqrt(2)' y='0.098/sqrt(2)' z='0'/>
+        <rot_deg x='0' y='0' z='0'/>
+        <color_rgb r='0' g='0' b='0'/>
+      </cuboid>
+  </shells>
+
+  <articulations>
+    <default>
+      <draw radius='0.015' height='0.2' rgb24='8F0000'/>
+      <ndraw radius='0.005' height='0.3' rgb24='8F0000'/>
+      <motor ri='0.5' li='0.001'  ki='0.03' vmax='24' imax='10' active='1'/>
+      <!--rotor J='1e-4' bv='1e-3' fc='0'/-->
+      <gear ratio='50' bv='1e-5' ke='1'/>
+      <friction bv='0.2' fc='0.1'/>
+      <encoder ppr='10000' mean='0' stdev='0'/>
+      <controller mode='pidposition' kp='100' ki='0.1' kd='50' kf='0.0' active='1' period='10'/>
+      <spring k='0' zeropos='0'/>
+    </default>
+    
+
+    <joint>
+      <ID value='J1'/>
+      <pos x='0' y='0' z='B1_height'/>
+      <axis x='0' y='0' z='1' wrap='0'/>
+      <connect B1='B1' B2='world'/>
+      <limits Min='-90' Max='90'/>
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J2'/>
+      <pos x='0.15' y='0.092' z='0.574'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B1' B2='B2'/>
+      <type value='Hinge'/>
+      <!--controller mode='pidposition' kp='100' ki='0.1' kd='50' kf='0.0' active='0' period='10'/-->
+    </joint>
+    
+    <joint>
+      <ID value='J3'/>
+      <pos x='0.15' y='0.092' z='0.574 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B2' B2='B3'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J4'/>
+      <pos x='0.15 + 0.80' y='0.092 + 0.03' z='0.574 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B4' B2='B3'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>
+
+    <joint>
+      <ID value='J5'/>
+      <pos x='0.15 + 0.80 + 0.18' y='-0.015 + 0.09' z='0.574 + 0.80'/>
+      <axis x='0' y='0' z='1'/>
+      <connect B1='B5' B2='B4'/>
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J6'/>
+      <pos x='0.15 + 0.80 + 0.18' y='-0.015 - 0.09' z='0.574 + 0.80'/>
+      <axis x='0' y='0' z='1'/>
+      <connect B1='B6' B2='B4'/>
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='J7'/>
+      <pos x='-0.21' y='-0.25 - 0.03/2' z='0.743'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B7' B2='B1'/>
+      <type value='Hinge'/>
+      <controller active='0' />
+    </joint>
+
+    <joint>
+      <ID value='J7'/>
+      <pos x='-0.21' y='-0.25 - 0.03/2' z='0.743 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B8' B2='B7'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>
+
+    <joint>
+      <ID value='J8'/>
+      <pos x='0.25' y='-0.25 + 1.5 * 0.03' z='0.743 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B9' B2='B8'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>
+
+    <joint>
+      <ID value='J9'/>
+      <pos x='0.15' y='-0.25 + 3.5 * 0.03' z='0.574 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B8' B2='B2'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />      
+    </joint>
+
+
+    <joint>
+      <ID value='J10'/>
+      <pos x='0.25 + 0.80' y='-0.25 + 1.5 * 0.03' z='0.743 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B9' B2='B4'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>
+
+    <joint>
+      <ID value='J11'/>
+      <pos x='-0.20' y='0.092 + 2 * 0.03' z='0.574 + 0.80'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B3' B2='B10'/>
+      <!--<type value='Slider'/>-->
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>
+    
+    <joint>
+      <ID value='J12'/>
+      <pos x='0.15' y='0.092 + 3 * 0.03' z='0.574'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B2' B2='B11'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>    
+
+    <joint>
+      <ID value='J13'/>
+      <pos x='0.15 - 0.35' y='0.092 + 3 * 0.03' z='0.574'/>
+      <axis x='0' y='1' z='0'/>
+      <connect B1='B10' B2='B11'/>
+      <type value='Hinge'/>
+
+      <motor active='0'/>
+      <rotor J='0' bv='1e-5' fc='0'/>
+      <!--gear ratio='1' bv='1e-5' ke='1'/-->
+      <friction bv='1e-5' fc='1e-4'/>
+      <controller active='0' />
+    </joint>    
+
+
+  </articulations>
+
+</robot>
+

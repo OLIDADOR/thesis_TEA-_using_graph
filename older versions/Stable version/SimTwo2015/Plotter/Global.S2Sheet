@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+  </columns>
+  <cells>
+    <cell r="3" c="2" text="[Up]" />
+    <cell r="4" c="2" text="[Down]" />
+    <cell r="3" c="3" text="0" />
+    <cell r="4" c="3" text="-0.16" />
+    <cell r="6" c="2" text="[Goto]" />
+    <cell r="6" c="3" text="-0.1" />
+    <cell r="6" c="4" text="-0.2" />
+    <cell r="7" c="2" text="[Zero]" />
+    <cell r="1" c="1" text="Pen" />
+    <cell r="1" c="2" text="[Color]" />
+    <cell r="1" c="3" text="128" />
+    <cell r="1" c="4" text="0" />
+    <cell r="1" c="5" text="0" />
+  </cells>
+</sheet>

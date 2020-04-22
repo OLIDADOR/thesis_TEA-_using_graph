@@ -134,7 +134,7 @@ object Form1: TForm1
       FocalLength = 50
       TargetObject = GLDummyCube3
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000

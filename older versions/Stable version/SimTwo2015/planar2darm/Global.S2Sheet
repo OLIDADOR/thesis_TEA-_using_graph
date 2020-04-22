@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+  </columns>
+  <cells>
+    <cell r="5" c="4" text="[OK]" />
+    <cell r="5" c="3" text="[Cancel]" />
+    <cell r="2" c="2" text="0 0" />
+  </cells>
+</sheet>

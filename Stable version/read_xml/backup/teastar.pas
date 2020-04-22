@@ -50,7 +50,7 @@ const
   //AStarHeapArraySize = form1.graphsize*NUM_LAYERS;
 
   COST1 = 0.5;
-  COST2 = 0.5;
+  COST2 = 0.6;
   COST3 = 0.707;
 
 type
@@ -121,14 +121,17 @@ type
      pos_X:Double;
      pos_Y:Double;
      Direction:integer;
+     pDirection:integer;
      ipos_X:Double;
      ipos_Y:Double;
      iDirection:integer;
      SubMissions: array[0..MAX_SUBMISSIONS] of integer;
      NumberSubMissions: integer;
+     TotalSubMissions: integer;
      CounterSubMissions: integer;
      ActualSubMission: integer;
      InitialIdPriority: integer;
+     parcial_step:integer;
    end;
 
    TEA_Graph_node = object
@@ -276,6 +279,7 @@ procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps:int
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
 
+
 implementation
 uses
   unit1;
@@ -301,10 +305,10 @@ procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
 begin
   //update the initial direction in order to be considered when the initial point
   //is inserted on heapArray
-  Map.TEA_GRAPH[agv.inicial_partial_node-1][0].direction:=agv.Direction;
+  Map.TEA_GRAPH[agv.inicial_partial_node-1][agv.parcial_step].direction:=agv.pDirection;
 
-   InsertInOpenList(Map, agv.inicial_partial_node,0);
-   Map.TEA_GRAPH[agv.inicial_partial_node-1][0].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
+   InsertInOpenList(Map, agv.inicial_partial_node,agv.parcial_step);
+   Map.TEA_GRAPH[agv.inicial_partial_node-1][agv.parcial_step].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
 end;
 
 //------------------------------------------------------------------------------------------
@@ -343,7 +347,7 @@ begin
 
   for count1 := 0 to (NUMBER_ROBOTS-1) do begin
 
-      count:=return_id_frompriority(agvs,count1-1);
+      count:=return_id_frompriority(agvs,count1+1);
       curPnt:= agvs[count].inicial_node;
       curPnt_t_step := agvs[count].inicial_step;
       curr_dirr:=agvs[count].Direction;
@@ -379,10 +383,12 @@ begin
           end
           else begin
              agvs[count].CounterSubMissions := agvs[count].CounterSubMissions +1;
+             agvs[count].parcial_step:=agvs[count].target_node_step;
              agvs[count].inicial_partial_node := agvs[count].target_node;
              agvs[count].target_node := agvs[count].SubMissions[agvs[count].CounterSubMissions-1];
+             agvs[count].pDirection:=curr_dirr;
              CleanHeapArray(Map);
-             CellsToVirgin(Map,agvs[count].target_node_step);
+             CellsToVirgin(Map,agvs[count].target_node_step+1);
              A_starTimeInitSubMission(Map,agvs[count]);
              //aqui
           end;
