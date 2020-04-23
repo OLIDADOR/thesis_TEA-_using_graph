@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<obstacles>
+  <cuboid>
+    <imovable/>
+    <size x='0.6' y='0.6' z='0.3'/>
+    <pos x='5' y='-2' z='0.15'/>
+    <rot_deg x='0' y='0' z='90'/>
+    <color_rgb r='0' g='128' b='128'/>
+  </cuboid>
+  <cuboid>
+    <imovable/>
+    <size x='0.6' y='0.6' z='0.3'/>
+    <pos x='0' y='2' z='0.15'/>
+    <rot_deg x='0' y='0' z='0'/>
+    <color_rgb r='128' g='0' b='0'/>
+  </cuboid>
+</obstacles>

@@ -1,0 +1,3 @@
+Arm6D.Axes.J1.Pos.
+Arm6D.Axes.J1.Speed.
+Arm6D.Axes.J1.Pos ref.

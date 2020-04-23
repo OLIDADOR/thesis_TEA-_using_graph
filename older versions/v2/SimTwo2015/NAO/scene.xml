@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<scene>
+
+  <robot>
+    <ID name='NAO Humanoid'/>
+    <pos x='0' y='0' z='0.45'/>
+    <rot_deg z='0'/>
+
+    <body file='nao.xml'/>
+  </robot>
+
+</scene>

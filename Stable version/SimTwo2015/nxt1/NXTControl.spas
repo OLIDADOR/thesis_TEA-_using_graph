@@ -38,6 +38,9 @@ var irobot, isensor: integer;
       X_a:array [1..10] of Double;
       Y_a:array [1..10] of Double;
       D_a:array [1..10] of Double;
+      X_pa:array [1..10] of Double;
+      Y_pa:array [1..10] of Double;
+      D_pa:array [1..10] of Double;
       C_a:array [1..10] of integer;
       Count_s:array [1..10] of integer;
       aux1:matrix;
@@ -583,6 +586,9 @@ begin
        X_a[i]:= X[i][1];
        Y_a[i]:= Y[i][1];
        D_a[i]:= inttorad(Dir[i][1]);
+       X_pa[i]:= X[i][1];
+       Y_pa[i]:= Y[i][1];
+       D_pa[i]:= inttorad(Dir[i][1]);
        SetRCValue(25, i ,'2');
        Count_s[i]:=1;
        i:=i+1;
@@ -607,11 +613,16 @@ begin
 
       if ((Count_s[i]<=steps_a[i]) and (flag1=1)) then
       begin
-      {
       X_a[i]:= X[i][Count_s[i]];
       Y_a[i]:= Y[i][Count_s[i]];
       D_a[i]:= inttorad(Dir[i][Count_s[i]]);
-      }
+      if ((X_pa[i]<>X_a[i]) or (Y_pa[i]<>Y_a[i]) or (D_pa[i]<>D_a[i])) then
+      begin
+      state[i]:=0;
+       X_pa[i]:= X_a[i];
+       Y_pa[i]:= Y_a[i];
+       D_pa[i]:= D_a[i];
+      end;
       SetRCValue(25, i ,'3')
       SetRCValue(23, i ,format('%.3g',[X_a[i]]));
       SetRCValue(22, i ,format('%.3g',[Y_a[i]]));
@@ -632,13 +643,17 @@ begin
       erro_ang_goto[i] := 0;
       erro_ang_final[i] := 0;
       state[i]:=0;
-
-
       SetRCValue(1, i+4 ,format('%d',[Count_s[i]]));
       SetRCValue(2, i+4 ,format('%d',[C_a[i]]));
       X_a[i]:= X[i][Count_s[i]];
       Y_a[i]:= Y[i][Count_s[i]];
       D_a[i]:= inttorad(Dir[i][Count_s[i]]);
+      if ((X_pa[i]<>X_a[i]) or (Y_pa[i]<>Y_a[i]) or (D_pa[i]<>D_a[i])) then
+      begin
+       X_pa[i]:= X_a[i];
+       Y_pa[i]:= Y_a[i];
+       D_pa[i]:= D_a[i];
+      end;
       SetRCValue(3, i+4 ,format('%.3g',[X_a[i]]));
       SetRCValue(4, i+4 ,format('%.3g',[y_a[i]]));
       SetRCValue(7, i+4 ,format('%d',[Dir[i][Count_s[i]]]));

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+    <col num="1" width="84" />
+  </columns>
+  <cells>
+    <cell r="3" c="2" text="[On]" />
+    <cell r="3" c="3" text="[Off]" />
+    <cell r="3" c="1" text="Solenoid" />
+  </cells>
+</sheet>

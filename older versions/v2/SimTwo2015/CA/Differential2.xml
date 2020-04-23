@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+<robot>
+  <kind value='wheelchair'/>
+  <defines>
+    <const name='car_length' value='0.4' />
+    <const name='car_width' value='0.2' />
+    <const name='car_body_heigth' value='0.1' />
+    <const name='wheel_radius' value='0.05' />
+    <const name='wheel_width' value='0.04' />
+    <const name='wheels_d2' value='0.15' />
+    <const name='back_wheels_x' value='-0.1' />
+    <const name='front_wheels_x' value='0.1' />
+    <const name='wheels_mass' value='0.1' />
+  </defines>
+
+  <solids>
+    <cuboid>
+      <ID value='CarBody'/>
+      <mass value='0.8'/>
+      <size x='car_length' y='car_width' z='car_body_heigth'/>
+      <pos x='0' y='0' z='0.10'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='0' b='0'/>
+      <nomesh file='ferrari.3DS' scale='5e-2'  shadow='0'/>
+      <canvas width='256' height='128' />
+    </cuboid>
+
+    <cylinder>
+      <ID value='BackWheelLeft'/>
+      <mass value='wheels_mass'/>
+      <size radius='wheel_radius' z='wheel_width'/>
+      <pos x='back_wheels_x' y='wheels_d2' z='wheel_radius'/>
+      <rot_deg x='-90' y='0' z='0'/>
+      <color_rgb r='105' g='105' b='105'/>
+    </cylinder>
+    
+    <cylinder>
+      <ID value='BackWheelRight'/>
+      <mass value='wheels_mass'/>
+      <size radius='wheel_radius' z='wheel_width'/>
+      <pos x='back_wheels_x' y='-wheels_d2' z='wheel_radius'/>
+      <rot_deg x='90' y='0' z='0'/>
+      <color_rgb r='105' g='105' b='105'/>
+    </cylinder>
+    
+    <cylinder>
+      <ID value='FrontWheelLeft'/>
+      <mass value='wheels_mass'/>
+      <size radius='wheel_radius' z='wheel_width'/>
+      <pos x='front_wheels_x' y='wheels_d2' z='wheel_radius'/>
+      <rot_deg x='-90' y='0' z='0'/>
+      <color_rgb r='65' g='65' b='65'/>
+    </cylinder> 
+    
+    <cylinder>
+      <ID value='FrontWheelRight'/>
+      <mass value='wheels_mass'/>
+      <size radius='wheel_radius' z='wheel_width'/>
+      <pos x='front_wheels_x' y='-wheels_d2' z='wheel_radius'/>
+      <rot_deg x='90' y='0' z='0'/>
+      <color_rgb r='65' g='65' b='65'/>
+    </cylinder>  
+
+  </solids>
+
+  <articulations>
+    <default>
+      <draw radius='0.01' height='0.3' rgb24='8F0000'/>
+      <motor ri='1' li='0.1' ki='10.4e-3' vmax='7.2' imax='4' active='1'/>
+      <gear ratio='12'/>
+      <friction bv='1e-5' fc='1e-3'/>
+      <encoder ppr='100' mean='0' stdev='0'/>
+      <controller mode='pidspeed' kp='0.2' ki='0.01' kd='0.0' kf='0.0' active='1' period='10'/>
+      <color_rgb r='128' g='0' b='128'/>
+    </default>
+
+    <joint>
+      <ID value='BackAxisRight'/>
+      <axis x='0' y='-1' z='0'/>
+      <pos x='back_wheels_x' y='0' z='wheel_radius'/>
+      <connect B1='CarBody' B2='BackWheelRight'/>
+      <nolimits Min='-1' Max='1'/>
+      <type value='Hinge'/>
+    </joint>
+    <joint>
+      <ID value='BackAxisLeft'/>
+      <axis x='0' y='1' z='0'/>
+      <pos x='back_wheels_x' y='0' z='wheel_radius'/>
+      <connect B1='CarBody' B2='BackWheelLeft'/>
+      <nolimits Min='-1' Max='1'/>
+      <type value='Hinge'/>
+    </joint>
+
+    <joint>
+      <ID value='FrontAxisRight'/>
+      <axis x='0' y='0' z='1'/>
+      <axis2 x='0' y='-1' z='0'/>
+      <pos x='front_wheels_x' y='-wheels_d2' z='wheel_radius'/>
+      <connect B1='CarBody' B2='FrontWheelRight'/>
+      <nolimits Min='-1' Max='1'/>
+      <type value='Universal'/>
+
+      <motor ri='1' ki='1.8e-2' vmax='5' imax='2' active='1'/>
+      <gear ratio='256'/>
+      <friction bv='1e-1' fc='3e-2'/>
+      <controller mode='pidposition' kp='20' ki='0' kd='0.01' kf='0.05' active='1' period='10'/>
+
+      <motor2 active='0'/>
+      <controller2 active='0'/>
+    </joint>
+
+    <joint>
+      <ID value='FrontAxisLeft'/>
+      <axis x='0' y='0' z='1'/>
+      <axis2 x='0' y='1' z='0'/>
+      <pos x='front_wheels_x' y='wheels_d2' z='wheel_radius'/>
+      <connect B1='CarBody' B2='FrontWheelLeft'/>
+      <nolimits Min='-1' Max='1'/>
+      <type value='Universal'/>
+
+      <motor ri='1' ki='1.8e-2' vmax='5' imax='2' active='1'/>
+      <gear ratio='256'/>
+      <friction bv='1e-1' fc='3e-2'/>
+      <controller mode='pidposition' kp='20' ki='0' kd='0.01' kf='0.05' active='1' period='10'/>
+
+      <motor2 active='0'/>
+      <controller2 active='0'/>
+    </joint>
+
+  </articulations>
+
+  <shells>
+    <cuboid>
+      <size x='0.01' y='0.15' z='0.05'/>
+      <pos x='0.1' y='0' z='0.1'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='128' b='128'/>
+    </cuboid>
+  </shells>
+
+  <sensors>
+    <floorline>
+      <beam length='0.8' initial_width='0.01' final_width='0.015'/>
+      <tag value='white'/>
+      <tag value='stripes'/>
+      <tag value='crosswalk'/>
+      <pos x='0.3' y='0' z='0.2'/>
+      <rot_deg x='0' y='45' z='0'/> 
+      <color_rgb r='0' g='0' b='128'/>
+    </floorline>
+  </sensors>
+
+</robot>
+
