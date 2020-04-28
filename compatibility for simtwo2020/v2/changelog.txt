@@ -1,0 +1,6 @@
+28/4/2020
+
+-Removed junked code;
+-Added robot position update in GLS;
+-Fixed robot instability opon arriving in target point;
+-Fixed a bugg where a the state of a robot target point was only defined as closed in the arrival step;
