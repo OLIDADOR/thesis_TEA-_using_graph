@@ -1,0 +1,7 @@
+29/4/2020
+
+-Removed junked code;
+-Fixed a the status update of the target node, now it is reserved in all steps of the path planning, prevents lower robots from occupieing the target point of higher priority ones;
+-Fixed the cost values for each movements, no longer originates the weird paths;
+-Fixed a bugg in the atribution of 2 steps based on the necessary rotation of the robot;
+-Fixed a problem in the ocupation of cells by lower priority robots that originated a deadlock situation.
