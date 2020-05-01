@@ -114,6 +114,7 @@ var
   ct:integer;
   c_cnodes:integer;
   init:array[0..NUMBER_ROBOTS-1] of integer;
+  ind_robo: integer;
 implementation
  uses
    unit1;
@@ -917,7 +918,7 @@ end;
 
 procedure TFControlo.TimerSendTimer(Sender: TObject);
 var
-    i: integer;
+
     l1:integer;
     aux1:integer;
     count:integer;
@@ -925,40 +926,41 @@ var
 begin
     if flagMessageInitialPositions = true then begin
        udpCom.SendMessage(MessageInitialPositions, '127.0.0.1:9808');
-       i:=0;
+       ind_robo:=0;
     end;
 
     if flagVelocities = true then begin
-         messagelist:=TStringList.Create;
-        if i<NUMBER_ROBOTS do begin
-           Ca[i]:=checkforpathcompletion(form1.robots,i);
-           messagelist.Add('N' + IntToStr( form1.robots[i].id_robot));
-           messagelist.Add('P' + IntToStr( form1.robots[i].InitialIdPriority));
-           messagelist.Add('T' + IntToStr( Ca[i]));
-           messagelist.Add('S' + IntToStr(get_steps(CaminhosAgvs,i)-1));
+
+        if ind_robo<NUMBER_ROBOTS then begin
+           messagelist:=TStringList.Create;
+           Ca[ind_robo]:=checkforpathcompletion(form1.robots,ind_robo);
+           messagelist.Add('N' + IntToStr( form1.robots[ind_robo].id_robot));
+           messagelist.Add('P' + IntToStr( form1.robots[ind_robo].InitialIdPriority));
+           messagelist.Add('T' + IntToStr( Ca[ind_robo]));
+           messagelist.Add('S' + IntToStr(get_steps(CaminhosAgvs,ind_robo)-1));
            l1:=length((CaminhosAgvs[i].coords));
            count:=0;
            for aux1:=1 to l1-1 do begin
-           if ((getXcoord(CaminhosAgvs[i].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[i].coords[aux1].node)<3)and (count<5)) then
+           if ((getXcoord(CaminhosAgvs[ind_robo].coords[aux1].node)<3) and (getYcoord(CaminhosAgvs[ind_robocoords[aux1].node)<3)and (count<5)) then
            begin
            messagelist.Add('I' + IntToStr(aux1));
-           messagelist.Add('X' + FloatToStr(round2(getXcoord(CaminhosAgvs[i].coords[aux1].node),3));
-           messagelist.Add('Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[i].coords[aux1].node),3));
-           messagelist.Add('D' + IntToStr(CaminhosAgvs[i].coords[aux1].direction));
+           messagelist.Add('X' + FloatToStr(round2(getXcoord(CaminhosAgvs[ind_robo].coords[aux1].node),3)));
+           messagelist.Add('Y' + FloatToStr(round2(getYcoord(CaminhosAgvs[ind_robo].coords[aux1].node),3)));
+           messagelist.Add('D' + IntToStr(CaminhosAgvs[ind_robo].coords[aux1].direction));
            count:=count+1;
            end;
-           messagelist.Add('F');
            end;
+           messagelist.Add('F');
            MessageVelocities:=messagelist.Text;
            if count>1 then
            begin
            udpCom.SendMessage(MessageVelocities, '127.0.0.1:9808');
            end;
            messagelist.free;
-           end;
-           i:=i+1;
+           ind_robo:=ind_robo+1;
+
         end else begin
-        i:=0;
+        ind_robo:=0;
         end;
         Edit5.Text:=inttostr(form1.robots[0].Direction);
         Edit6.Text:=inttostr(form1.robots[3].Direction);
@@ -994,7 +996,7 @@ begin
     flagChange := false;
     totalTrocas := 0;
     totalValidations := 0;
-
+    ind_robo:=0;
     InitialPointsForAllRobots(form1.robots);
 
 

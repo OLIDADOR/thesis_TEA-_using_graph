@@ -201,7 +201,7 @@ begin
       SetRCValue(6, 3 ,format('%s',[MessageCommands]));
       Commandlist.text:=MessageCommands;
       l1:=Commandlist.Count;
-      for j:=1 to l1 do begin
+      for j:=0 to l1-1 do begin
        straux:=Commandlist[j];
        s2:=length(straux);
        if straux[1] = 'N'  then begin
@@ -267,6 +267,7 @@ begin
         flagcoms:=1;
         flag1:=1
        end;
+       straux:='';
       end;
       SetRCValue(18, 8 ,'END');
       i:=0;
@@ -373,8 +374,8 @@ function VelocityCalc_GoTo(i:integer; V_nom, w : double): matrix;
       tol_t, tol_pos: double;
 
     Begin
-      k1:= 40;
-      k2:= 40;
+      k1:= 60;
+      k2:= 50;
       v_go := 10;
       tol_t := 0.03;
       tol_pos := 0.03;
@@ -619,7 +620,7 @@ begin
           Readcommands();
           SetRCValue(18,2,'liv');
 
-      end;
+     end;
   end;
 
   //Envia para os motores V1 e V2

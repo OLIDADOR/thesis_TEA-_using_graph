@@ -674,12 +674,12 @@ begin
     tstep:=agvs[vehicle].target_node_step;
 
 
-     for aux1:=tstep to  NUM_LAYERS-1 do begin
+     {for aux1:=tstep to  NUM_LAYERS-1 do begin
          Map.GraphState[i-1][aux1]:=OBSTACLEROBOT;
      end;
      for aux1:=1 to  tstep-1 do begin
          Map.GraphState[i-1][aux1]:=OBSTACLEROBOT;
-     end;
+     end;}
 
 
     CaminhosAgvs[vehicle].coords[tstep].node:=i;

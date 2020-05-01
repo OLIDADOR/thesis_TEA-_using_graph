@@ -1128,7 +1128,7 @@ ntl:integer;
 ind:integer;
 begin
 
-    for v:=0 to (length(agvs)-1) do begin
+    for v:=0 to (vehicle) do begin
 
         if(v<>vehicle) then begin
 
