@@ -1,0 +1,263 @@
+object Form1: TForm1
+  Left = 299
+  Height = 803
+  Top = 142
+  Width = 1369
+  Caption = 'Form1'
+  ClientHeight = 803
+  ClientWidth = 1369
+  DesignTimePPI = 120
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object StringGrid1: TStringGrid
+    Left = 49
+    Height = 242
+    Top = 54
+    Width = 590
+    AutoFillColumns = True
+    ColCount = 3
+    Columns = <    
+      item
+        Title.Caption = 'Node_id'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 196
+      end>
+    FixedCols = 0
+    RowCount = 1
+    TabOrder = 0
+    ColWidths = (
+      195
+      195
+      196
+    )
+  end
+  object GLSceneViewer1: TGLSceneViewer
+    Left = 672
+    Height = 622
+    Top = 54
+    Width = 687
+    Camera = GLCamera1
+    Buffer.BackgroundColor = clBtnHighlight
+    Buffer.AmbientColor.Red = 0.329412013292313
+    Buffer.AmbientColor.Green = 0.329412013292313
+    Buffer.AmbientColor.Blue = 0.329412013292313
+    Buffer.AmbientColor.Alpha = 1
+    Buffer.AmbientColor.Color = {
+      B1A8A83EB1A8A83EB1A8A83E0000803F
+    }
+    FieldOfView = 161.733245849609
+    OnMouseDown = GLSceneViewer1MouseDown
+    OnMouseMove = GLSceneViewer1MouseMove
+    OnMouseWheel = GLSceneViewer1MouseWheel
+    TabOrder = 1
+  end
+  object StringGrid2: TStringGrid
+    Left = 49
+    Height = 226
+    Top = 322
+    Width = 589
+    AutoFillColumns = True
+    ColCount = 3
+    Columns = <    
+      item
+        Title.Caption = 'robot_id'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 195
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 195
+      end>
+    FixedCols = 0
+    RowCount = 1
+    TabOrder = 2
+    ColWidths = (
+      195
+      195
+      195
+    )
+  end
+  object LabeledEdit2: TLabeledEdit
+    Left = 47
+    Height = 28
+    Top = 608
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Robot inicial X'
+    EditLabel.ParentColor = False
+    TabOrder = 3
+  end
+  object LabeledEdit3: TLabeledEdit
+    Left = 208
+    Height = 28
+    Top = 608
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Robot inicial Y'
+    EditLabel.ParentColor = False
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 47
+    Height = 43
+    Top = 656
+    Width = 140
+    Caption = 'Add Robot'
+    OnClick = Button1Click
+    TabOrder = 5
+  end
+  object Button2: TButton
+    Left = 960
+    Height = 56
+    Top = 712
+    Width = 249
+    Caption = 'Next'
+    OnClick = Button2Click
+    TabOrder = 6
+  end
+  object Button3: TButton
+    Left = 389
+    Height = 43
+    Top = 656
+    Width = 249
+    Caption = 'Load data'
+    OnClick = Button3Click
+    TabOrder = 7
+  end
+  object GLScene2: TGLScene
+    left = 704
+    top = 712
+    object GLCamera1: TGLCamera
+      TagFloat = 0
+      DepthOfView = 300000
+      FocalLength = 50
+      TargetObject = GLDummyCube3
+      Position.Coordinates = {
+        00000000000000000000AF430000803F
+      }
+      Direction.Coordinates = {
+        A1CB7F3F0000000086B523BD00000000
+      }
+    end
+    object GLDummyCube3: TGLDummyCube
+      TagFloat = 0
+      PitchAngle = 0
+      RollAngle = 0
+      TurnAngle = 0
+      CubeSize = 1
+      EdgeColor.Red = 1
+      EdgeColor.Green = 1
+      EdgeColor.Blue = 1
+      EdgeColor.Alpha = 1
+    end
+    object GLLightSource1: TGLLightSource
+      TagFloat = 0
+      Ambient.Red = 0.949999988079071
+      Ambient.Green = 0.949999988079071
+      Ambient.Blue = 0.949999988079071
+      Ambient.Alpha = 1
+      Ambient.Color = {
+        3333733F3333733F3333733F0000803F
+      }
+      ConstAttenuation = 1
+      Diffuse.Red = 1
+      Diffuse.Green = 1
+      Diffuse.Blue = 1
+      Diffuse.Alpha = 1
+      LinearAttenuation = 0
+      QuadraticAttenuation = 0
+      Position.Coordinates = {
+        0000803F00004040000000400000803F
+      }
+      LightStyle = lsOmni
+      Specular.Red = 0.949999988079071
+      Specular.Green = 0.949999988079071
+      Specular.Blue = 0.949999988079071
+      Specular.Alpha = 1
+      Specular.Color = {
+        3333733F3333733F3333733F0000803F
+      }
+      SpotCutOff = 180
+      SpotDirection.Coordinates = {
+        0000803F000040400000004000000000
+      }
+      SpotExponent = 0
+    end
+    object GLCube1: TGLCube
+      TagFloat = 0
+      Material.BackProperties.Ambient.Red = 0.200000002980232
+      Material.BackProperties.Ambient.Green = 0.200000002980232
+      Material.BackProperties.Ambient.Blue = 0.200000002980232
+      Material.BackProperties.Ambient.Alpha = 1
+      Material.BackProperties.Diffuse.Red = 0.800000011920929
+      Material.BackProperties.Diffuse.Green = 0.800000011920929
+      Material.BackProperties.Diffuse.Blue = 0.800000011920929
+      Material.BackProperties.Diffuse.Alpha = 1
+      Material.BackProperties.Emission.Red = 0
+      Material.BackProperties.Emission.Green = 0
+      Material.BackProperties.Emission.Blue = 0
+      Material.BackProperties.Emission.Alpha = 1
+      Material.BackProperties.Specular.Red = 0
+      Material.BackProperties.Specular.Green = 0
+      Material.BackProperties.Specular.Blue = 0
+      Material.BackProperties.Specular.Alpha = 1
+      Material.FrontProperties.Ambient.Red = 0.419607996940613
+      Material.FrontProperties.Ambient.Green = 0.556863009929657
+      Material.FrontProperties.Ambient.Blue = 0.137254998087883
+      Material.FrontProperties.Ambient.Alpha = 1
+      Material.FrontProperties.Ambient.Color = {
+        DCD6D63E938E0E3F938C0C3E0000803F
+      }
+      Material.FrontProperties.Diffuse.Red = 0.800000011920929
+      Material.FrontProperties.Diffuse.Green = 0.800000011920929
+      Material.FrontProperties.Diffuse.Blue = 0.800000011920929
+      Material.FrontProperties.Diffuse.Alpha = 1
+      Material.FrontProperties.Emission.Red = 0
+      Material.FrontProperties.Emission.Green = 0
+      Material.FrontProperties.Emission.Blue = 0
+      Material.FrontProperties.Emission.Alpha = 1
+      Material.FrontProperties.Specular.Red = 0
+      Material.FrontProperties.Specular.Green = 0
+      Material.FrontProperties.Specular.Blue = 0
+      Material.FrontProperties.Specular.Alpha = 1
+      Material.Texture.EnvColor.Red = 0
+      Material.Texture.EnvColor.Green = 0
+      Material.Texture.EnvColor.Blue = 0
+      Material.Texture.EnvColor.Alpha = 0
+      Material.Texture.BorderColor.Red = 0
+      Material.Texture.BorderColor.Green = 0
+      Material.Texture.BorderColor.Blue = 0
+      Material.Texture.BorderColor.Alpha = 0
+      PitchAngle = 0
+      Position.Coordinates = {
+        0000000000000000000000C00000803F
+      }
+      RollAngle = 0
+      TurnAngle = 0
+      CubeSize = {
+        00007A4400007A440000803F
+      }
+    end
+  end
+  object GLCadencer1: TGLCadencer
+    Scene = GLScene2
+    MaxDeltaTime = 0
+    MinDeltaTime = 0
+    FixedDeltaTime = 0
+    OnProgress = GLCadencer1Progress
+    left = 848
+    top = 712
+  end
+end

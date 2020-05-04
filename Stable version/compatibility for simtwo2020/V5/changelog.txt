@@ -1,0 +1,5 @@
+04/4/2020
+
+-Several modifications at the user interface level for extra acessability;
+-Added the movement of robots to Neutral positions so at the end of their missions;
+-Some TEA* buggfixes related to priotity changes;

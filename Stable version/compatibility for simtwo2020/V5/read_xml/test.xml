@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map>
+  <Nodes>
+    <Node Id="1">
+      <x>0,12486308871851</x>
+      <y>0,0551053484602917</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="2">
+      <x>0,12486308871851</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="3">
+      <x>0,12486308871851</x>
+      <y>0,93354943273906</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="4">
+      <x>0,12486308871851</x>
+      <y>1,22204213938412</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="5">
+      <x>0,12486308871851</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="6">
+      <x>0,12486308871851</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="7">
+      <x>0,555312157721796</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="8">
+      <x>0,775465498357065</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="9">
+      <x>0,84118291347207</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="10">
+      <x>1,1960569550931</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="11">
+      <x>1,91894852135816</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="12">
+      <x>1,91237677984666</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="13">
+      <x>0,48302300109529</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="14">
+      <x>0,48302300109529</x>
+      <y>0,0518638573743922</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="15">
+      <x>0,84118291347207</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="16">
+      <x>0,84118291347207</x>
+      <y>0,93030794165316</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="17">
+      <x>0,84118291347207</x>
+      <y>1,21880064829822</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="18">
+      <x>1,19934282584885</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="19">
+      <x>1,19934282584885</x>
+      <y>0,927066450567261</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="20">
+      <x>1,1960569550931</x>
+      <y>1,22852512155592</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="21">
+      <x>1,54764512595838</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="22">
+      <x>1,54764512595838</x>
+      <y>0,142625607779579</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="23">
+      <x>1,91894852135816</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="24">
+      <x>2,27710843373494</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="25">
+      <x>2,27710843373494</x>
+      <y>1,50729335494327</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="26">
+      <x>2,63198247535597</x>
+      <y>0,486223662884927</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="27">
+      <x>2,63198247535597</x>
+      <y>0,93030794165316</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="28">
+      <x>2,98357064622125</x>
+      <y>0,93030794165316</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="29">
+      <x>2,63198247535597</x>
+      <y>1,22528363047002</y>
+      <Number_of_Links>3</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="30">
+      <x>2,986856516977</x>
+      <y>1,22528363047002</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="31">
+      <x>2,63198247535597</x>
+      <y>1,50405186385737</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="32">
+      <x>0,407447973713034</x>
+      <y>0,93354943273906</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="33">
+      <x>0,407447973713034</x>
+      <y>1,22204213938412</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="34">
+      <x>0,568455640744797</x>
+      <y>0,93030794165316</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="35">
+      <x>0,565169769989047</x>
+      <y>1,21880064829822</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="36">
+      <x>1,47535596933187</x>
+      <y>0,927066450567261</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="37">
+      <x>1,47535596933187</x>
+      <y>1,22852512155592</y>
+      <Number_of_Links>1</Number_of_Links>
+      <Defined>1</Defined>
+    </Node>
+    <Node Id="38">
+      <x>0,450164293537788</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="39">
+      <x>1,05969331872946</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="40">
+      <x>1,34392113910186</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="41">
+      <x>1,62814895947426</x>
+      <y>1,94489465153971</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="42">
+      <x>1,55750273822563</x>
+      <y>1,65964343598055</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="43">
+      <x>1,91894852135816</x>
+      <y>1,36628849270665</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="44">
+      <x>1,91894852135816</x>
+      <y>1,07293354943274</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="45">
+      <x>1,91894852135816</x>
+      <y>0,779578606158833</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="46">
+      <x>2,27710843373494</x>
+      <y>0,741491085899514</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="47">
+      <x>2,27710843373494</x>
+      <y>0,9967585089141</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+    <Node Id="48">
+      <x>2,27710843373494</x>
+      <y>1,25202593192869</y>
+      <Number_of_Links>2</Number_of_Links>
+      <Defined>0</Defined>
+    </Node>
+  </Nodes>
+  <Links>
+    <Link Id="1">
+      <Node1_Id>1</Node1_Id>
+      <Node2_Id>2</Node2_Id>
+      <Distance>0,431118314424635</Distance>
+    </Link>
+    <Link Id="2">
+      <Node1_Id>2</Node1_Id>
+      <Node2_Id>3</Node2_Id>
+      <Distance>0,447325769854133</Distance>
+    </Link>
+    <Link Id="3">
+      <Node1_Id>2</Node1_Id>
+      <Node2_Id>13</Node2_Id>
+      <Distance>0,35815991237678</Distance>
+    </Link>
+    <Link Id="4">
+      <Node1_Id>3</Node1_Id>
+      <Node2_Id>4</Node2_Id>
+      <Distance>0,288492706645057</Distance>
+    </Link>
+    <Link Id="5">
+      <Node1_Id>3</Node1_Id>
+      <Node2_Id>32</Node2_Id>
+      <Distance>0,282584884994524</Distance>
+    </Link>
+    <Link Id="6">
+      <Node1_Id>4</Node1_Id>
+      <Node2_Id>5</Node2_Id>
+      <Distance>0,437601296596434</Distance>
+    </Link>
+    <Link Id="7">
+      <Node1_Id>4</Node1_Id>
+      <Node2_Id>33</Node2_Id>
+      <Distance>0,282584884994524</Distance>
+    </Link>
+    <Link Id="8">
+      <Node1_Id>5</Node1_Id>
+      <Node2_Id>6</Node2_Id>
+      <Distance>0,285251215559157</Distance>
+    </Link>
+    <Link Id="9">
+      <Node1_Id>5</Node1_Id>
+      <Node2_Id>7</Node2_Id>
+      <Distance>0,430449069003286</Distance>
+    </Link>
+    <Link Id="10">
+      <Node1_Id>6</Node1_Id>
+      <Node2_Id>38</Node2_Id>
+      <Distance>0,325301204819277</Distance>
+    </Link>
+    <Link Id="12">
+      <Node1_Id>7</Node1_Id>
+      <Node2_Id>8</Node2_Id>
+      <Distance>0,360327280913956</Distance>
+    </Link>
+    <Link Id="13">
+      <Node1_Id>7</Node1_Id>
+      <Node2_Id>9</Node2_Id>
+      <Distance>0,285870755750274</Distance>
+    </Link>
+    <Link Id="11">
+      <Node1_Id>8</Node1_Id>
+      <Node2_Id>38</Node2_Id>
+      <Distance>0,325301204819277</Distance>
+    </Link>
+    <Link Id="14">
+      <Node1_Id>8</Node1_Id>
+      <Node2_Id>39</Node2_Id>
+      <Distance>0,284227820372399</Distance>
+    </Link>
+    <Link Id="18">
+      <Node1_Id>9</Node1_Id>
+      <Node2_Id>10</Node2_Id>
+      <Distance>0,35487404162103</Distance>
+    </Link>
+    <Link Id="19">
+      <Node1_Id>9</Node1_Id>
+      <Node2_Id>17</Node2_Id>
+      <Distance>0,440842787682334</Distance>
+    </Link>
+    <Link Id="20">
+      <Node1_Id>10</Node1_Id>
+      <Node2_Id>42</Node2_Id>
+      <Distance>0,36144578313253</Distance>
+    </Link>
+    <Link Id="22">
+      <Node1_Id>10</Node1_Id>
+      <Node2_Id>20</Node2_Id>
+      <Distance>0,431118314424635</Distance>
+    </Link>
+    <Link Id="21">
+      <Node1_Id>11</Node1_Id>
+      <Node2_Id>42</Node2_Id>
+      <Distance>0,36144578313253</Distance>
+    </Link>
+    <Link Id="23">
+      <Node1_Id>11</Node1_Id>
+      <Node2_Id>12</Node2_Id>
+      <Distance>0,285326906835774</Distance>
+    </Link>
+    <Link Id="24">
+      <Node1_Id>11</Node1_Id>
+      <Node2_Id>43</Node2_Id>
+      <Distance>0,293354943273906</Distance>
+    </Link>
+    <Link Id="17">
+      <Node1_Id>12</Node1_Id>
+      <Node2_Id>41</Node2_Id>
+      <Distance>0,284227820372399</Distance>
+    </Link>
+    <Link Id="28">
+      <Node1_Id>13</Node1_Id>
+      <Node2_Id>14</Node2_Id>
+      <Distance>0,434359805510535</Distance>
+    </Link>
+    <Link Id="29">
+      <Node1_Id>13</Node1_Id>
+      <Node2_Id>15</Node2_Id>
+      <Distance>0,35815991237678</Distance>
+    </Link>
+    <Link Id="30">
+      <Node1_Id>15</Node1_Id>
+      <Node2_Id>16</Node2_Id>
+      <Distance>0,444084278768233</Distance>
+    </Link>
+    <Link Id="31">
+      <Node1_Id>15</Node1_Id>
+      <Node2_Id>18</Node2_Id>
+      <Distance>0,35815991237678</Distance>
+    </Link>
+    <Link Id="32">
+      <Node1_Id>16</Node1_Id>
+      <Node2_Id>17</Node2_Id>
+      <Distance>0,288492706645057</Distance>
+    </Link>
+    <Link Id="33">
+      <Node1_Id>16</Node1_Id>
+      <Node2_Id>34</Node2_Id>
+      <Distance>0,272727272727273</Distance>
+    </Link>
+    <Link Id="34">
+      <Node1_Id>17</Node1_Id>
+      <Node2_Id>35</Node2_Id>
+      <Distance>0,276013143483023</Distance>
+    </Link>
+    <Link Id="35">
+      <Node1_Id>18</Node1_Id>
+      <Node2_Id>19</Node2_Id>
+      <Distance>0,440842787682334</Distance>
+    </Link>
+    <Link Id="36">
+      <Node1_Id>18</Node1_Id>
+      <Node2_Id>21</Node2_Id>
+      <Distance>0,348302300109529</Distance>
+    </Link>
+    <Link Id="37">
+      <Node1_Id>19</Node1_Id>
+      <Node2_Id>20</Node2_Id>
+      <Distance>0,301476578295677</Distance>
+    </Link>
+    <Link Id="38">
+      <Node1_Id>19</Node1_Id>
+      <Node2_Id>36</Node2_Id>
+      <Distance>0,276013143483023</Distance>
+    </Link>
+    <Link Id="39">
+      <Node1_Id>20</Node1_Id>
+      <Node2_Id>37</Node2_Id>
+      <Distance>0,279299014238773</Distance>
+    </Link>
+    <Link Id="40">
+      <Node1_Id>21</Node1_Id>
+      <Node2_Id>22</Node2_Id>
+      <Distance>0,343598055105348</Distance>
+    </Link>
+    <Link Id="41">
+      <Node1_Id>21</Node1_Id>
+      <Node2_Id>23</Node2_Id>
+      <Distance>0,371303395399781</Distance>
+    </Link>
+    <Link Id="27">
+      <Node1_Id>23</Node1_Id>
+      <Node2_Id>45</Node2_Id>
+      <Distance>0,293354943273906</Distance>
+    </Link>
+    <Link Id="42">
+      <Node1_Id>23</Node1_Id>
+      <Node2_Id>24</Node2_Id>
+      <Distance>0,35815991237678</Distance>
+    </Link>
+    <Link Id="43">
+      <Node1_Id>24</Node1_Id>
+      <Node2_Id>46</Node2_Id>
+      <Distance>0,255267423014587</Distance>
+    </Link>
+    <Link Id="47">
+      <Node1_Id>24</Node1_Id>
+      <Node2_Id>26</Node2_Id>
+      <Distance>0,354874041621029</Distance>
+    </Link>
+    <Link Id="46">
+      <Node1_Id>25</Node1_Id>
+      <Node2_Id>48</Node2_Id>
+      <Distance>0,255267423014587</Distance>
+    </Link>
+    <Link Id="48">
+      <Node1_Id>26</Node1_Id>
+      <Node2_Id>27</Node2_Id>
+      <Distance>0,444084278768233</Distance>
+    </Link>
+    <Link Id="49">
+      <Node1_Id>27</Node1_Id>
+      <Node2_Id>29</Node2_Id>
+      <Distance>0,294975688816856</Distance>
+    </Link>
+    <Link Id="50">
+      <Node1_Id>27</Node1_Id>
+      <Node2_Id>28</Node2_Id>
+      <Distance>0,35158817086528</Distance>
+    </Link>
+    <Link Id="51">
+      <Node1_Id>29</Node1_Id>
+      <Node2_Id>31</Node2_Id>
+      <Distance>0,278768233387358</Distance>
+    </Link>
+    <Link Id="52">
+      <Node1_Id>29</Node1_Id>
+      <Node2_Id>30</Node2_Id>
+      <Distance>0,35487404162103</Distance>
+    </Link>
+    <Link Id="15">
+      <Node1_Id>39</Node1_Id>
+      <Node2_Id>40</Node2_Id>
+      <Distance>0,284227820372399</Distance>
+    </Link>
+    <Link Id="16">
+      <Node1_Id>40</Node1_Id>
+      <Node2_Id>41</Node2_Id>
+      <Distance>0,284227820372399</Distance>
+    </Link>
+    <Link Id="25">
+      <Node1_Id>43</Node1_Id>
+      <Node2_Id>44</Node2_Id>
+      <Distance>0,293354943273906</Distance>
+    </Link>
+    <Link Id="26">
+      <Node1_Id>44</Node1_Id>
+      <Node2_Id>45</Node2_Id>
+      <Distance>0,293354943273906</Distance>
+    </Link>
+    <Link Id="44">
+      <Node1_Id>46</Node1_Id>
+      <Node2_Id>47</Node2_Id>
+      <Distance>0,255267423014587</Distance>
+    </Link>
+    <Link Id="45">
+      <Node1_Id>47</Node1_Id>
+      <Node2_Id>48</Node2_Id>
+      <Distance>0,255267423014587</Distance>
+    </Link>
+  </Links>
+</Map>
