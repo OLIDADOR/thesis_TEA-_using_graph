@@ -1,0 +1,5 @@
+05/4/2020
+
+-Added the generation of a mission XML as well as the ability to load that XML in order to make it easier to repeat tests; 
+-Added the framework for the generation of communication flaws;
+-More bugfixes in TEA*;
