@@ -30,6 +30,7 @@ object Form1: TForm1
         Width = 196
       end>
     FixedCols = 0
+    RowCount = 1
     TabOrder = 0
     ColWidths = (
       195
@@ -78,6 +79,7 @@ object Form1: TForm1
         Width = 195
       end>
     FixedCols = 0
+    RowCount = 1
     TabOrder = 2
     ColWidths = (
       195
@@ -125,6 +127,15 @@ object Form1: TForm1
     OnClick = Button2Click
     TabOrder = 6
   end
+  object Button3: TButton
+    Left = 389
+    Height = 43
+    Top = 656
+    Width = 249
+    Caption = 'Load data'
+    OnClick = Button3Click
+    TabOrder = 7
+  end
   object GLScene2: TGLScene
     left = 704
     top = 712
@@ -134,7 +145,7 @@ object Form1: TForm1
       FocalLength = 50
       TargetObject = GLDummyCube3
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000

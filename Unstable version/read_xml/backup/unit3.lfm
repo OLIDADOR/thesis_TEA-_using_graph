@@ -1,0 +1,96 @@
+object Form3: TForm3
+  Left = 246
+  Height = 601
+  Top = 157
+  Width = 1288
+  Caption = 'Form3'
+  ClientHeight = 601
+  ClientWidth = 1288
+  DesignTimePPI = 120
+  OnPaint = FormPaint
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object PaintBox1: TPaintBox
+    Left = 560
+    Height = 569
+    Top = 15
+    Width = 672
+    OnPaint = PaintBox1Paint
+  end
+  object StringGrid1: TStringGrid
+    Left = 13
+    Height = 215
+    Top = 25
+    Width = 537
+    AutoFillColumns = True
+    Columns = <    
+      item
+        Title.Caption = 'Id'
+        Width = 106
+      end    
+      item
+        Title.Caption = 'Pos X'
+        Width = 106
+      end    
+      item
+        Title.Caption = 'Pos Y '
+        Width = 106
+      end    
+      item
+        Title.Caption = 'Is Workstation'
+        Width = 106
+      end    
+      item
+        Title.Caption = 'Node id'
+        Width = 109
+      end>
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 0
+    ColWidths = (
+      106
+      106
+      106
+      106
+      109
+    )
+  end
+  object LabeledEdit1: TLabeledEdit
+    Left = 13
+    Height = 28
+    Top = 328
+    Width = 155
+    EditLabel.Height = 20
+    EditLabel.Width = 155
+    EditLabel.Caption = 'Workstation ID'
+    EditLabel.ParentColor = False
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 13
+    Height = 40
+    Top = 392
+    Width = 155
+    Caption = 'Add Workstation'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 240
+    Height = 40
+    Top = 392
+    Width = 176
+    Caption = 'Remove Workstation'
+    OnClick = Button2Click
+    TabOrder = 3
+  end
+  object Button3: TButton
+    Left = 13
+    Height = 56
+    Top = 528
+    Width = 537
+    Caption = 'Comfirm'
+    OnClick = Button3Click
+    TabOrder = 4
+  end
+end

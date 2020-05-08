@@ -18,7 +18,7 @@ const
   CLOSED = 2;
   OPENED = 3;
 
-  NUM_LAYERS = 160;
+  NUM_LAYERS = 420;
   MAX_EXCHANGES = 10;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
@@ -51,6 +51,7 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    Button3: TButton;
     GLCadencer1: TGLCadencer;
     GLCamera1: TGLCamera;
     GLCube1: TGLCube;
@@ -64,6 +65,7 @@ type
     StringGrid2: TStringGrid;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
       newTime: Double);
@@ -109,7 +111,7 @@ var
     dirr:double;
 implementation
      uses
-   unit2;
+   unit2,unit3;
 {$R *.lfm}
 function get_line_Dir (x1:Double;y1:Double;x2:double;y2:Double):integer;
 
@@ -449,6 +451,103 @@ begin
       create_link_between(n1_i,n2_i,nodelist,dist_d);
    end;
     read_xml:=nodelist;
+end;
+
+
+procedure read_mission_xml();
+var
+  nodelist:array of node_full;
+  Doc: TXMLDocument;
+  Robots,Workstations,SubMissions: TDOMNodeList;
+  isact,wid,ni,ws,idw,Robot,x,y,priority,Direction,inode,steps,ActualSubMission,CounterSubMissions: TDOMNode;
+  NumberSubMissions_value,isact_value,wid_value,ni_value,idw_value,id_value,priority_value,x_value,y_value,dir_value,inode_value,steps_value,ActualSubMission_value,CounterSubMissions_value,TotalSubMissions_value,target_node_value,target_node_step_value,SubMissions_value:string;
+  NumberSubMissions,TotalSubMissions,target_node,target_node_step:TDOMNode;
+  l1,SubMissions_count:integer;
+  i,aux1:integer;
+  SubMissions_a:array[0..4] of integer;
+begin
+
+  ReadXMLFile(Doc, 'C:\Users\diogo\Desktop\pascal\read_xml\mission.xml');
+  Robots:= Doc.GetElementsByTagName('Robot');
+  setlength(form1.robots,Robots.Count);
+  for i:= 0 to Robots.Count - 1 do
+  begin
+     robot:= Robots[i];
+     id:=robot.Attributes.Item[0];
+     id_value:=id.NodeValue;
+     priority:=robot.FindNode('priority');
+     priority_value:=priority.FirstChild.NodeValue;
+     x:=robot.FindNode('x');
+     x_value:=x.FirstChild.NodeValue;
+     y:=robot.FindNode('y');
+     y_value:=y.FirstChild.NodeValue;
+     Direction:=robot.FindNode('Direction');
+     dir_value:=Direction.FirstChild.NodeValue;
+     inode:=robot.FindNode('node');
+     inode_value:=inode.FirstChild.NodeValue;
+     steps:=robot.FindNode('steps');
+     steps_value:=steps.FirstChild.NodeValue;
+     ActualSubMission:=robot.FindNode('ActualSubMission');
+     ActualSubMission_value:=ActualSubMission.FirstChild.NodeValue;
+     CounterSubMissions:=robot.FindNode('CounterSubMissions');
+     CounterSubMissions_value:=CounterSubMissions.FirstChild.NodeValue;
+     TotalSubMissions:=robot.FindNode('TotalSubMissions');
+     TotalSubMissions_value:=TotalSubMissions.FirstChild.NodeValue;
+     NumberSubMissions:=robot.FindNode('NumberSubMissions');
+     NumberSubMissions_value:=NumberSubMissions.FirstChild.NodeValue;
+     target_node:=robot.FindNode('target_node');
+     target_node_value:=target_node.FirstChild.NodeValue;
+     target_node_step:=robot.FindNode('target_node_step');
+     target_node_step_value:=target_node_step.FirstChild.NodeValue;
+     SubMissions:= Doc.GetElementsByTagName('SubMission'+id_value);
+     //SubMissions_value:=SubMissions.FirstChild.Attributes.Item[0];
+     SubMissions_count:=SubMissions.Count;
+     for aux1:=0 to 5-1 do
+     begin
+        SubMissions_a[aux1]:=strtoint(SubMissions[aux1].TextContent);
+     end;
+     form1.robots[i].id_robot:=strtoint(id_value);
+     form1.robots[i].InitialIdPriority:=strtoint(priority_value);
+     form1.robots[i].pos_X:=strtofloat(x_value);
+     form1.robots[i].pos_y:=strtofloat(y_value);
+     form1.robots[i].ipos_X:=form1.robots[i].pos_X;
+     form1.robots[i].ipos_y:=form1.robots[i].pos_y;
+     form1.robots[i].iDirection:=strtoint(dir_value);
+     form1.robots[i].Direction:=form1.robots[i].Direction;
+     form1.robots[i].inicial_node:=strtoint(inode_value);
+     form1.robots[i].inicial_step:=strtoint(steps_value);
+     form1.robots[i].ActualSubMission:=strtoint(ActualSubMission_value);
+     form1.robots[i].CounterSubMissions:=strtoint(CounterSubMissions_value);
+     form1.robots[i].TotalSubMissions:=strtoint(TotalSubMissions_value);
+     form1.robots[i].target_node:=strtoint(target_node_value);
+     form1.robots[i].target_node_step:=strtoint(target_node_step_value);
+     form1.robots[i].SubMissions:=SubMissions_a;
+  end;
+  Workstations:= Doc.GetElementsByTagName('Workstation');
+   setlength(form3.wos,Workstations.Count);
+   for i:= 0 to Workstations.Count - 1 do
+   begin
+      ws:=Workstations[i];
+      idw:=ws.Attributes.Item[0];
+      idw_value:=idw.NodeValue;
+      ni:=ws.FindNode('node_id');
+      ni_value:=ni.FirstChild.NodeValue;
+      wid:=ws.FindNode('ws_id');
+      wid_value:=wid.FirstChild.NodeValue;
+      isact:=ws.FindNode('isactive');
+      isact_value:=isact.FirstChild.NodeValue;
+      x:=ws.FindNode('X');
+      x_value:=x.FirstChild.NodeValue;
+      y:=ws.FindNode('Y');
+      y_value:=y.FirstChild.NodeValue;
+      form3.wos[i].id:=strtoint(idw_value);
+      form3.wos[i].node_id:=strtoint(ni_value);
+      form3.wos[i].ws_id:=strtoint(wid_value);
+      form3.wos[i].isactive:=strtoint(isact_value);
+      form3.wos[i].pos_X:=strtofloat(x_value);
+      form3.wos[i].pos_Y:=strtofloat(y_value);
+   end;
+
 end;
 
 function check_array(l:array of integer; i:integer):integer;
@@ -812,7 +911,6 @@ aux1:integer;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
-     max_id:=0;
     full_nodelist:=read_xml();
     ws:=get_Workstations(full_nodelist);
     l1:=length(full_nodelist);
@@ -869,8 +967,8 @@ y_r:=strtofloat(Labelededit3.Text);
   //Create_robots(robots,full_nodelist,x_r,y_r,10);
 l4:=length(robots);
 setlength(robots,l4+1);
-robots[l4].id_robot:=max_id;
-max_id:=max_id+1;
+max_id:=get_max_robotid(robots);
+robots[l4].id_robot:=max_id+1;
 id_r:=get_closest_node_id(full_nodelist, x_r, y_r, 200);
 l1:=length(robots[l4].current_nodes);
 setlength(robots[l4].current_nodes,l1+1);
@@ -881,18 +979,11 @@ robots[l4].InitialIdPriority:=max_id+1;
 robots[l4].Direction:=0;
 robots[l4].NumberSubMissions:=0;
 update_robot_inicial_position(max_id+1, id_r, robots, full_nodelist);
-  l2:=length(robots);
-      if l2>0 then
-      begin
-      for aux1:=0 to l2-1 do
-      begin
-         id_l:=robots[aux1].id_robot;
-         x_r:=robots[aux1].ipos_X;
-         y_r:=robots[aux1].ipos_y;
-         StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
-        end;
-      end;
-  print_robot_position_GLS(robots,200,GLScene2,GLDummyCube3,25,25);
+id_l:=robots[l4].id_robot;
+x_r:=robots[l4].ipos_X;
+y_r:=robots[l4].ipos_y;
+StringGrid2.InsertRowWithValues(1,[inttostr(id_l), floattostr(x_r), floattostr(y_r)]);
+print_robot_position_GLS(robots,200,GLScene2,GLDummyCube3,25,25);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -915,7 +1006,31 @@ begin
    graphsize:=l1;
    write_scene_xml(robots,1);
    form1.hide;
-   form2.show;
+   form3.show;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+   read_mission_xml();
+   l1:=length(full_nodelist);
+   setlength(map.TEA_GRAPH, l1,NUM_LAYERS);
+   setlength(map.GraphState, l1,NUM_LAYERS);
+   setlength(map.HeapArray.data, l1*NUM_LAYERS);
+   for aux1:=0 to NUM_LAYERS-1 do
+   begin
+      for aux2:=0 to l1-1 do
+      begin
+         map.TEA_GRAPH[aux2][aux1].id:=full_nodelist[aux2].id;
+         map.TEA_GRAPH[aux2][aux1].pos_X:=full_nodelist[aux2].pos_X;
+         map.TEA_GRAPH[aux2][aux1].pos_Y:=full_nodelist[aux2].pos_Y;
+         map.TEA_GRAPH[aux2][aux1].links:=full_nodelist[aux2].links;
+         map.GraphState[aux2][aux1]:=VIRGIN;
+      end;
+   end;
+   graphsize:=l1;
+   write_scene_xml(robots,1);
+    form2.show;
+    form1.hide;
 end;
 
 procedure TForm1.GLCadencer1Progress(Sender: TObject; const deltaTime,

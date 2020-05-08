@@ -30,20 +30,21 @@ unit TEAstar;
 interface
 
 uses
-  Classes, SysUtils, Graphics, laz2_XMLRead, laz2_DOM, Forms, math;
+  Classes, SysUtils, Graphics, laz2_XMLRead, laz2_DOM, Forms, math, ExtCtrls, GLScene, GLGraph, GLFullScreenViewer, GLCadencer, GLObjects,
+  GLLCLViewer,Types, GLBaseClasses,character;
 
 const
 
   // Cell States
   VIRGIN = 0;
-  OBSTACLEWALL = 1;
+  OBSTACLEROBOTINIT = 1;
   CLOSED = 2;
   OPENED = 3;
   OBSTACLEROBOT = 4;
 
-  NUM_LAYERS = 160;
+  NUM_LAYERS = 420;
   NUMBER_ROBOTS = 4;
-  MAX_EXCHANGES = 10;
+  MAX_EXCHANGES = 5;
   MAX_ITERATIONS = 10000;
   MAX_SUBMISSIONS = 4;
   //Max_nodes=form1.graphsize;
@@ -121,14 +122,19 @@ type
      pos_X:Double;
      pos_Y:Double;
      Direction:integer;
+     pDirection:integer;
      ipos_X:Double;
      ipos_Y:Double;
      iDirection:integer;
      SubMissions: array[0..MAX_SUBMISSIONS] of integer;
      NumberSubMissions: integer;
+     TotalSubMissions: integer;
      CounterSubMissions: integer;
      ActualSubMission: integer;
      InitialIdPriority: integer;
+     parcial_step:integer;
+     onrest:integer;
+     cube:TGLCube;
    end;
 
    TEA_Graph_node = object
@@ -178,58 +184,6 @@ PAStarCell = ^TEA_Graph_node;  // PAStarCell is a pointer to TAStarCell, just po
       a_node=array of node_full;
 
 
-
-
-
-  ////TGridCoord = record
-  ////  x, y, t_step, direction: Smallint;
-  ////end;
-
-
-  //TAStarCell = record
-  //  G,H: double;
-  //  ParentPoint: TGridCoord;
-  //  HeapIdx: integer;
-  //  MyCoord: TGridCoord;
-  //end;
-
-  //TAStarGridState = array[0..AStarGridXSize, 0..AStarGridYSize, 0..NUM_LAYERS] of byte;
-  //TAStarGrid = array[0..AStarGridXSize, 0..AStarGridYSize, 0..NUM_LAYERS-1] of TAStarCell;
-  //
-  //  TAStarHeapArray = record
-  //    data: array[0 .. AStarHeapArraySize-1] of PAStarCell;
-  //    count: integer;
-  //  end;
-  //
-  //TAStarProfiler = record
-  //  RemovePointFromAStarList_count: integer;
-  //  RemoveFromOpenList_count: integer;
-  //  AddToOpenList_count: integer;
-  //  HeapArrayTotal: integer;
-  //  comparesTotal: integer;
-  //  iter: integer;
-  //end;
-  //
-  //TAStarMap = record
-  //  Grid: TAStarGrid;
-  //  GridState: TAStarGridState;
-  //  HeapArray: TAStarHeapArray;
-  //  Profiler: TAStarProfiler;
-  //end;
-  //
-  //Robot = record
-  //  InitialPoint, TargetPoint, InitialPointParcial: TGridCoord;
-  //  Color: string;
-  //  SubMissions: array[0..MAX_SUBMISSIONS] of TGridCoord;
-  //  NumberSubMissions: integer;
-  //  CounterSubMissions: integer;
-  //  ActualSubMission: integer;
-  //  InitialIdPriority: integer;
-  //end;
-  //
-  //RobotsTeam = array[0..NUMBER_ROBOTS-1] of Robot;
-  //
-
   nodes= record
     node:integer;
     steps:integer;
@@ -276,6 +230,7 @@ procedure RemoveFromOpenList(var Map: TAStarMap; out Pnt: integer; out steps:int
 procedure UpdateHeapPositionByDemotion(var Map: TAStarMap; idx: integer); inline;
 
 
+
 implementation
 uses
   unit1;
@@ -290,6 +245,9 @@ begin
   Map.TEA_GRAPH[agv.inicial_node-1][0].direction:=agv.Direction;
 
   InsertInOpenList(Map, agv.inicial_node,0);
+  if agv.target_node=0 then begin
+    Map.TEA_GRAPH[agv.inicial_node-1][0].H := CalcH( Map, agv.inicial_node, agv.target_node);
+  end;
   Map.TEA_GRAPH[agv.inicial_node-1][0].H := CalcH( Map, agv.inicial_node, agv.target_node);
 end;
 
@@ -301,23 +259,42 @@ procedure A_starTimeInitSubMission(var Map: TAStarMap; agv: Robot_Pos_info);
 begin
   //update the initial direction in order to be considered when the initial point
   //is inserted on heapArray
-  Map.TEA_GRAPH[agv.inicial_partial_node-1][0].direction:=agv.Direction;
+  Map.TEA_GRAPH[agv.inicial_partial_node-1][agv.parcial_step].direction:=agv.pDirection;
 
-   InsertInOpenList(Map, agv.inicial_partial_node,0);
-   Map.TEA_GRAPH[agv.inicial_partial_node-1][0].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
+   InsertInOpenList(Map, agv.inicial_partial_node,agv.parcial_step);
+   if agv.target_node=0 then begin
+    Map.TEA_GRAPH[agv.inicial_partial_node-1][agv.parcial_step].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
+  end;
+   Map.TEA_GRAPH[agv.inicial_partial_node-1][agv.parcial_step].H := CalcH( Map, agv.inicial_partial_node, agv.target_node);
 end;
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+function return_id_frompriority(var agvs: r_node; p:integer):integer;
+var
+ l1,aux1,r:integer;
+Begin
+  r:=0;
+  l1:=length(agvs);
+  for aux1:=0 to l1-1 do
+  begin
+    if p=agvs[aux1].InitialIdPriority then
+    begin
+         r:=aux1;
+    end;
+  end;
+   return_id_frompriority:=r;
+end;
+
 
 function A_starTimeGo(var Map: TAStarMap; var CaminhosAgvs:Caminhos; var agvs: r_node; maxIter: integer):integer;
 var
     curPnt: integer;
     curPnt_t_step: integer;
     curr_dirr:integer;
-    count,vehicle,steps: integer;
-
+    count1,count,vehicle,steps: integer;
+    t,aux1:integer;
 begin
 
   flagTargetOverlap:=false;
@@ -325,8 +302,9 @@ begin
   errorMessage:=0;
   vehicleError:=0;
 
-  for count := 0 to (length(agvs)-1) do begin
+  for count1 := 0 to (NUMBER_ROBOTS-1) do begin
 
+      count:=return_id_frompriority(agvs,count1+1);
       curPnt:= agvs[count].inicial_node;
       curPnt_t_step := agvs[count].inicial_step;
       curr_dirr:=agvs[count].Direction;
@@ -335,10 +313,16 @@ begin
       A_starTimeInit(Map,agvs[count]);
 
       agvs[count].target_node := agvs[count].SubMissions[agvs[count].ActualSubMission-1];
+      if agvs[count].target_node=0 then begin
+          agvs[count].target_node := agvs[count].SubMissions[agvs[count].ActualSubMission-1];
+      end;
 
       //The initial position of each agv can´t be considered by the others as possible path in k={0,1}
       //independently of its priorities
       vehicle:=count;
+      if vehicle=3 then begin
+       vehicle:=count;
+      end;
       InitialPositionAsObstacles(vehicle,Map,agvs);
 
       result:=vehicle;
@@ -356,16 +340,22 @@ begin
 
         // found the way
         if Map.GraphState[agvs[count].target_node-1][agvs[count].target_node_step] = CLOSED then begin
-          if agvs[count].CounterSubMissions = agvs[count].NumberSubMissions then begin
+          if agvs[count].CounterSubMissions >= agvs[count].NumberSubMissions then begin
             agvs[count].CounterSubMissions := agvs[count].ActualSubMission;
             break;
           end
           else begin
              agvs[count].CounterSubMissions := agvs[count].CounterSubMissions +1;
+             agvs[count].parcial_step:=agvs[count].target_node_step;
              agvs[count].inicial_partial_node := agvs[count].target_node;
              agvs[count].target_node := agvs[count].SubMissions[agvs[count].CounterSubMissions-1];
+             if agvs[count].target_node=0 then begin
+                agvs[count].target_node := agvs[count].SubMissions[agvs[count].CounterSubMissions-1];
+             end;
+
+             agvs[count].pDirection:=curr_dirr;
              CleanHeapArray(Map);
-             CellsToVirgin(Map,agvs[count].target_node_step);
+             CellsToVirgin(Map,agvs[count].target_node_step+1);
              A_starTimeInitSubMission(Map,agvs[count]);
              //aqui
           end;
@@ -394,7 +384,11 @@ begin
       FreeCellsToVirgin(Map);
 
       //if path is not found, returns the vehicle and do not plan the next robots
-      if ((noPath=true) or (flagTargetOverlap=true)) then break;
+      if ((noPath=true) or (flagTargetOverlap=true)) then
+      begin
+      t:=vehicle;
+      break;
+      end;
 
       vehicle:=vehicle+1;
 
@@ -447,28 +441,33 @@ var
     n1,n2:integer;
     node_dirr,rot:integer;
     rot_abs:double;
+    t:integer;
 begin
 
    contador:=0;
 
    //VERIFICAR RESULT NO PROCEDURE "GO"
    result := 0;
-
+   if agv.id_robot=1 then
+   begin
+     result := 0;
+   end;
    //"inc" increase the adress of the pointer (with syze of variable type)
    inc(Map.Profiler.iter);
    inc(Map.Profiler.HeapArrayTotal, Map.HeapArray.count);
 
    //Verify if the curPnt is the target point
    if (curPnt= agv.target_node) then begin
+     if agv.target_node=0 then begin
+        Map.TEA_GRAPH[curPnt-1][curPnt_t_step].H := CalcH(Map, curPnt, agv.target_node);
+     end;
       Map.TEA_GRAPH[curPnt-1][curPnt_t_step].H := CalcH(Map, curPnt, agv.target_node);
       result := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].H;
-      //if ((agv.TargetPoint.x = agv.InitialPoint.x) and (agv.TargetPoint.x = agv.InitialPoint.x)) then begin
-      //   result:=0;
-      //end;
+       Map.GraphState[curPnt-1][curPnt_t_step]:=CLOSED;
       agv.target_node_step:=curPnt_t_step;
    end
 
-   else if curPnt_t_step>= NUM_LAYERS then begin
+   else if curPnt_t_step>= NUM_LAYERS-1 then begin
       //writeln('More Layers Required');
       result:=1;
    end
@@ -479,21 +478,6 @@ begin
       RemoveFromOpenList(Map,curPnt,curPnt_t_step,curr_dirr);
 
       Map.GraphState[curPnt-1][curPnt_t_step] := CLOSED;
-
-//
-//      if((curPnt.x mod 2) = 0) and ((curPnt.y mod 2) = 0) then begin
-//        //it's a center point of a cell
-//        edge:=0;
-//      end
-//      else begin  //it's an edge
-//       if((curPnt.x mod 2) = 0) then begin        //verify if it is an horizontal edge
-//          edge:=1;
-//       end
-//       else begin                               //verify if it is a vertical edge
-//          edge:=2;
-//       end;
-//      end;
-
 
    l1:=length(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links);
    for i:=0 to l1 do
@@ -510,6 +494,10 @@ begin
       begin
       n1:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].id;
       n2:=map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].node_to_link;
+    {  if ((n1=37) and (agv.id_robot=2))  then
+      begin
+        t:=2;
+      end;  }
       node_dirr:=get_node_dir(Map,n1,n2);
       rot:=node_dirr-curr_dirr;
       rot_abs:=abs(rot);
@@ -518,7 +506,7 @@ begin
       //rotate 45º and move parallel = 1 step
       //rotate 45º and move diagonally = 2 steps
       newPnt:=n2;
-      if (rot_abs<2) then
+      if ((rot_abs<2) or (rot_abs>6)) then
       begin
         newPnt_step:= curPnt_t_step+1;
       end
@@ -528,79 +516,17 @@ begin
       end;
        newPnt_dirr:=node_dirr;
       end;
+      case Map.GraphState[newPnt-1][newPnt_step] of
 
-      //for i:=-1 to 1 do
-      //begin
-      //
-      //    for j:=-1 to 1 do
-      //    begin
-      //
-      //        //verify if the current point is inside the limits of the map
-      //        //(>=2 because 1 corresponds to the wall)
-      //        //edge = 1 and edge = 2 has neighbourhood 6 (i<>0 / j<>0 avoid two vertices)
-      //        //edge = 0 has neighbourhood 4 (i=0 or j=0 avoid the four vertices)
-      //
-      //        if((curPnt.x + i >= 2) and (curPnt.y + j >= 2) and
-      //           (curPnt.x + i < AStarGridXSize) and (curPnt.y + j < AStarGridYSize) and
-      //           (((edge = 1) and (j<>0)) or ((edge = 2) and (i<>0)) or
-      //           ((edge = 0) and ((j = 0) or (i = 0)))))
-      //        then begin
-      //
-      //              //generates the neighborhood
-      //              //move parallel or diagonaly = 1 step
-      //              //rotate 90º and move = 2 steps
-      //              //rotate 45º and move parallel = 1 step
-      //              //rotate 45º and move diagonally = 2 steps
-      //              newPnt.x := curPnt.x + i;
-      //              newPnt.y := curPnt.y + j;
-      //              case curPnt.direction of
-      //                 0,4: begin
-      //                          if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-      //                      end;
-      //                 2,6: begin
-      //                          if ((i<>0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-      //                      end;
-      //                 1,5: begin
-      //                          if (i=j) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-      //                      end;
-      //                 3,7: begin
-      //                          if (i=j) then begin newPnt.t_step := curPnt.t_step + 2; end
-      //                          else if (i=-j) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i=0) and (j<>0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i<>0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end
-      //                          else if ((i=0) and (j=0)) then begin newPnt.t_step := curPnt.t_step + 1; end;
-      //                      end;
-      //              end;
-      //
-      //              //"rosa dos ventos": North (j direction) is equal to direction 0
-      //              //counting clockwise
-      //              if ((i=0) and (j=1)) then begin newPnt.direction:=0; end
-      //              else if ((i=1) and (j=1)) then begin newPnt.direction:=1; end
-      //              else if ((i=1) and (j=0)) then begin newPnt.direction:=2; end
-      //              else if ((i=1) and (j=-1)) then begin newPnt.direction:=3; end
-      //              else if ((i=0) and (j=-1)) then begin newPnt.direction:=4; end
-      //              else if ((i=-1) and (j=-1)) then begin newPnt.direction:=5; end
-      //              else if ((i=-1) and (j=0)) then begin newPnt.direction:=6; end
-      //              else if ((i=-1) and (j=1)) then begin newPnt.direction:=7; end;
+                        OBSTACLEROBOTINIT: continue;
 
+                        OBSTACLEROBOT: begin
+                        t:=1;
+                        end;
 
-                    case Map.GraphState[newPnt-1][newPnt_step] of
-
-                        OBSTACLEWALL: continue;
-
-                        OBSTACLEROBOT: continue;
-
-                        CLOSED: continue;
+                        CLOSED: begin
+                        t:=2;
+                        end;
 
                         VIRGIN: begin
                             //The node is not in the Open List neither in the Close List
@@ -611,7 +537,9 @@ begin
                               //ParentPoint.y := curPnt.y;
                               Parent_step := curPnt_t_step;
                               //ParentPoint.direction := curPnt.direction;
-
+                              if agv.target_node=0 then begin
+                               H := CalcH(Map, newPnt, agv.target_node);
+                              end;
                               H := CalcH(Map, newPnt, agv.target_node);
                               //mycoord.x := newPnt.x;
                               //mycoord.y := newPnt.y;
@@ -623,7 +551,7 @@ begin
                                     G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST1;
                               end
                               else begin
-                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].distance);
+                                    G := Map.TEA_GRAPH[curPnt-1][curPnt_t_step].G + COST2;
                               end;
 
                               //to reflect the rotation cost
@@ -645,7 +573,7 @@ begin
                                   auxCost := COST1;
                             end
                             else begin
-                                  auxCost := COST2*abs(map.TEA_GRAPH[curPnt-1][curPnt_t_step].links[i].distance);
+                                  auxCost := COST2;
                             end;
 
                             if (newPnt_step = curPnt_t_step + 2) then begin
@@ -699,7 +627,7 @@ end;
 //------------------------------------------------------------------------------------------
 procedure StorePath (var Map:TAStarMap; var agvs:r_node; var CaminhosAgvs:Caminhos; vehicle:integer; steps:integer);
 var
-    i,j,tstep:integer;
+    i,j,aux1,tstep:integer;
     aux_i,aux_j,aux_tstep:integer;
     count: integer;
     v: integer;
@@ -711,6 +639,15 @@ begin
 
     i:=agvs[vehicle].target_node;
     tstep:=agvs[vehicle].target_node_step;
+
+
+     {for aux1:=tstep to  NUM_LAYERS-1 do begin
+         Map.GraphState[i-1][aux1]:=OBSTACLEROBOT;
+     end;
+     for aux1:=1 to  tstep-1 do begin
+         Map.GraphState[i-1][aux1]:=OBSTACLEROBOT;
+     end;}
+
 
     CaminhosAgvs[vehicle].coords[tstep].node:=i;
     CaminhosAgvs[vehicle].coords[tstep].steps:=tstep;
@@ -737,12 +674,14 @@ begin
     //infinite cycle when a robot closed the target, but it can´t plan a viable path
     //(therefore, variable "noPath" stays equals to false, so this function runs)
     count:=0;
-    while (((i<>agvs[vehicle].inicial_node) or
-           (tstep<>0)) and (count < NUM_LAYERS)) do begin
+    while (((i<>agvs[vehicle].inicial_node) or (tstep<>0)) and (count < NUM_LAYERS)) do begin
 
            aux_i:=i;
            aux_tstep:=tstep;
-
+           if tstep=1 then
+           begin
+             tstep:=1;
+           end;
            i:=Map.TEA_GRAPH[aux_i-1][aux_tstep].Parent_node;
            tstep:=Map.TEA_GRAPH[aux_i-1][aux_tstep].Parent_step;
 
@@ -825,7 +764,7 @@ begin
       for aux1:=0 to l1-1 do
       begin
         ntl:=Map.TEA_GRAPH[i-1][tstep].links[aux1].node_to_link;
-       if Map.GraphState[ntl-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
+        Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
       end;
 
       //if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
@@ -869,12 +808,12 @@ begin
       for aux1:=0 to l1-1 do
       begin
         ntl:=Map.TEA_GRAPH[i-1][tstep].links[aux1].node_to_link;
-       if Map.GraphState[ntl-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
+        Map.GraphState[ntl-1][tstep]:=OBSTACLEROBOT;
         l2:=length(Map.TEA_GRAPH[ntl-1][tstep].links);
          for aux2:=0 to l2-1 do
         begin
           ntl2:=Map.TEA_GRAPH[ntl-1][tstep].links[aux2].node_to_link;
-          if Map.GraphState[ntl2-1][tstep] <> OBSTACLEWALL then Map.GraphState[ntl2-1][tstep]:=OBSTACLEROBOT;
+          Map.GraphState[ntl2-1][tstep]:=OBSTACLEROBOT;
         end;
       end;
      // if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
@@ -959,6 +898,12 @@ end;
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+function round2(const Number: extended; const Places: longint): extended;
+var t: extended;
+begin
+   t := power(10, places);
+   round2 := round(Number*t)/t;
+end;
 
 procedure UpdatePathDirections (var CaminhosAgvs:Caminhos; vehicle:integer; map:TAStarMap);
 var
@@ -972,11 +917,11 @@ begin
       id2:=CaminhosAgvs[vehicle].coords[count+1].node;
       id3:=CaminhosAgvs[vehicle].coords[count+2].node;
 
-      diffx:=map.TEA_GRAPH[id2-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
-      diffy:=map.TEA_GRAPH[id2-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
+      diffx:=round2(map.TEA_GRAPH[id2-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X,1);
+      diffy:=round2(map.TEA_GRAPH[id2-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y,1);
       if count< CaminhosAgvs[vehicle].steps-1 then begin
-      diffx2:=map.TEA_GRAPH[id3-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X;
-      diffy2:=map.TEA_GRAPH[id3-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y;
+      diffx2:=round2(map.TEA_GRAPH[id3-1][0].pos_X - map.TEA_GRAPH[id1-1][0].pos_X,1);
+      diffy2:=round2(map.TEA_GRAPH[id3-1][0].pos_Y - map.TEA_GRAPH[id1-1][0].pos_Y,1);
       end
       else
       begin
@@ -984,7 +929,7 @@ begin
         diffy2:=0;
       end;
       if ((diffx = 0) and (diffy = 0)) then begin
-          if ((diffx2 = 0) and (diffy2 = 1)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 0; end
+          if ((diffx2 = 0) and (diffy2 > 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 0; end
           else if ((diffx2 = 0) and (diffy2 < 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 4; end
           else if ((diffx2 >0) and (diffy2 = 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 2; end
           else if ((diffx2 <0) and (diffy2 = 0)) then begin CaminhosAgvs[vehicle].coords[count+1].direction := 6; end
@@ -1021,7 +966,7 @@ begin
   //scan the nodes
   while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
-              if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
+              if ((Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
                  Map.TEA_GRAPH[i][tstep].G := 0;
                  Map.TEA_GRAPH[i][tstep].H := 0;
@@ -1054,7 +999,7 @@ begin
   //scan the nodes
   while i <= form1.graphsize-1 do begin
           while tstep <= NUM_LAYERS do begin
-              if ((Map.GraphState[i][tstep]<>OBSTACLEWALL) and (Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
+              if ((Map.GraphState[i][tstep] <> OBSTACLEROBOT))  then begin
                  Map.GraphState[i][tstep] := VIRGIN;
                  Map.TEA_GRAPH[i][tstep].G := 0;
                  Map.TEA_GRAPH[i][tstep].H := 0;
@@ -1148,59 +1093,39 @@ l1:integer;
 aux1:integer;
 ntl:integer;
 ind:integer;
+c_p:integer;
+v_p:integer;
 begin
-
-    for v:=0 to (length(agvs)-1) do begin
-
-        if(v<>vehicle) then begin
+    c_p:=agvs[vehicle].InitialIdPriority;
+    for v:=0 to (NUMBER_ROBOTS-1) do begin
+        v_p:=agvs[v].InitialIdPriority;
+        if((v<>vehicle) and (c_p>v_P)) then begin
 
            //change the state of the cell to occupy in k={0,1}
+          if agvs[v].onrest<>1 then begin
            for k:=0 to 1 do begin
              i:=agvs[v].inicial_node;
-             Map.GraphState[i-1][k] := OBSTACLEROBOT;
+             Map.GraphState[i-1][k] := OBSTACLEROBOTINIT;
              l1:=length(Map.TEA_GRAPH[i-1][k].links);
              for aux1:=0 to l1-1 do begin
                  ntl:= Map.TEA_GRAPH[i-1][k].links[aux1].node_to_link;
                  //ind:=findindeposofnode(ntl,Map,l1);
-                 Map.GraphState[ntl-1][k]:=OBSTACLEROBOT;
+                 Map.GraphState[ntl-1][k]:=OBSTACLEROBOTINIT;
              end;
-             //if(((i mod 2) = 0) and ((j mod 2) = 0)) then begin
-             //     //it's a center point of a cell
-             //     if Map.GridState[i+1][j][k] <> OBSTACLEWALL then Map.GridState[i+1][j][k]:=OBSTACLEROBOT;
-             //     if Map.GridState[i][j+1][k] <> OBSTACLEWALL then Map.GridState[i][j+1][k]:=OBSTACLEROBOT;
-             //     if Map.GridState[i-1][j][k] <> OBSTACLEWALL then Map.GridState[i-1][j][k]:=OBSTACLEROBOT;
-             //     if Map.GridState[i][j-1][k] <> OBSTACLEWALL then Map.GridState[i][j-1][k]:=OBSTACLEROBOT;
-             //  end
-             //  else begin  //it's an edge
-             //    if((i mod 2) = 0) then begin        //verify if it is an horizontal edge
-             //         if Map.GridState[i-1][j-1][k] <> OBSTACLEWALL then Map.GridState[i-1][j-1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i][j-1][k] <> OBSTACLEWALL then Map.GridState[i][j-1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i+1][j-1][k] <> OBSTACLEWALL then Map.GridState[i+1][j-1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i-1][j+1][k] <> OBSTACLEWALL then Map.GridState[i-1][j+1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i][j+1][k] <> OBSTACLEWALL then Map.GridState[i][j+1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i+1][j+1][k] <> OBSTACLEWALL then Map.GridState[i+1][j+1][k]:=OBSTACLEROBOT;
-             //    end
-             //    else begin                               //verify if it is a vertical edge
-             //         if Map.GridState[i-1][j-1][k] <> OBSTACLEWALL then Map.GridState[i-1][j-1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i-1][j][k] <> OBSTACLEWALL then Map.GridState[i-1][j][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i-1][j+1][k] <> OBSTACLEWALL then Map.GridState[i-1][j+1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i+1][j-1][k] <> OBSTACLEWALL then Map.GridState[i+1][j-1][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i+1][j][k] <> OBSTACLEWALL then Map.GridState[i+1][j][k]:=OBSTACLEROBOT;
-             //         if Map.GridState[i+1][j+1][k] <> OBSTACLEWALL then Map.GridState[i+1][j+1][k]:=OBSTACLEROBOT;
-             //    end;
-
-             //podera ser melhorado considerando posições intermédias do agv ou seja fora dos nodes
-
-
            end;
-        end
+          end else begin
+             for k:=0 to 1 do begin
+             i:=agvs[v].inicial_node;
+             Map.GraphState[i-1][k] := OBSTACLEROBOTINIT;
+             end;
+          end;
+          end
         else
         begin
              //the cell continues free to the own vehicle
         end;
 
     end;
-
 end;
 
 //------------------------------------------------------------------------------------------

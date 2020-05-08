@@ -1,13 +1,14 @@
 object FControlo: TFControlo
-  Left = 1158
+  Left = 298
   Height = 722
-  Top = 93
-  Width = 568
+  Top = 111
+  Width = 559
   Caption = 'FControlo'
   ClientHeight = 722
-  ClientWidth = 568
+  ClientWidth = 559
   DesignTimePPI = 120
   OnClose = FormClose
+  OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '2.0.4.0'
   object Edit1: TEdit
@@ -100,6 +101,14 @@ object FControlo: TFControlo
     ParentFont = False
     TabOrder = 9
     Text = 'Edit9'
+  end
+  object Edit10: TEdit
+    Left = 280
+    Height = 28
+    Top = 376
+    Width = 100
+    TabOrder = 10
+    Text = 'Edit10'
   end
   object udpCom: TLUDPComponent
     Port = 0

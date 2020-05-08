@@ -10,26 +10,6 @@ uses
   GLLCLViewer, Dom, XmlRead, XMLWrite, Math, Types, GLBaseClasses,character,TEAstar;
 
 
-const
-
-  // Cell States
-  VIRGIN = 0;
-  OBSTACLEWALL = 1;
-  CLOSED = 2;
-  OPENED = 3;
-  OBSTACLEROBOT = 4;
-
-  NUM_LAYERS = 160;
-  NUMBER_ROBOTS = 4;
-  MAX_EXCHANGES = 10;
-  MAX_ITERATIONS = 10000;
-  MAX_SUBMISSIONS = 4;
-  //Max_nodes=form1.graphsize;
-  //AStarHeapArraySize = form1.graphsize*NUM_LAYERS;
-
-  COST1 = 0.5;
-  COST2 = 0.5;
-  COST3 = 0.707;
 
 type
 
@@ -39,7 +19,9 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Button4: TButton;
     GLCadencer1: TGLCadencer;
+    GLCadencer2: TGLCadencer;
     GLCamera3: TGLCamera;
     GLCamera4: TGLCamera;
     GLCube3: TGLCube;
@@ -58,14 +40,21 @@ type
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
+    LabeledEdit4: TLabeledEdit;
+    LabeledEdit5: TLabeledEdit;
+    LabeledEdit6: TLabeledEdit;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
+    ToggleBox1: TToggleBox;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GLCadencer1Progress(Sender: TObject; const deltaTime,
+      newTime: Double);
+    procedure GLCadencer2Progress(Sender: TObject; const deltaTime,
       newTime: Double);
     procedure GLSceneViewer1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -73,11 +62,11 @@ type
       Y: Integer);
     procedure GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
-    procedure ToggleBox1Change(Sender: TObject);
   private
 
   public
-
+  coms_flaws:integer;
+  X_c_max,X_c_min,Y_c_max,Y_c_min:Double;
   end;
 
 
@@ -97,9 +86,11 @@ var
   rc1,rc2:integer;
   i_t:integer;
   i_node:integer;
+  printedmap:integer;
+  u_ws:array of integer;
 implementation
       uses
-   unit1,main,controlo;
+   unit1,main,controlo,unit3;
 
 {$R *.lfm}
 
@@ -120,6 +111,18 @@ begin
     end;
 end;
 
+function get_ws_ID(id:integer):integer;
+var
+  size1,aux1:integer;
+begin
+   size1:=length(form3.wos);
+   for aux1:=0 to size1-1 do
+   begin
+   if id=form3.wos[aux1].ws_id then begin
+     get_ws_ID:=aux1;
+   end;
+   end;
+end;
 
 
 function check_array(l:array of integer; i:integer):integer;
@@ -298,6 +301,7 @@ angle:double;
          newcube.Position.y:=y-1.1*scale;
          newcube.Position.z:=1;
          angle:=gradtorad(robotlist[aux1].Direction);
+         form1.robots[aux1].cube:=newcube;
          //newcube.Direction.X:=cos(angle);
          //newcube.Direction.Y:=sin(angle);
          //newcube.Direction.Z:=1;
@@ -314,8 +318,8 @@ l1:integer;
 begin
      if agv.NumberSubMissions>0 then
      begin
-         agv.SubMissions[agv.NumberSubMissions-1]:=nid;
          agv.NumberSubMissions:=agv.NumberSubMissions+1;
+         agv.SubMissions[agv.NumberSubMissions-1]:=nid;
      end
      else
      begin
@@ -324,14 +328,124 @@ begin
        agv.ActualSubMission:=1;
        agv.NumberSubMissions:=1;
        agv.CounterSubMissions:=1;
+       agv.TotalSubMissions:=1;
      end;
 
 end;
+function checkarray(a:array of integer; i:integer):integer;
+ var
+ le1,aux1,a_id,r:integer;
+begin
+  le1:=length(a);
+  r:=0;
+  if le1>0 then
+  begin
+  for aux1:=0 to le1-1 do
+    begin
+      a_id:=a[aux1];
+      if a_id=i then
+      begin
+        r:=1;
+      end;
+    end;
+  end;
+  checkarray:=r;
+end;
+
+function getclosesestrestplace(nodelist:a_node;ws:w_node;id:integer):integer;
+
+var
+    le4,le5,le6:integer;
+    aux4,aux5:integer;
+    n_curr,w_curr:integer;
+    x_p:Double;
+    y_p:Double;
+    x:Double;
+    y:Double;
+    id_min:integer;
+    diff1:Double;
+    diff2:Double;
+    Difft:Double;
+    diff_min:Double;
+begin
+  le4:=length(ws);
+  le5:=length(nodelist);
+  le6:=length(u_ws);
+  diff_min:=10;
+  id_min:=0;
+  if le5>0 then
+  begin
+  for aux5:=0 to le5-1 do
+  begin
+    n_curr:=nodelist[aux5].id;
+    if n_curr=id then
+    begin
+    x:=nodelist[aux5].pos_X;
+    y:=nodelist[aux5].pos_y;
+    end;
+  end;
+  if le4>0 then
+  begin
+  for aux4:=0 to le4-1 do
+  begin
+     w_curr:=ws[aux4].node_id;
+     x_p:=ws[aux4].pos_X;
+     y_p:=ws[aux4].pos_Y;
+     diff1:=abs(x_p-x);
+     diff2:=abs(y_p-y);
+     Difft:=diff1+diff2;
+  if ((diff_min>Difft) and (ws[aux4].isactive<>1) and (checkarray(u_ws,ws[aux4].node_id)<>1) and (le6>0)) then
+     begin
+      diff_min:=Difft;
+      id_min:=w_curr;
+  end else if ((diff_min>Difft) and (ws[aux4].isactive<>1) and (le6=0)) then
+     begin
+      diff_min:=Difft;
+      id_min:=w_curr;
+      end;
+ end;
+  getclosesestrestplace:=id_min;
+end;
+end;
+end;
+
+
+
+procedure Setrobotsrestspot(nodelist:a_node; robotlist:r_node;ws:w_node);
+var
+le1,le2,aux1,aux5,final_mission_ind,final_mission_id,idr:integer;
+begin
+    le1:=length(robotlist);
+    le2:=length(u_ws);
+    if le1>0 then
+    begin
+    for aux1:=0 to le1-1 do
+      begin
+        final_mission_ind:=robotlist[aux1].NumberSubMissions;
+        final_mission_id:=robotlist[aux1].SubMissions[final_mission_ind-1];
+        idr:=getclosesestrestplace(nodelist,ws,final_mission_id);
+        if le2=0 then begin
+        setlength(u_ws,le1);
+        for aux5:=0 to le2-1 do
+        begin
+        u_ws[aux5]:=0;
+        end;
+        u_ws[aux1]:=idr;
+        end else begin
+         u_ws[aux1]:=idr;
+        end;
+        add_mission(robotlist[aux1], idr);
+      end;
+end;
+end;
+
+
  { TForm2 }
 
 
  procedure TForm2.GLCadencer1Progress(Sender: TObject; const deltaTime,
   newTime: Double);
+
 begin
    if ((mx <> mx2) or (my <> my2)) then
   begin
@@ -339,17 +453,58 @@ begin
     mx := mx2;
     my := my2;
   end;
+
+
+
+end;
+
+procedure TForm2.GLCadencer2Progress(Sender: TObject; const deltaTime,
+  newTime: Double);
+var
+l1,aux1:integer;
+begin
+   if printedmap=1 then
+   begin
+     l1:=length(form1.robots);
+     for aux1:=0 to l1-1 do
+     begin
+     form1.robots[aux1].cube.Position.X:=form1.robots[aux1].pos_X*200-1.5*200;
+     form1.robots[aux1].cube.Position.Y:=form1.robots[aux1].pos_y*200-1.1*200;
+     end;
+  end;
+  if ToggleBox1.Checked=True then
+    begin
+     coms_flaws:=1;
+     if LabeledEdit3.text<>'' then begin
+     X_c_max:=strtofloat(LabeledEdit3.text);
+     end;
+     if LabeledEdit4.text<>'' then begin
+     X_c_min:=strtofloat(LabeledEdit4.text);
+     end;
+     if LabeledEdit5.text<>'' then begin
+     Y_c_max:=strtofloat(LabeledEdit5.text);
+     end;
+     if LabeledEdit6.text<>'' then begin
+     Y_c_min:=strtofloat(LabeledEdit6.text);
+     end;
+    end else
+    begin
+     coms_flaws:=0;
+    end;
 end;
 
 procedure TForm2.FormShow(Sender: TObject);
 begin
  Print_map_in_GLS(form1.full_nodelist,10,GLScene3,GLDummyCube3,200);
  Print_robot_position_GLS(form1.robots,200,GLScene3,GLDummyCube3,25,25);
+ printedmap:=1;
  l1:=length(form1.robots);
  label2.Caption:=inttostr(l1);
 end;
 
 procedure TForm2.Button1Click(Sender: TObject);
+var
+auxID:integer;
 begin
   r_ID:=strtoint(labelededit1.Text);
   ws_ID:=strtoint(labelededit2.Text);
@@ -359,7 +514,8 @@ begin
     r_id_curr:=form1.robots[aux1].id_robot;
     if r_id_curr=r_ID then
     begin
-       add_mission(form1.robots[aux1],form1.ws[ws_ID-1]);
+       auxID:=get_ws_ID(ws_ID);
+       add_mission(form1.robots[aux1],form3.wos[auxID].node_id);
        //form1.robots[aux1].target_node:=form1.ws[ws_ID-1];
     end;
   end;
@@ -367,6 +523,7 @@ end;
 
 procedure TForm2.Button2Click(Sender: TObject);
 begin
+  Setrobotsrestspot(form1.full_nodelist,form1.robots,form3.wos);
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TFControlo, FControlo);
   FMain.Show;
@@ -374,29 +531,139 @@ begin
 end;
 
 procedure TForm2.Button3Click(Sender: TObject);
-var
-i,aux1:integer;
-X,y:double;
-newcube: TGLCube;
-angle:double;
 begin
-  i:=strtoint(LabeledEdit3.Text);
-  for aux1:=0 to NUMBER_ROBOTS-1 do
+
+end;
+
+procedure TForm2.Button4Click(Sender: TObject);
+var
+Doc: TXMLDocument;                                  // variable to document
+RootNode, parentNode, nofilho: TDOMNode;                    // variable to nodes
+l1,l2,l3,aux1,aux2:integer;
+begin
+  // Create a document
+ Doc := TXMLDocument.Create;
+
+ // Create a root node
+ RootNode := Doc.CreateElement('Mission');
+ Doc.Appendchild(RootNode);      // save root node
+
+ l1:=length(form1.robots);
+ for aux1:=0 to l1-1 do
+ begin
+ // Create a defines node
+  RootNode:= Doc.DocumentElement;
+  parentNode := Doc.CreateElement('Robot');
+  TDOMElement(parentNode).SetAttribute('id',inttostr(form1.robots[aux1].id_robot));     // create atributes
+  RootNode.Appendchild(parentNode);
+
+  parentNode := Doc.CreateElement('priority');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].InitialIdPriority));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('x');               // create a child node
+  nofilho := Doc.CreateTextNode(FloatToStr(form1.robots[aux1].pos_X));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('y');               // create a child node
+  nofilho := Doc.CreateTextNode(FloatToStr(form1.robots[aux1].pos_y));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('Direction');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].Direction));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('node');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].inicial_node));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('steps');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].inicial_step));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('ActualSubMission');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].ActualSubMission));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('CounterSubMissions');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].CounterSubMissions));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('TotalSubMissions');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].TotalSubMissions));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('NumberSubMissions');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].NumberSubMissions));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('target_node');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].target_node));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('target_node_step');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].target_node_step));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  parentNode := Doc.CreateElement('SubMissions');               // create a child node
+  nofilho := Doc.CreateTextNode(inttostr(length(form1.robots[aux1].SubMissions)));               // insert a value to node
+  parentNode.Appendchild(nofilho);                         // save node
+  RootNode.ChildNodes.Item[aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+  l2:=length(form1.robots[aux1].SubMissions);
+  for aux2:=0 to l2-1 do
   begin
-   X:=getXcoord(controlo.CaminhosAgvs[aux1].coords[i].node);
-   Y:=getYcoord(controlo.CaminhosAgvs[aux1].coords[i].node);
-   newcube:=TGLCube.CreateAsChild(GLScene3.Objects);
-   newcube.CubeHeight:=25;
-   newcube.CubeWidth:=25;
-   newcube.CubeDepth:=1;
-   newcube.Position.X:=x-1.5*200;
-   newcube.Position.y:=y-1.1*200;
-   newcube.Position.z:=1;
-   angle:=0;
-   newcube.RollAngle:=angle;
-   //colour.
-   newcube.Material.FrontProperties.Ambient.RandomColor;
+      parentNode := Doc.CreateElement('SubMission'+inttostr(form1.robots[aux1].id_robot));               // create a child node
+      nofilho := Doc.CreateTextNode(inttostr(form1.robots[aux1].SubMissions[aux2]));               // insert a value to node
+      parentNode.Appendchild(nofilho);                         // save node
+      RootNode.ChildNodes.Item[aux1].ChildNodes.Item[11].AppendChild(parentNode);     // insert a childnode in respective pai
   end;
+end;
+    l3:=length(form3.wos);
+    for aux1:=0 to l3-1 do
+    begin
+     parentNode := Doc.CreateElement('Workstation');
+     TDOMElement(parentNode).SetAttribute('id',inttostr(form3.wos[aux1].id));     // create atributes
+     RootNode.Appendchild(parentNode);
+
+     parentNode := Doc.CreateElement('node_id');               // create a child node
+     nofilho := Doc.CreateTextNode(inttostr(form3.wos[aux1].node_id));               // insert a value to node
+     parentNode.Appendchild(nofilho);                         // save node
+     RootNode.ChildNodes.Item[l1+aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+     parentNode := Doc.CreateElement('ws_id');               // create a child node
+     nofilho := Doc.CreateTextNode(inttostr(form3.wos[aux1].ws_id));               // insert a value to node
+     parentNode.Appendchild(nofilho);                         // save node
+     RootNode.ChildNodes.Item[l1+aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+     parentNode := Doc.CreateElement('isactive');               // create a child node
+     nofilho := Doc.CreateTextNode(inttostr(form3.wos[aux1].isactive));               // insert a value to node
+     parentNode.Appendchild(nofilho);                         // save node
+     RootNode.ChildNodes.Item[l1+aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+     parentNode := Doc.CreateElement('X');               // create a child node
+     nofilho := Doc.CreateTextNode(Floattostr(form3.wos[aux1].pos_X));               // insert a value to node
+     parentNode.Appendchild(nofilho);                         // save node
+     RootNode.ChildNodes.Item[l1+aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+
+     parentNode := Doc.CreateElement('Y');               // create a child node
+     nofilho := Doc.CreateTextNode(Floattostr(form3.wos[aux1].pos_y));               // insert a value to node
+     parentNode.Appendchild(nofilho);                         // save node
+     RootNode.ChildNodes.Item[l1+aux1].AppendChild(parentNode);     // insert a childnode in respective pai
+    end;
+     writeXMLFile(Doc, 'Mission.xml');                     // write to XML
 end;
 
 procedure TForm2.FormPaint(Sender: TObject);
@@ -411,16 +678,17 @@ begin
      begin
      StringGrid2.DeleteRow(1);
      end;
-  l1:=length(form1.full_nodelist);
+  l1:=length(form3.wos);
   count:=1;
   for aux1:=0 to l1-1 do
   begin
-  i_curr:=form1.full_nodelist[aux1].id;
-  x:=form1.full_nodelist[aux1].pos_X;
-  y:=form1.full_nodelist[aux1].pos_y;
-  if check_array(form1.ws,i_curr)=1 then
+  i_curr:=form3.wos[aux1].id;
+  x:=form3.wos[aux1].pos_X;
+  y:=form3.wos[aux1].pos_y;
+  if form3.wos[aux1].isactive=1 then
   begin
        StringGrid1.InsertRowWithValues(1,[inttostr(count),inttostr(i_curr) , floattostr(x), floattostr(Y)]);
+       form3.wos[aux1].ws_id:=count;
        count:=count+1;
   end;
   end;
@@ -474,13 +742,6 @@ procedure TForm2.GLSceneViewer1MouseWheel(Sender: TObject; Shift: TShiftState;
 begin
    GLCamera3.AdjustDistanceToTarget(Power(1.025, WheelDelta / 300));
 end;
-
-procedure TForm2.ToggleBox1Change(Sender: TObject);
-begin
-
-end;
-
-
 
 end.
 

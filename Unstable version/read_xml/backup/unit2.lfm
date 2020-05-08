@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 743
+  Left = 16
   Height = 853
-  Top = 582
+  Top = 122
   Width = 1893
   Caption = 'Form2'
   ClientHeight = 853
@@ -162,37 +162,86 @@ object Form2: TForm2
     OnClick = Button2Click
     TabOrder = 7
   end
+  object Button4: TButton
+    Left = 1438
+    Height = 54
+    Top = 758
+    Width = 399
+    Caption = 'Export Test XML'
+    OnClick = Button4Click
+    TabOrder = 8
+  end
+  object ToggleBox1: TToggleBox
+    Left = 1737
+    Height = 56
+    Top = 656
+    Width = 93
+    Caption = 'Comms Flaws ON'
+    TabOrder = 9
+  end
   object LabeledEdit3: TLabeledEdit
-    Left = 1435
+    Left = 1443
     Height = 28
-    Top = 689
+    Top = 672
     Width = 100
     EditLabel.Height = 20
     EditLabel.Width = 100
-    EditLabel.Caption = 'LabeledEdit3'
+    EditLabel.Caption = 'X Max'
     EditLabel.ParentColor = False
-    TabOrder = 8
-    Text = 'LabeledEdit3'
+    TabOrder = 10
+  end
+  object LabeledEdit4: TLabeledEdit
+    Left = 1443
+    Height = 28
+    Top = 725
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'X Min'
+    EditLabel.ParentColor = False
+    TabOrder = 11
+  end
+  object LabeledEdit5: TLabeledEdit
+    Left = 1608
+    Height = 28
+    Top = 672
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Y Max'
+    EditLabel.ParentColor = False
+    TabOrder = 12
+  end
+  object LabeledEdit6: TLabeledEdit
+    Left = 1608
+    Height = 28
+    Top = 725
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Y Min'
+    EditLabel.ParentColor = False
+    TabOrder = 13
   end
   object Button3: TButton
-    Left = 1568
-    Height = 31
-    Top = 686
-    Width = 94
-    Caption = 'Button3'
+    Left = 1737
+    Height = 33
+    Top = 720
+    Width = 93
+    Caption = 'SET'
     OnClick = Button3Click
-    TabOrder = 9
+    TabOrder = 14
   end
   object GLScene3: TGLScene
-    left = 80
-    top = 568
+    left = 88
+    top = 576
     object GLCamera3: TGLCamera
       TagFloat = 0
       DepthOfView = 300000
       FocalLength = 50
       TargetObject = GLDummyCube3
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000
@@ -304,8 +353,8 @@ object Form2: TForm2
     MinDeltaTime = 0
     FixedDeltaTime = 0
     OnProgress = GLCadencer1Progress
-    left = 201
-    top = 568
+    left = 200
+    top = 576
   end
   object GLScene4: TGLScene
     left = 936
@@ -316,7 +365,7 @@ object Form2: TForm2
       FocalLength = 50
       TargetObject = GLDummyCube4
       Position.Coordinates = {
-        000000000000000000007A430000803F
+        00000000000000000000AF430000803F
       }
       Direction.Coordinates = {
         A1CB7F3F0000000086B523BD00000000
@@ -421,5 +470,14 @@ object Form2: TForm2
         00007A4400007A440000803F
       }
     end
+  end
+  object GLCadencer2: TGLCadencer
+    Scene = GLScene3
+    MaxDeltaTime = 0
+    MinDeltaTime = 0.25
+    FixedDeltaTime = 0
+    OnProgress = GLCadencer2Progress
+    left = 311
+    top = 576
   end
 end
