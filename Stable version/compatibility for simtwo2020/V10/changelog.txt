@@ -1,4 +1,4 @@
-12/4/2020
+13/4/2020
 
--Fixed a bugg where the ghost nodes were not getting properlly detected;
--New communication flaw detection module, does no longer randomly looses some robots positions;
+-Finnished flaw detection, it now signals all of the nodes that are in the robots path not just the in and out nodes
+
