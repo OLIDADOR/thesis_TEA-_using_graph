@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<robot>
+  <solids>
+    <cuboid>
+      <ID value='S1'/>
+      <mass value='0.8'/>
+	  <mesh file='nxt_brick2_shadow.3DS' scale='0.005'/>
+      <size x='0.40' y='0.26' z='0.2'/>
+      <pos x='0.0' y='0.4' z='0.1'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='0' b='0'/>
+    </cuboid>
+	
+    <cuboid>
+      <ID value='S2'/>
+      <mass value='0.8'/>
+	  <mesh file='nxt_motor_shadow.3DS' scale='0.005'/>
+      <size x='0.01' y='0.010' z='0.1'/>
+      <pos x='0' y='-0.5' z='0.05'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='0' b='0'/>
+    </cuboid>
+	
+    <cuboid>
+      <ID value='S3'/>
+      <mass value='0.8'/>
+	  <mesh file='nxt_sensor_shadow.3DS' scale='0.005'/>
+      <size x='0.01' y='0.010' z='0.1'/>
+      <pos x='0.4' y='0' z='0.05'/>
+      <rot_deg x='0' y='0' z='0'/>
+      <color_rgb r='128' g='0' b='0'/>
+    </cuboid>
+
+
+  </solids>
+
+</robot>
