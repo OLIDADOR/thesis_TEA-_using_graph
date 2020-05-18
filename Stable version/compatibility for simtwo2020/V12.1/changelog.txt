@@ -1,0 +1,7 @@
+18/5/2020
+
+-Debugged main control loop;
+-Added flaw tolerance in TEA* V1 -still needs some fixes 
+-Added a 2 step limit in control loop;
+ 
+

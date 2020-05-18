@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="17">
+      <Unit0>
+        <Filename Value="project1.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="5"/>
+        <CursorPos Y="25"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="unit1.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <TopLine Value="1110"/>
+        <CursorPos X="18" Y="87"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="unit2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit2"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="766"/>
+        <CursorPos X="30" Y="814"/>
+        <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="teastar.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TEAstar"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="416"/>
+        <CursorPos Y="437"/>
+        <UsageCount Value="205"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="channels.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="64"/>
+        <CursorPos X="5" Y="97"/>
+        <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="82"/>
+        <CursorPos X="46" Y="19"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="controlo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FControlo"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="1427"/>
+        <CursorPos Y="1432"/>
+        <FoldState Value=" T0$MmO3"/>
+        <UsageCount Value="202"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="unit3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit3"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="143"/>
+        <CursorPos Y="206"/>
+        <UsageCount Value="133"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\TESTE2\unit3.pas"/>
+        <ComponentName Value="Form3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="421"/>
+        <CursorPos X="26" Y="9"/>
+        <UsageCount Value="0"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="2902"/>
+        <CursorPos Y="2915"/>
+        <UsageCount Value="98"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\GLSceneLCL\Source\Basis\GLObjects.pas"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="2495"/>
+        <CursorPos X="16" Y="2507"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\GLSceneLCL\Source\FileFormats\TGA.pas"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="75"/>
+        <CursorPos X="20" Y="99"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\lnet\lib\lnet.pp"/>
+        <UnitName Value="lNet"/>
+        <EditorIndex Value="11"/>
+        <TopLine Value="1251"/>
+        <CursorPos Y="1265"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\lnet\lazaruspackage\lclwineventer.inc"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="43"/>
+        <CursorPos Y="48"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32callback.inc"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="86"/>
+        <CursorPos Y="97"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="C:\lazarus\lcl\include\application.inc"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="1407"/>
+        <CursorPos Y="1421"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="C:\lazarus\lcl\grids.pas"/>
+        <UnitName Value="Grids"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="3013"/>
+        <CursorPos Y="3026"/>
+        <UsageCount Value="65"/>
+        <Loaded Value="True"/>
+      </Unit16>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="316" TopLine="299"/>
+      </Position1>
+      <Position2>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="322" TopLine="300"/>
+      </Position2>
+      <Position3>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="328" TopLine="313"/>
+      </Position3>
+      <Position4>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="332" TopLine="313"/>
+      </Position4>
+      <Position5>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="333" TopLine="313"/>
+      </Position5>
+      <Position6>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="334" TopLine="313"/>
+      </Position6>
+      <Position7>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="335" TopLine="314"/>
+      </Position7>
+      <Position8>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="334" TopLine="314"/>
+      </Position8>
+      <Position9>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="332" TopLine="314"/>
+      </Position9>
+      <Position10>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="341" TopLine="328"/>
+      </Position10>
+      <Position11>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="312" TopLine="298"/>
+      </Position11>
+      <Position12>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="313" TopLine="298"/>
+      </Position12>
+      <Position13>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="314" TopLine="319"/>
+      </Position13>
+      <Position14>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="324" TopLine="325"/>
+      </Position14>
+      <Position15>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="348" TopLine="339"/>
+      </Position15>
+      <Position16>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="306" TopLine="292"/>
+      </Position16>
+      <Position17>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="349" TopLine="337"/>
+      </Position17>
+      <Position18>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="401" Column="16" TopLine="388"/>
+      </Position18>
+      <Position19>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="391" Column="13" TopLine="388"/>
+      </Position19>
+      <Position20>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="403" TopLine="388"/>
+      </Position20>
+      <Position21>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="401" Column="6" TopLine="391"/>
+      </Position21>
+      <Position22>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="348" TopLine="335"/>
+      </Position22>
+      <Position23>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="401" TopLine="388"/>
+      </Position23>
+      <Position24>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="402" TopLine="388"/>
+      </Position24>
+      <Position25>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="403" TopLine="388"/>
+      </Position25>
+      <Position26>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="404" TopLine="388"/>
+      </Position26>
+      <Position27>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="405" TopLine="388"/>
+      </Position27>
+      <Position28>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="428" TopLine="415"/>
+      </Position28>
+      <Position29>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="433" TopLine="415"/>
+      </Position29>
+      <Position30>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="434" TopLine="415"/>
+      </Position30>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="3">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="teastar.pas"/>
+        <Line Value="418"/>
+      </Item1>
+      <Item2>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="teastar.pas"/>
+        <Line Value="437"/>
+      </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="teastar.pas"/>
+        <Line Value="401"/>
+      </Item3>
+    </BreakPoints>
+  </Debugging>
+</CONFIG>
