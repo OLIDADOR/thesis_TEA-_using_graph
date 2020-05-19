@@ -1,0 +1,9 @@
+19/5/2020
+
+-Debugged main control loop;
+-Fixed ghost node creation; 
+-Changed node atribution process;
+-Changed TEA* for compatibility with ghost nodes and flaws;
+-Debugged the flaw detection module;
+ 
+

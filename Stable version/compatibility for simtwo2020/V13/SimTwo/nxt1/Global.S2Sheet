@@ -1,0 +1,340 @@
+<?xml version="1.0"?>
+<sheet>
+  <columns>
+    <defaultcol width="50" />
+    <col num="3" width="373" />
+    <col num="4" width="129" />
+    <col num="5" width="105" />
+    <col num="6" width="86" />
+    <col num="7" width="106" />
+  </columns>
+  <cells>
+    <cell r="1" c="1" text="0" />
+    <cell r="2" c="1" text="0" />
+    <cell r="31" c="9" text="i" />
+    <cell r="31" c="10" text="i" />
+    <cell r="40" c="5" text="state3" />
+    <cell r="38" c="5" text="10" />
+    <cell r="40" c="6" text="state1_erro" />
+    <cell r="41" c="5" text="Ainda_2" />
+    <cell r="41" c="4" text="aqui" />
+    <cell r="33" c="5" text="0.013827782492345958" />
+    <cell r="34" c="5" text="0.007286389733705859" />
+    <cell r="35" c="5" text="0.0065413927586400987" />
+    <cell r="37" c="5" text="0.3227964227390358" />
+    <cell r="32" c="5" text="3" />
+    <cell r="9" c="4" text="3.14" />
+    <cell r="18" c="2" text="liv" />
+    <cell r="6" c="3" text="N1
+P2
+T0
+S42
+I1
+X0.841
+Y1.219
+D0
+I2
+X0.841
+Y1.66
+D0
+I3
+X0.841
+Y1.66
+D0
+I4
+X0.841
+Y1.66
+D2
+I5
+X1.196
+Y1.66
+D2
+I6
+X1.196
+Y1.66
+D4
+I7
+X1.196
+Y1.229
+D4
+I8
+X1.196
+Y1.229
+D2
+I9
+X1.475
+Y1.229
+D2
+I10
+X1.475
+Y1.229
+D6
+I11
+X1.196
+Y1.229
+D6
+I12
+X1.196
+Y1.229
+D4
+I13
+X1.199
+Y0.927
+D4
+I14
+X1.199
+Y0.486
+D4
+F
+" />
+    <cell r="18" c="3" text="42" />
+    <cell r="18" c="4" text="14" />
+    <cell r="18" c="5" text="1.199" />
+    <cell r="18" c="6" text="0.486" />
+    <cell r="18" c="7" text="DF" />
+    <cell r="18" c="8" text="END" />
+    <cell r="25" c="1" text="3" />
+    <cell r="22" c="1" text="0.486" />
+    <cell r="23" c="1" text="1.2" />
+    <cell r="25" c="2" text="3" />
+    <cell r="22" c="2" text="0.93" />
+    <cell r="23" c="2" text="0.568" />
+    <cell r="22" c="3" text="1.66" />
+    <cell r="23" c="3" text="0.555" />
+    <cell r="25" c="4" text="3" />
+    <cell r="22" c="4" text="1.66" />
+    <cell r="23" c="4" text="1.2" />
+    <cell r="5" c="5" text="4" />
+    <cell r="9" c="6" text="0.55" />
+    <cell r="9" c="7" text="0.53" />
+    <cell r="5" c="6" text="4" />
+    <cell r="5" c="7" text="4" />
+    <cell r="5" c="8" text="4" />
+    <cell r="1" c="8" text="15" />
+    <cell r="2" c="8" text="0" />
+    <cell r="3" c="8" text="0" />
+    <cell r="4" c="8" text="0" />
+    <cell r="7" c="8" text="0" />
+    <cell r="8" c="8" text="1.57" />
+    <cell r="9" c="8" text="1.22" />
+    <cell r="10" c="8" text="1.66" />
+    <cell r="11" c="8" text="3.12" />
+    <cell r="1" c="6" text="15" />
+    <cell r="2" c="6" text="0" />
+    <cell r="3" c="6" text="0" />
+    <cell r="4" c="6" text="0" />
+    <cell r="7" c="6" text="0" />
+    <cell r="8" c="6" text="1.57" />
+    <cell r="10" c="6" text="0.921" />
+    <cell r="11" c="6" text="0.0297" />
+    <cell r="1" c="7" text="15" />
+    <cell r="2" c="7" text="0" />
+    <cell r="3" c="7" text="0" />
+    <cell r="4" c="7" text="0" />
+    <cell r="7" c="7" text="0" />
+    <cell r="8" c="7" text="1.57" />
+    <cell r="10" c="7" text="1.65" />
+    <cell r="11" c="7" text="0.00654" />
+    <cell r="7" c="3" text="N2
+P1
+T0
+S27
+I1
+X1.196
+Y1.229
+D4
+I2
+X1.199
+Y0.927
+D4
+I3
+X1.475
+Y0.927
+D2
+I4
+X1.475
+Y0.927
+D6
+I5
+X1.199
+Y0.927
+D6
+I6
+X1.199
+Y0.927
+D4
+I7
+X1.199
+Y0.486
+D4
+I8
+X1.199
+Y0.486
+D6
+I9
+X0.841
+Y0.486
+D6
+I10
+X0.841
+Y0.486
+D0
+I11
+X0.841
+Y0.93
+D0
+I12
+X0.841
+Y0.93
+D6
+I13
+X0.568
+Y0.93
+D6
+I14
+X0.568
+Y0.93
+D2
+F
+" />
+    <cell r="8" c="3" text="N3
+P3
+T0
+S35
+I1
+X0.555
+Y1.66
+D5
+I2
+X0.125
+Y1.66
+D6
+I3
+X0.125
+Y1.66
+D4
+I4
+X0.125
+Y1.222
+D4
+I5
+X0.125
+Y1.222
+D2
+I6
+X0.407
+Y1.222
+D2
+I7
+X0.407
+Y1.222
+D6
+I8
+X0.407
+Y1.222
+D6
+I9
+X0.407
+Y1.222
+D6
+I10
+X0.125
+Y1.222
+D6
+I11
+X0.125
+Y1.222
+D0
+I12
+X0.125
+Y1.66
+D0
+I13
+X0.125
+Y1.66
+D2
+I14
+X0.555
+Y1.66
+D2
+F
+" />
+    <cell r="9" c="3" text="N4
+P4
+T0
+S36
+I1
+X2.277
+Y1.252
+D4
+I2
+X2.277
+Y0.997
+D4
+I3
+X2.277
+Y0.741
+D4
+I4
+X2.277
+Y0.486
+D4
+I5
+X2.277
+Y0.486
+D6
+I6
+X1.919
+Y0.486
+D6
+I7
+X1.919
+Y0.486
+D0
+I8
+X1.919
+Y0.78
+D0
+I9
+X1.919
+Y1.073
+D0
+I10
+X1.919
+Y1.366
+D0
+I11
+X1.919
+Y1.66
+D0
+I12
+X1.919
+Y1.66
+D6
+I13
+X1.558
+Y1.66
+D6
+I14
+X1.196
+Y1.66
+D6
+F
+" />
+    <cell r="9" c="5" text="1.2" />
+    <cell r="1" c="5" text="15" />
+    <cell r="2" c="5" text="0" />
+    <cell r="3" c="5" text="0" />
+    <cell r="4" c="5" text="0" />
+    <cell r="7" c="5" text="0" />
+    <cell r="8" c="5" text="1.57" />
+    <cell r="10" c="5" text="0.51" />
+    <cell r="11" c="5" text="-1.58" />
+    <cell r="25" c="3" text="3" />
+    <cell r="1" c="2" text="4" />
+    <cell r="24" c="1" text="-1.57" />
+    <cell r="24" c="2" text="0" />
+    <cell r="24" c="3" text="0" />
+    <cell r="24" c="4" text="3.14" />
+  </cells>
+</sheet>
