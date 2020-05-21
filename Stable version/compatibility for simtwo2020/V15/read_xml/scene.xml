@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <defines>
+    <const name="ground" value="0.001"/>
+  </defines>
+  <robot>
+    <ID name="LegoNXT1"/>
+    <pos x="0.12486308871851" y="0.0551053484602917" z="0"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <body file="nxt.xml"/>
+  </robot>
+  <robot>
+    <ID name="LegoNXT2"/>
+    <pos x="0.12486308871851" y="1.94489465153971" z="0"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <body file="nxt.xml"/>
+  </robot>
+  <robot>
+    <ID name="LegoNXT3"/>
+    <pos x="1.91237677984666" y="1.94489465153971" z="0"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <body file="nxt.xml"/>
+  </robot>
+  <robot>
+    <ID name="LegoNXT4"/>
+    <pos x="2.63198247535597" y="0.486223662884927" z="0"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <body file="nxt.xml"/>
+  </robot>
+  <track file="track.xml"/>
+</scene>

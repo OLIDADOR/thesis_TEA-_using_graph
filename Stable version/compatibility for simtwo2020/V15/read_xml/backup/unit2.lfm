@@ -1,0 +1,369 @@
+object Form2: TForm2
+  Left = 16
+  Height = 853
+  Top = 122
+  Width = 1893
+  Caption = 'Form2'
+  ClientHeight = 853
+  ClientWidth = 1893
+  DesignTimePPI = 120
+  OnPaint = FormPaint
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object GLSceneViewer1: TGLSceneViewer
+    Left = 82
+    Height = 512
+    Top = 35
+    Width = 805
+    Camera = GLCamera3
+    Buffer.AmbientColor.Red = 0.200000002980232
+    Buffer.AmbientColor.Green = 0.200000002980232
+    Buffer.AmbientColor.Blue = 0.200000002980232
+    Buffer.AmbientColor.Alpha = 1
+    FieldOfView = 157.897094726563
+    OnMouseDown = GLSceneViewer1MouseDown
+    OnMouseMove = GLSceneViewer1MouseMove
+    OnMouseWheel = GLSceneViewer1MouseWheel
+    TabOrder = 0
+  end
+  object LabeledEdit1: TLabeledEdit
+    Left = 70
+    Height = 28
+    Top = 671
+    Width = 118
+    EditLabel.Height = 20
+    EditLabel.Width = 118
+    EditLabel.Caption = 'Robot ID'
+    EditLabel.ParentColor = False
+    TabOrder = 1
+  end
+  object LabeledEdit2: TLabeledEdit
+    Left = 232
+    Height = 28
+    Top = 672
+    Width = 118
+    EditLabel.Height = 20
+    EditLabel.Width = 118
+    EditLabel.Caption = 'Workstation ID'
+    EditLabel.ParentColor = False
+    TabOrder = 2
+  end
+  object StringGrid1: TStringGrid
+    Left = 416
+    Height = 248
+    Top = 568
+    Width = 472
+    AutoFillColumns = True
+    ColCount = 4
+    Columns = <    
+      item
+        Title.Caption = 'Workstation ID'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'Node ID'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 117
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 117
+      end>
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 3
+    ColWidths = (
+      117
+      117
+      117
+      117
+    )
+  end
+  object Button1: TButton
+    Left = 70
+    Height = 55
+    Top = 728
+    Width = 111
+    Caption = 'Add Mission'
+    OnClick = Button1Click
+    TabOrder = 4
+  end
+  object StringGrid2: TStringGrid
+    Left = 944
+    Height = 244
+    Top = 568
+    Width = 456
+    AutoFillColumns = True
+    ColCount = 4
+    Columns = <    
+      item
+        Title.Caption = 'Robot ID'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'X'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'Y'
+        Width = 113
+      end    
+      item
+        Title.Caption = 'Target Node'
+        Width = 113
+      end>
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 5
+    ColWidths = (
+      113
+      113
+      113
+      113
+    )
+  end
+  object Label1: TLabel
+    Left = 209
+    Height = 20
+    Top = 733
+    Width = 122
+    Caption = 'Number of robots:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 344
+    Height = 20
+    Top = 733
+    Width = 44
+    Caption = 'Label2'
+    ParentColor = False
+  end
+  object Button2: TButton
+    Left = 1435
+    Height = 60
+    Top = 584
+    Width = 402
+    Caption = 'Link to Simtwo'
+    OnClick = Button2Click
+    TabOrder = 6
+  end
+  object Button4: TButton
+    Left = 1438
+    Height = 54
+    Top = 758
+    Width = 399
+    Caption = 'Export Test XML'
+    OnClick = Button4Click
+    TabOrder = 7
+  end
+  object ToggleBox1: TToggleBox
+    Left = 1737
+    Height = 56
+    Top = 656
+    Width = 93
+    Caption = 'Comms Flaws ON'
+    TabOrder = 8
+  end
+  object LabeledEdit3: TLabeledEdit
+    Left = 1443
+    Height = 28
+    Top = 672
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'X Max'
+    EditLabel.ParentColor = False
+    TabOrder = 9
+  end
+  object LabeledEdit4: TLabeledEdit
+    Left = 1443
+    Height = 28
+    Top = 725
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'X Min'
+    EditLabel.ParentColor = False
+    TabOrder = 10
+  end
+  object LabeledEdit5: TLabeledEdit
+    Left = 1608
+    Height = 28
+    Top = 672
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Y Max'
+    EditLabel.ParentColor = False
+    TabOrder = 11
+  end
+  object LabeledEdit6: TLabeledEdit
+    Left = 1608
+    Height = 28
+    Top = 725
+    Width = 100
+    EditLabel.Height = 20
+    EditLabel.Width = 100
+    EditLabel.Caption = 'Y Min'
+    EditLabel.ParentColor = False
+    TabOrder = 12
+  end
+  object Button3: TButton
+    Left = 1737
+    Height = 33
+    Top = 720
+    Width = 93
+    Caption = 'SET'
+    OnClick = Button3Click
+    TabOrder = 13
+  end
+  object PaintBox1: TPaintBox
+    Left = 1007
+    Height = 512
+    Top = 35
+    Width = 848
+    OnPaint = PaintBox1Paint
+  end
+  object GLScene3: TGLScene
+    left = 88
+    top = 576
+    object GLCamera3: TGLCamera
+      TagFloat = 0
+      DepthOfView = 300000
+      FocalLength = 50
+      TargetObject = GLDummyCube3
+      Position.Coordinates = {
+        00000000000000000000AF430000803F
+      }
+      Direction.Coordinates = {
+        A1CB7F3F0000000086B523BD00000000
+      }
+    end
+    object GLDummyCube3: TGLDummyCube
+      TagFloat = 0
+      PitchAngle = 0
+      RollAngle = 0
+      TurnAngle = 0
+      CubeSize = 1
+      EdgeColor.Red = 1
+      EdgeColor.Green = 1
+      EdgeColor.Blue = 1
+      EdgeColor.Alpha = 1
+    end
+    object GLLightSource3: TGLLightSource
+      TagFloat = 0
+      Ambient.Red = 0.949999988079071
+      Ambient.Green = 0.949999988079071
+      Ambient.Blue = 0.949999988079071
+      Ambient.Alpha = 1
+      Ambient.Color = {
+        3333733F3333733F3333733F0000803F
+      }
+      ConstAttenuation = 1
+      Diffuse.Red = 1
+      Diffuse.Green = 1
+      Diffuse.Blue = 1
+      Diffuse.Alpha = 1
+      LinearAttenuation = 0
+      QuadraticAttenuation = 0
+      Position.Coordinates = {
+        0000803F00004040000000400000803F
+      }
+      LightStyle = lsOmni
+      Specular.Red = 0.949999988079071
+      Specular.Green = 0.949999988079071
+      Specular.Blue = 0.949999988079071
+      Specular.Alpha = 1
+      Specular.Color = {
+        3333733F3333733F3333733F0000803F
+      }
+      SpotCutOff = 180
+      SpotDirection.Coordinates = {
+        0000803F000040400000004000000000
+      }
+      SpotExponent = 0
+    end
+    object GLCube3: TGLCube
+      TagFloat = 0
+      Material.BackProperties.Ambient.Red = 0.200000002980232
+      Material.BackProperties.Ambient.Green = 0.200000002980232
+      Material.BackProperties.Ambient.Blue = 0.200000002980232
+      Material.BackProperties.Ambient.Alpha = 1
+      Material.BackProperties.Diffuse.Red = 0.800000011920929
+      Material.BackProperties.Diffuse.Green = 0.800000011920929
+      Material.BackProperties.Diffuse.Blue = 0.800000011920929
+      Material.BackProperties.Diffuse.Alpha = 1
+      Material.BackProperties.Emission.Red = 0
+      Material.BackProperties.Emission.Green = 0
+      Material.BackProperties.Emission.Blue = 0
+      Material.BackProperties.Emission.Alpha = 1
+      Material.BackProperties.Specular.Red = 0
+      Material.BackProperties.Specular.Green = 0
+      Material.BackProperties.Specular.Blue = 0
+      Material.BackProperties.Specular.Alpha = 1
+      Material.FrontProperties.Ambient.Red = 0.419607996940613
+      Material.FrontProperties.Ambient.Green = 0.556863009929657
+      Material.FrontProperties.Ambient.Blue = 0.137254998087883
+      Material.FrontProperties.Ambient.Alpha = 1
+      Material.FrontProperties.Ambient.Color = {
+        DCD6D63E938E0E3F938C0C3E0000803F
+      }
+      Material.FrontProperties.Diffuse.Red = 0.800000011920929
+      Material.FrontProperties.Diffuse.Green = 0.800000011920929
+      Material.FrontProperties.Diffuse.Blue = 0.800000011920929
+      Material.FrontProperties.Diffuse.Alpha = 1
+      Material.FrontProperties.Emission.Red = 0
+      Material.FrontProperties.Emission.Green = 0
+      Material.FrontProperties.Emission.Blue = 0
+      Material.FrontProperties.Emission.Alpha = 1
+      Material.FrontProperties.Specular.Red = 0
+      Material.FrontProperties.Specular.Green = 0
+      Material.FrontProperties.Specular.Blue = 0
+      Material.FrontProperties.Specular.Alpha = 1
+      Material.Texture.EnvColor.Red = 0
+      Material.Texture.EnvColor.Green = 0
+      Material.Texture.EnvColor.Blue = 0
+      Material.Texture.EnvColor.Alpha = 0
+      Material.Texture.BorderColor.Red = 0
+      Material.Texture.BorderColor.Green = 0
+      Material.Texture.BorderColor.Blue = 0
+      Material.Texture.BorderColor.Alpha = 0
+      PitchAngle = 0
+      Position.Coordinates = {
+        0000000000000000000000C00000803F
+      }
+      RollAngle = 0
+      TurnAngle = 0
+      CubeSize = {
+        00007A4400007A440000803F
+      }
+    end
+  end
+  object GLCadencer1: TGLCadencer
+    Scene = GLScene3
+    MaxDeltaTime = 0
+    MinDeltaTime = 0
+    FixedDeltaTime = 0
+    OnProgress = GLCadencer1Progress
+    left = 200
+    top = 576
+  end
+  object GLCadencer2: TGLCadencer
+    Scene = GLScene3
+    MaxDeltaTime = 0
+    MinDeltaTime = 0.1
+    FixedDeltaTime = 0
+    OnProgress = GLCadencer2Progress
+    left = 311
+    top = 576
+  end
+  object Timer1: TTimer
+    Interval = 500
+    OnTimer = Timer1Timer
+    left = 912
+    top = 512
+  end
+end
