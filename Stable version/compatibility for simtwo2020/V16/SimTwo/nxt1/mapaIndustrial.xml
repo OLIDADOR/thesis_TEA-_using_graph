@@ -1,0 +1,326 @@
+<?xml version="1.0" ?>
+
+<robot>
+<solids>
+  <cuboid>
+    <ID value="Parede 1"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="0.36" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 2"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="0.72" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 3"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="1.08" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 4"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="1.44" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 5"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="1.8" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 6"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="2.16" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 7"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="2.52" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 8"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.18" y="2.88" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 9"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="2.88" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 10"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="2.52" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 11"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="2.16" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 12"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="1.8" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 13"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="1.44" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 14"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="1.08" y="1.08" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 15"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="2.88" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 16"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="2.52" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 17"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="2.16" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 18"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="1.8" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 19"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="1.44" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 20"/>
+    <mass value="10"/>
+    <size x="0.67" y="0.038" z="0.15"/>
+    <pos x="2.16" y="1.08" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 21"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.67" z="0.15"/>
+    <pos x="0.72" y="0.36" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 22"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.31" z="0.15"/>
+    <pos x="1.08" y="0.18" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 23"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.31" z="0.15"/>
+    <pos x="1.44" y="0.18" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 24"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.31" z="0.15"/>
+    <pos x="1.8" y="0.18" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 25"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.31" z="0.15"/>
+    <pos x="2.16" y="0.18" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 26"/>
+    <mass value="10"/>
+    <size x="0.038" y="0.67" z="0.15"/>
+    <pos x="2.52" y="0.36" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 27"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="0.9" y="0.72" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 28"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="2.34" y="0.72" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 29"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="0.36" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 30"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="0.72" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 31"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="1.08" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 32"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="1.44" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 33"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="1.8" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 34"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="2.16" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 35"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="2.52" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 36"/>
+    <mass value="10"/>
+    <size x="0.31" y="0.038" z="0.15"/>
+    <pos x="3.06" y="2.88" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 37"/>
+    <mass value="10"/>
+    <size x="3.19" y="0.038" z="0.15"/>
+    <pos x="1.62" y="0" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 38"/>
+    <mass value="10"/>
+    <size x="0.038" y="3.19" z="0.15"/>
+    <pos x="3.24" y="1.62" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 39"/>
+    <mass value="10"/>
+    <size x="3.19" y="0.038" z="0.15"/>
+    <pos x="1.62" y="3.24" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+  <cuboid>
+    <ID value="Parede 40"/>
+    <mass value="10"/>
+    <size x="0.038" y="3.19" z="0.15"/>
+    <pos x="0" y="1.62" z="0.075"/>
+    <rot_deg x="0" y="0" z="0"/>
+    <color_rgb r="128" g="128" b="128"/>
+  </cuboid>
+</solids>
+</robot>

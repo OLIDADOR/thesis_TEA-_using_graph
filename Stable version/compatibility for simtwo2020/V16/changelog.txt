@@ -1,0 +1,9 @@
+22/5/2020
+
+-Bugfixed several errors in the detection of flaws
+-Fixed colision when robots are following each other or too closed;
+-Added the generation of random flaws;
+-Added tolerance to random flaws up tested in cases up to 10%;
+
+ 
+
