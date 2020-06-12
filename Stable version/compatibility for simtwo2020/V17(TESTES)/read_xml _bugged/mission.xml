@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mission>
+  <Robot id="1">
+    <priority>1</priority>
+    <x>0,12486308871851</x>
+    <y>0,0551053484602917</y>
+    <Direction>0</Direction>
+    <node>1</node>
+    <steps>0</steps>
+    <ActualSubMission>0</ActualSubMission>
+    <CounterSubMissions>0</CounterSubMissions>
+    <TotalSubMissions>0</TotalSubMissions>
+    <NumberSubMissions>0</NumberSubMissions>
+    <target_node>0</target_node>
+    <target_node_step>0<SubMission1>0</SubMission1><SubMission1>0</SubMission1><SubMission1>0</SubMission1><SubMission1>0</SubMission1><SubMission1>0</SubMission1>
+    </target_node_step>
+    <SubMissions>5</SubMissions>
+  </Robot>
+  <Robot id="2">
+    <priority>2</priority>
+    <x>0,48302300109529</x>
+    <y>0,0518638573743922</y>
+    <Direction>0</Direction>
+    <node>14</node>
+    <steps>0</steps>
+    <ActualSubMission>0</ActualSubMission>
+    <CounterSubMissions>0</CounterSubMissions>
+    <TotalSubMissions>0</TotalSubMissions>
+    <NumberSubMissions>0</NumberSubMissions>
+    <target_node>0</target_node>
+    <target_node_step>0<SubMission2>0</SubMission2><SubMission2>0</SubMission2><SubMission2>0</SubMission2><SubMission2>0</SubMission2><SubMission2>0</SubMission2>
+    </target_node_step>
+    <SubMissions>5</SubMissions>
+  </Robot>
+  <Workstation id="1">
+    <node_id>1</node_id>
+    <ws_id>0</ws_id>
+    <isactive>0</isactive>
+    <X>0,12486308871851</X>
+    <Y>0,0551053484602917</Y>
+  </Workstation>
+  <Workstation id="2">
+    <node_id>14</node_id>
+    <ws_id>0</ws_id>
+    <isactive>0</isactive>
+    <X>0,48302300109529</X>
+    <Y>0,0518638573743922</Y>
+  </Workstation>
+  <Workstation id="3">
+    <node_id>22</node_id>
+    <ws_id>0</ws_id>
+    <isactive>0</isactive>
+    <X>1,54764512595838</X>
+    <Y>0,142625607779579</Y>
+  </Workstation>
+  <Workstation id="4">
+    <node_id>25</node_id>
+    <ws_id>1</ws_id>
+    <isactive>1</isactive>
+    <X>2,27710843373494</X>
+    <Y>1,50729335494327</Y>
+  </Workstation>
+  <Workstation id="5">
+    <node_id>28</node_id>
+    <ws_id>0</ws_id>
+    <isactive>0</isactive>
+    <X>2,98357064622125</X>
+    <Y>0,93030794165316</Y>
+  </Workstation>
+  <Workstation id="6">
+    <node_id>30</node_id>
+    <ws_id>2</ws_id>
+    <isactive>1</isactive>
+    <X>2,986856516977</X>
+    <Y>1,22528363047002</Y>
+  </Workstation>
+  <Workstation id="7">
+    <node_id>31</node_id>
+    <ws_id>3</ws_id>
+    <isactive>1</isactive>
+    <X>2,63198247535597</X>
+    <Y>1,50405186385737</Y>
+  </Workstation>
+  <Workstation id="8">
+    <node_id>32</node_id>
+    <ws_id>4</ws_id>
+    <isactive>1</isactive>
+    <X>0,407447973713034</X>
+    <Y>0,93354943273906</Y>
+  </Workstation>
+  <Workstation id="9">
+    <node_id>33</node_id>
+    <ws_id>5</ws_id>
+    <isactive>1</isactive>
+    <X>0,407447973713034</X>
+    <Y>1,22204213938412</Y>
+  </Workstation>
+  <Workstation id="10">
+    <node_id>34</node_id>
+    <ws_id>6</ws_id>
+    <isactive>1</isactive>
+    <X>0,568455640744797</X>
+    <Y>0,93030794165316</Y>
+  </Workstation>
+  <Workstation id="11">
+    <node_id>35</node_id>
+    <ws_id>7</ws_id>
+    <isactive>1</isactive>
+    <X>0,565169769989047</X>
+    <Y>1,21880064829822</Y>
+  </Workstation>
+  <Workstation id="12">
+    <node_id>36</node_id>
+    <ws_id>8</ws_id>
+    <isactive>1</isactive>
+    <X>1,47535596933187</X>
+    <Y>0,927066450567261</Y>
+  </Workstation>
+  <Workstation id="13">
+    <node_id>37</node_id>
+    <ws_id>9</ws_id>
+    <isactive>1</isactive>
+    <X>1,47535596933187</X>
+    <Y>1,22852512155592</Y>
+  </Workstation>
+</Mission>

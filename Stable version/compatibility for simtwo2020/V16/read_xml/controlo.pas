@@ -2017,7 +2017,7 @@ begin
        ind_robo:=0;
     end;
     if ((form2.coms_flaws_random=1) and (random(99)<f_percent)) then begin
-    if ((flagVelocities = true) {and (b_pathsend<>1)}) then begin
+    END ELSE if ((flagVelocities = true) {and (b_pathsend<>1)}) then begin
 
         if ind_robo<NUMBER_ROBOTS then begin
            if a_c_flaw[ind_robo]=0 then begin
@@ -2065,7 +2065,6 @@ begin
         if s_time>=1000 then begin
          total_seconds:=total_seconds+1;
          s_time:=0;
-    end;
     end;
     end;
 end;

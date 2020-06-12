@@ -1619,7 +1619,7 @@ begin
 
             X_a:=StrToFloat(xCamStr);
             Y_a:=StrToFloat(yCamStr);
-            if (checkinterval(X_a,Y_a)=1) then
+            if ((checkinterval(X_a,Y_a)=1) or ((form2.coms_flaws_random=1) and (random(99)<f_percent))) then
             begin
             id_rob:= Strtoint(id_robstr);
             a_c_flaw[id_rob-1]:=1;
@@ -2017,7 +2017,7 @@ begin
        ind_robo:=0;
     end;
     if ((form2.coms_flaws_random=1) and (random(99)<f_percent)) then begin
-    if ((flagVelocities = true) {and (b_pathsend<>1)}) then begin
+    END ELSE if ((flagVelocities = true) {and (b_pathsend<>1)}) then begin
 
         if ind_robo<NUMBER_ROBOTS then begin
            if a_c_flaw[ind_robo]=0 then begin
