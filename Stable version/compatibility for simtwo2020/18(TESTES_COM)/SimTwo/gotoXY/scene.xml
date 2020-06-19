@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<scene>
+   <defines>
+    <const name='ground' value='0.001' />
+  </defines>
+  <robot>
+    <ID name='LegoNXT1'/>
+    <pos x='0.18' y='0.18' z='0'/>
+    <rot_deg x='45' y='45' z='0'/>
+
+    <body file='nxt.xml'/>
+  </robot>
+
+  <track file='track.xml'/>
+</scene>
