@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="23">
+      <Unit0>
+        <Filename Value="project1.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <CursorPos Y="25"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="unit1.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <TopLine Value="1007"/>
+        <CursorPos Y="1022"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="unit2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit2"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="869"/>
+        <CursorPos X="9" Y="890"/>
+        <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="teastar.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TEAstar"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="1237"/>
+        <CursorPos X="12" Y="365"/>
+        <UsageCount Value="205"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="channels.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="64"/>
+        <CursorPos X="5" Y="97"/>
+        <UsageCount Value="200"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="77"/>
+        <CursorPos X="46" Y="19"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="controlo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FControlo"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="1433"/>
+        <CursorPos X="161" Y="1421"/>
+        <UsageCount Value="202"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="unit3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit3"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="122"/>
+        <CursorPos X="24" Y="135"/>
+        <UsageCount Value="204"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\TESTE2\unit3.pas"/>
+        <ComponentName Value="Form3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="421"/>
+        <CursorPos X="26" Y="9"/>
+        <UsageCount Value="8"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="2232"/>
+        <CursorPos Y="2244"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\GLSceneLCL\Source\Basis\GLObjects.pas"/>
+        <EditorIndex Value="18"/>
+        <TopLine Value="2495"/>
+        <CursorPos X="16" Y="2507"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\GLSceneLCL\Source\FileFormats\TGA.pas"/>
+        <EditorIndex Value="17"/>
+        <TopLine Value="75"/>
+        <CursorPos X="20" Y="99"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\lnet\lib\lnet.pp"/>
+        <UnitName Value="lNet"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="874"/>
+        <CursorPos Y="886"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\lnet\lazaruspackage\lclwineventer.inc"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="43"/>
+        <CursorPos Y="48"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32callback.inc"/>
+        <EditorIndex Value="16"/>
+        <TopLine Value="2660"/>
+        <CursorPos Y="2679"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="C:\lazarus\lcl\include\application.inc"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="1407"/>
+        <CursorPos Y="1421"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="C:\lazarus\lcl\grids.pas"/>
+        <UnitName Value="Grids"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="3013"/>
+        <CursorPos Y="3026"/>
+        <UsageCount Value="64"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="..\..\git\thesis_TEA-_using_graph\Stable version\compatibility for simtwo2020\V12.1\read_xml\teastar.pas"/>
+        <UnitName Value="TEAstar"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="797"/>
+        <CursorPos X="6" Y="822"/>
+        <UsageCount Value="9"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="C:\lazarus\lcl\include\buttoncontrol.inc"/>
+        <EditorIndex Value="11"/>
+        <TopLine Value="10"/>
+        <CursorPos Y="22"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\lcl\include\buttons.inc"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="158"/>
+        <CursorPos Y="170"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="5409"/>
+        <CursorPos Y="5420"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="C:\lazarus\lcl\lclmessageglue.pas"/>
+        <UnitName Value="LCLMessageGlue"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="109"/>
+        <CursorPos Y="123"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
+        <UnitName Value="LCLClasses"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="144"/>
+        <CursorPos Y="157"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
+      </Unit22>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="204" Column="22" TopLine="196"/>
+      </Position1>
+      <Position2>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="229" Column="16" TopLine="196"/>
+      </Position2>
+      <Position3>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="211" Column="15" TopLine="181"/>
+      </Position3>
+      <Position4>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="230" Column="16" TopLine="196"/>
+      </Position4>
+      <Position5>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="277" Column="27" TopLine="262"/>
+      </Position5>
+      <Position6>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="284" Column="13" TopLine="262"/>
+      </Position6>
+      <Position7>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="305" Column="27" TopLine="271"/>
+      </Position7>
+      <Position8>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="312" Column="13" TopLine="278"/>
+      </Position8>
+      <Position9>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="274" Column="33" TopLine="259"/>
+      </Position9>
+      <Position10>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="299" Column="24" TopLine="265"/>
+      </Position10>
+      <Position11>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="321" Column="36" TopLine="295"/>
+      </Position11>
+      <Position12>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="833" Column="27" TopLine="829"/>
+      </Position12>
+      <Position13>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="857" Column="20" TopLine="831"/>
+      </Position13>
+      <Position14>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1158" Column="82" TopLine="1139"/>
+      </Position14>
+      <Position15>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1614" TopLine="1605"/>
+      </Position15>
+      <Position16>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1624" Column="26" TopLine="1609"/>
+      </Position16>
+      <Position17>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1636" Column="26" TopLine="1611"/>
+      </Position17>
+      <Position18>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1646" Column="26" TopLine="1621"/>
+      </Position18>
+      <Position19>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1665" Column="21" TopLine="1640"/>
+      </Position19>
+      <Position20>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1626" Column="76" TopLine="1646"/>
+      </Position20>
+      <Position21>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1680" Column="23" TopLine="1666"/>
+      </Position21>
+      <Position22>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1692" Column="17" TopLine="1667"/>
+      </Position22>
+      <Position23>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1769" Column="30" TopLine="1756"/>
+      </Position23>
+      <Position24>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="1957" Column="30" TopLine="1948"/>
+      </Position24>
+      <Position25>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="100" Column="34" TopLine="85"/>
+      </Position25>
+      <Position26>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="391" Column="23" TopLine="385"/>
+      </Position26>
+      <Position27>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="413" Column="17" TopLine="385"/>
+      </Position27>
+      <Position28>
+        <Filename Value="teastar.pas"/>
+        <Caret Line="356" Column="12" TopLine="352"/>
+      </Position28>
+      <Position29>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="505" Column="10" TopLine="493"/>
+      </Position29>
+      <Position30>
+        <Filename Value="controlo.pas"/>
+        <Caret Line="994" Column="21" TopLine="985"/>
+      </Position30>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
