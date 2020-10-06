@@ -1,0 +1,233 @@
+object Form1: TForm1
+  Left = 233
+  Height = 823
+  Top = 161
+  Width = 1229
+  BorderStyle = bsSingle
+  Caption = 'Factory Floor Analyser'
+  ClientHeight = 823
+  ClientWidth = 1229
+  DesignTimePPI = 120
+  DragMode = dmAutomatic
+  OnCreate = FormCreate
+  OnPaint = FormPaint
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object map: TImage
+    Left = 280
+    Height = 617
+    Top = 29
+    Width = 913
+    KeepOriginXWhenClipped = True
+    KeepOriginYWhenClipped = True
+    DragMode = dmAutomatic
+    OnClick = mapClick
+    OnPaint = mapPaint
+    Stretch = True
+  end
+  object vel_nom11: TLabeledEdit
+    Left = 32
+    Height = 28
+    Top = 48
+    Width = 180
+    EditLabel.Height = 19
+    EditLabel.Width = 180
+    EditLabel.Caption = 'Robot Length + Slack '
+    EditLabel.ParentColor = False
+    EditLabel.ParentFont = False
+    EditLabel.Font.Height = 19
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 16
+    Height = 61
+    Top = 744
+    Width = 145
+    Caption = 'Next ->'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Left = 16
+    Height = 20
+    Top = 480
+    Width = 88
+    Caption = 'Real X coord:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 20
+    Top = 528
+    Width = 87
+    Caption = 'Real Y coord:'
+    ParentColor = False
+  end
+  object Button2: TButton
+    Left = 302
+    Height = 38
+    Top = 684
+    Width = 153
+    Caption = 'Open Map File'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+  object Label3: TLabel
+    Left = 116
+    Height = 1
+    Top = 482
+    Width = 1
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 118
+    Height = 1
+    Top = 526
+    Width = 1
+    ParentColor = False
+  end
+  object RadioGroup1: TRadioGroup
+    Left = 12
+    Height = 144
+    Top = 320
+    Width = 243
+    AutoFill = True
+    Caption = 'Map Intersection points'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 119
+    ClientWidth = 239
+    OnClick = RadioGroup1Click
+    TabOrder = 3
+    object Add_toggle: TToggleBox
+      Left = 6
+      Height = 38
+      Top = 0
+      Width = 227
+      Caption = 'Add Point'
+      OnClick = Add_toggleClick
+      TabOrder = 0
+    end
+    object Button3: TButton
+      Left = 6
+      Height = 44
+      Top = 38
+      Width = 227
+      Caption = 'Delete All Points'
+      OnClick = Button3Click
+      TabOrder = 1
+    end
+    object ToggleBox1: TToggleBox
+      Left = 6
+      Height = 37
+      Top = 82
+      Width = 227
+      Caption = 'Delete One Point'
+      OnChange = ToggleBox1Change
+      TabOrder = 2
+    end
+  end
+  object Label5: TLabel
+    Left = 488
+    Height = 1
+    Top = 696
+    Width = 1
+    Font.Color = clRed
+    Font.Height = -25
+    ParentColor = False
+    ParentFont = False
+  end
+  object width1: TLabeledEdit
+    Left = 32
+    Height = 28
+    Top = 136
+    Width = 180
+    EditLabel.Height = 19
+    EditLabel.Width = 180
+    EditLabel.Caption = 'Factory Floor Width (meters) '
+    EditLabel.ParentColor = False
+    EditLabel.ParentFont = False
+    EditLabel.Font.Height = 19
+    TabOrder = 4
+  end
+  object heigth: TLabeledEdit
+    Left = 32
+    Height = 28
+    Top = 232
+    Width = 180
+    EditLabel.Height = 19
+    EditLabel.Width = 180
+    EditLabel.Caption = 'Factory Floor Height (meters) '
+    EditLabel.ParentColor = False
+    EditLabel.ParentFont = False
+    EditLabel.Font.Height = 19
+    TabOrder = 5
+  end
+  object Label6: TLabel
+    Left = 1064
+    Height = 20
+    Top = 684
+    Width = 44
+    Caption = 'Label6'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 1064
+    Height = 20
+    Top = 736
+    Width = 44
+    Caption = 'Label7'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 1160
+    Height = 20
+    Top = 684
+    Width = 44
+    Caption = 'Label8'
+    ParentColor = False
+  end
+  object RadioGroup2: TRadioGroup
+    Left = 11
+    Height = 153
+    Top = 578
+    Width = 252
+    AutoFill = True
+    Caption = 'Detect Links (Slow)'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 128
+    ClientWidth = 248
+    TabOrder = 6
+    object RadioButton1: TRadioButton
+      Left = 6
+      Height = 64
+      Top = 0
+      Width = 236
+      Caption = 'Yes'
+      TabOrder = 0
+    end
+    object RadioButton2: TRadioButton
+      Left = 6
+      Height = 64
+      Top = 64
+      Width = 236
+      Caption = 'No'
+      TabOrder = 1
+    end
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    left = 940
+    top = 683
+  end
+end
